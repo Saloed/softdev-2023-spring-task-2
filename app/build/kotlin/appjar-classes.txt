@@ -1,0 +1,1 @@
+C:\Users\Plezha\IdeaProjects\softdev-2023-spring-task-2\app\build\classes\kotlin\main\softdevSpringTask\TarKt$readLine$readChar$1.class;C:\Users\Plezha\IdeaProjects\softdev-2023-spring-task-2\app\build\classes\kotlin\main\softdevSpringTask\TarKt.class
