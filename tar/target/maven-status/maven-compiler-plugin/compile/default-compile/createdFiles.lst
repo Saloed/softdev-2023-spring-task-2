@@ -1,1 +1,3 @@
 com\tar\App.class
+tar\src\main\java\com\tar\FileHeader.class
+tar\src\main\java\com\tar\PFile.class
