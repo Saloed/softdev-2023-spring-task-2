@@ -60,20 +60,6 @@ class Tests {
 
     @Test
     fun tar() {
-        val file1 = fileOf("file1.txt", "file1")
-        val file2 = fileOf("file2.txt", "file2")
-        val file3 = fileOf("file3.txt", "file3$\n")
-        val args = arrayOf(
-            "file1.txt",
-            "file2.txt",
-            "file3.txt",
-            "-out",
-            "out.txt"
-        )
-        main(args)
-        val out = File("out.txt")
-        val actual = out.bufferedReader().use { it.readText() }
-
         val expected = """
             3
             file1.txt
@@ -88,9 +74,24 @@ class Tests {
             
             
         """.trimIndent()
+
+        val file1 = fileOf("file1.txt", "file1")
+        val file2 = fileOf("file2.txt", "file2")
+        val file3 = fileOf("file3.txt", "file3$\n")
+        val args = arrayOf(
+            "file1.txt",
+            "file2.txt",
+            "file3.txt",
+            "-out",
+            "out.txt"
+        )
+        main(args)
+        val out = File("out.txt")
+        val actual = out.bufferedReader().use { it.readText() }
         file1.delete()
         file2.delete()
         file3.delete()
+        out.delete()
 
         assertEquals(expected, actual)
     }
