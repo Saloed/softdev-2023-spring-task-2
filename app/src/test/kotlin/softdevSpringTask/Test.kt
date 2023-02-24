@@ -1,46 +1,97 @@
 package softdevSpringTask
 
 import java.io.File
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 
-class Test {
+private fun fileOf(name: String, content: String): File {
+    val file = File(name)
+    file.createNewFile()
+    file.bufferedWriter().use { it.write(content) }
+    return file
+}
+
+class Tests {
     @Test
     fun u() {
+        val out = fileOf(
+            "out.txt",
+            """
+            3
+            file1.txt
+            5
+            file1
+            file2.txt
+            5
+            file2
+            file3.txt
+            6
+            file3
+            
+            
+        """.trimIndent()
+        )
         val args = arrayOf(
             "-u",
             "out.txt",
         )
-        var expected = File("C:\\Users\\Plezha\\IdeaProjects\\softdev-2023-spring-task-2\\app\\src\\test\\kotlin\\softdevSpringTask\\file1.txt").inputStream().readAllBytes()
-        var actual = File("file1.txt").inputStream().readAllBytes()
-        assertEquals(expected.size, actual.size)
-        for (i in expected.indices) assertEquals(expected[i], actual[i])
 
-        expected = File("C:\\Users\\Plezha\\IdeaProjects\\softdev-2023-spring-task-2\\app\\src\\test\\kotlin\\softdevSpringTask\\file2.txt").inputStream().readAllBytes()
-        actual = File("file2.txt").inputStream().readAllBytes()
-        assertEquals(expected.size, actual.size)
-        for (i in expected.indices) assertEquals(expected[i], actual[i])
+        main(args)
+        out.delete()
 
-        expected = File("C:\\Users\\Plezha\\IdeaProjects\\softdev-2023-spring-task-2\\app\\src\\test\\kotlin\\softdevSpringTask\\file3.txt").inputStream().readAllBytes()
-        actual = File("file3.txt").inputStream().readAllBytes()
-        assertEquals(expected.size, actual.size)
-        for (i in expected.indices) assertEquals(expected[i], actual[i])
+        val file1 = File("file1.txt")
+        val file2 = File("file2.txt")
+        val file3 = File("file3.txt")
+
+        var expected = "file1"
+        var actual = file1.bufferedReader().use { it.readText() }
+        file1.delete()
+        assertEquals(expected, actual)
+
+        expected = "file2"
+        actual = file2.bufferedReader().use { it.readText() }
+        file2.delete()
+        assertEquals(expected, actual)
+
+        expected = "file3\n"
+        actual = file3.bufferedReader().use { it.readText() }
+        file3.delete()
+        assertEquals(expected, actual)
     }
 
     @Test
-    fun out() {
+    fun tar() {
+        val file1 = fileOf("file1.txt", "file1")
+        val file2 = fileOf("file2.txt", "file2")
+        val file3 = fileOf("file3.txt", "file3$\n")
         val args = arrayOf(
-            "C:\\Users\\Plezha\\IdeaProjects\\softdev-2023-spring-task-2\\app\\src\\test\\kotlin\\softdevSpringTask\\file1.txt",
-            "C:\\Users\\Plezha\\IdeaProjects\\softdev-2023-spring-task-2\\app\\src\\test\\kotlin\\softdevSpringTask\\file2.txt",
-            "C:\\Users\\Plezha\\IdeaProjects\\softdev-2023-spring-task-2\\app\\src\\test\\kotlin\\softdevSpringTask\\file3.txt",
+            "file1.txt",
+            "file2.txt",
+            "file3.txt",
             "-out",
             "out.txt"
         )
         main(args)
-        val expected = File("expectedOut.txt").inputStream().readAllBytes()
-        val actual = File("out.txt").inputStream().readAllBytes()
+        val out = File("out.txt")
+        val actual = out.bufferedReader().use { it.readText() }
 
-        assertEquals(expected.size, actual.size)
-        for (i in expected.indices) assertEquals(expected[i], actual[i])
+        val expected = """
+            3
+            file1.txt
+            5
+            file1
+            file2.txt
+            5
+            file2
+            file3.txt
+            7
+            file3$
+            
+            
+        """.trimIndent()
+        file1.delete()
+        file2.delete()
+        file3.delete()
+
+        assertEquals(expected, actual)
     }
 }
