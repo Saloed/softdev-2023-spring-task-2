@@ -1,11 +1,11 @@
 package com.tests;
 
 import com.utility.Coder;
-import com.utility.FileDecodingException;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +26,11 @@ public class AppTest {
         for (int i = 0; i < strs.size() / 2; i++) {
             try {
                 // Input file
-                String nameIn = "." + File.separator + "inputTestFile.txt";
+                String nameIn = Paths.get("inputTestFile.txt").toAbsolutePath().toString();
                 File inputFile = new File(nameIn);
                 inputFile.createNewFile();
                 // Output file
-                String nameOut = "." + File.separator + "outputTestFile.txt";
+                String nameOut = Paths.get("outputTestFile.txt").toAbsolutePath().toString();
                 File outputFile = new File(nameOut);
                 outputFile.createNewFile();
                 // Write to input, decode, read from output
@@ -69,11 +69,11 @@ public class AppTest {
         for (int i = 0; i < strs.size() / 2; i++) {
             try {
                 // Input file
-                String nameIn = "." + File.separator + "inputTestFile.txt";
+                String nameIn = Paths.get("inputTestFile.txt").toAbsolutePath().toString();
                 File inputFile = new File(nameIn);
                 inputFile.createNewFile();
                 // Output file
-                String nameOut = "." + File.separator + "outputTestFile.txt";
+                String nameOut = Paths.get("outputTestFile.txt").toAbsolutePath().toString();
                 File outputFile = new File(nameOut);
                 outputFile.createNewFile();
                 // Write to input, decode, read from output

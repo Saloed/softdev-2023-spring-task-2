@@ -2,7 +2,7 @@ package com.utility;
 
 
 import java.io.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -13,13 +13,16 @@ import java.util.List;
  */
 
 public class Coder {
+    private final static byte DEFINE_TYPE = 64;
+
+    // method used to encode and write sequence of bytes according to content of "bytes" list
     public static void printByteArray(List<Byte> bytes, OutputStream bw) throws IOException {
         if (bytes.isEmpty()) return;
         else if (bytes.size() == 1 || bytes.get(0) == bytes.get(1)) {
             bw.write((byte) bytes.size());
             bw.write(bytes.get(0));
         } else {
-            bw.write((byte) (64 + bytes.size()));
+            bw.write((byte) (DEFINE_TYPE + bytes.size()));
             for (Byte b : bytes) bw.write(b);
         }
     }
@@ -27,15 +30,13 @@ public class Coder {
     public static void encode(String inputFile, String outputFile) throws IOException {
         try (InputStream br = new FileInputStream(inputFile);
              OutputStream bw = new FileOutputStream(outputFile)) {
-            List<Byte> bytes = new LinkedList<>();
+            List<Byte> bytes = new ArrayList<>();
             while (true) {
-                //
-                if (bytes.size() == 63) {
+                if (bytes.size() == DEFINE_TYPE - 1) {
                     printByteArray(bytes, bw);
                     bytes.clear();
                     continue;
                 }
-                //
                 byte now = (byte) br.read();
                 // EOF
                 if (now == -1) {
@@ -60,6 +61,8 @@ public class Coder {
                     }
                 }
             }
+        } catch (IOException e) {
+            System.out.println("Can't find file");
         }
     }
 
@@ -69,11 +72,11 @@ public class Coder {
             while (true) {
                 byte now = (byte) br.read();
                 if (now == -1) break;
-                if (now < 64) {
+                if (now < DEFINE_TYPE) {
                     byte chatToOut = (byte) br.read();
                     for (int i = 0; i < now; i++) bw.write((char) chatToOut);
                 } else {
-                    for (int i = 0; i < now - 64; i++) bw.write((char) (byte) br.read());
+                    for (int i = 0; i < now - DEFINE_TYPE; i++) bw.write((char) (byte) br.read());
                 }
             }
         } catch (IOException e) {
