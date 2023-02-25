@@ -2,6 +2,8 @@ package com.utility;
 
 
 import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /*
     Bad case occurs when there are many single symbols
@@ -11,67 +13,72 @@ import java.io.*;
  */
 
 public class Coder {
-    public static void encode(String inputFile, String outputFile) throws IllegalFileFormatException {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
-             BufferedReader br = new BufferedReader(new FileReader(inputFile))) {
-            int last = br.read();
-            char counter = 1;
-            StringBuilder sb = new StringBuilder();
-            sb.append((char) last);
-            while (last != -1) {
-                if ("0123456789".contains("" + (char) last)) {
-                    throw new IllegalFileFormatException();
-                }
-                int now = br.read();
-                // 3 cases: now == last, now == -1, others
-                if (now == last) {
-                    if (sb.length() > 1) {
-                        sb.deleteCharAt(sb.length() - 1);
-                        bw.write(Integer.toString((-sb.length() == -1) ? 1 : -sb.length()) + sb);
-                    }
-                    sb.setLength(0);
-                    counter++;
-                } else if (now == -1) {
-                    if (counter == 1) {
-                        bw.write(Integer.toString((-sb.length() == -1) ? 1 : -sb.length()) + sb);
-                    } else {
-                        bw.write(Integer.toString(counter) + (char) last);
-                    }
-                } else {
-                    if (counter > 1) bw.write(Integer.toString(counter) + (char) last);
-                    counter = 1;
-                    sb.append((char) now);
-                }
-                last = now;
-            }
-        } catch (IOException e) {
-            System.out.println("Can't find file");
+    public static void printByteArray(List<Byte> bytes, OutputStream bw) throws IOException {
+        if (bytes.isEmpty()) return;
+        else if (bytes.size() == 1 || bytes.get(0) == bytes.get(1)) {
+            bw.write((byte) bytes.size());
+            bw.write(bytes.get(0));
+        } else {
+            bw.write((byte) (64 + bytes.size()));
+            for (Byte b : bytes) bw.write(b);
         }
     }
 
-    public static void decode(String inputFile, String outputFile) throws FileDecodingException {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
-             BufferedReader br = new BufferedReader(new FileReader(inputFile))) {
-            int last = br.read();
-            StringBuilder sb = new StringBuilder();
-            while (last != -1) {
-                if ("0123456789-".contains("" + (char) last)) {
-                    sb.append((char) last);
-                } else {
-                    if (sb.length() == 0) throw new FileDecodingException();
-                    int intValue = Integer.parseInt(sb.toString());
-                    if (intValue > 0) {
-                        for (int i = 0; i < intValue; i++) bw.write((char) last);
-                    } else {
-                        bw.write((char) last);
-                        for (int i = 0; i < Math.abs(intValue) - 1; i++) bw.write((char) br.read());
-                    }
-                    sb.setLength(0);
+    public static void encode(String inputFile, String outputFile) throws IOException {
+        try (InputStream br = new FileInputStream(inputFile);
+             OutputStream bw = new FileOutputStream(outputFile)) {
+            List<Byte> bytes = new LinkedList<>();
+            while (true) {
+                //
+                if (bytes.size() == 63) {
+                    printByteArray(bytes, bw);
+                    bytes.clear();
+                    continue;
                 }
-                last = br.read();
+                //
+                byte now = (byte) br.read();
+                // EOF
+                if (now == -1) {
+                    printByteArray(bytes, bw);
+                    break;
+                }
+                if (bytes.size() <= 1) {
+                    bytes.add(now);
+                } else if (now == bytes.get(bytes.size() - 1)) {
+                    if (bytes.get(bytes.size() - 1) == bytes.get(bytes.size() - 2)) bytes.add(now);
+                    else {
+                        printByteArray(bytes, bw);
+                        bytes.clear();
+                        bytes.add(now);
+                    }
+                } else {
+                    if (bytes.get(bytes.size() - 1) != bytes.get(bytes.size() - 2)) bytes.add(now);
+                    else {
+                        printByteArray(bytes, bw);
+                        bytes.clear();
+                        bytes.add(now);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void decode(String inputFile, String outputFile) {
+        try (InputStream br = new FileInputStream(inputFile);
+             OutputStream bw = new FileOutputStream(outputFile)) {
+            while (true) {
+                byte now = (byte) br.read();
+                if (now == -1) break;
+                if (now < 64) {
+                    byte chatToOut = (byte) br.read();
+                    for (int i = 0; i < now; i++) bw.write((char) chatToOut);
+                } else {
+                    for (int i = 0; i < now - 64; i++) bw.write((char) (byte) br.read());
+                }
             }
         } catch (IOException e) {
             System.out.println("Can't find file");
         }
     }
 }
+

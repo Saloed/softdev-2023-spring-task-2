@@ -1,36 +1,51 @@
 package com.utility;
 
+import org.apache.commons.cli.*;
+
 import java.io.File;
 import java.io.IOException;
 
 public class App {
     public static void main(String[] args) {
+        Options options = new Options();
+
+        Option encode = new Option("z", "zcommand", true, "input file path");
+        encode.setRequired(false);
+        options.addOption(encode);
+
+        Option decode = new Option("u", "ucommand", true, "output file");
+        decode.setRequired(false);
+        options.addOption(decode);
+
+        Option outputFile = new Option("out", "outcommand", true, "output file");
+        outputFile.setRequired(false);
+        options.addOption(outputFile);
+
+        CommandLineParser parser = new DefaultParser();
+        //HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd = null;
         try {
-            // Checking for correct input arguments
-            StringBuilder sb = new StringBuilder();
-            for (String arg : args) sb.append(arg);
-            String outputFileName;
-            String inputFileName;
-            if (sb.toString().matches("-[zu]-out\\w+.txt\\w+.txt") && args.length == 4) {
-                outputFileName = args[2];
-                inputFileName = args[3];
-            } else if (sb.toString().matches("-[zu]\\w+.txt") && args.length == 2) {
-                outputFileName = null;
-                inputFileName = args[1];
+            cmd = parser.parse(options, args);
+            String encoding = cmd.getOptionValue("zcommand");
+            String decoding = cmd.getOptionValue("ucommand");
+            String outputFileName = cmd.getOptionValue("outcommand");
+            if (encoding != null && decoding == null) {
+                if (outputFileName == null) {
+                    outputFileName = "changed-" + encoding;
+                    File file = new File("." + File.separator + outputFileName);
+                    file.createNewFile();
+                }
+                Coder.encode(encoding, outputFileName);
+            } else if (encoding == null && decoding != null) {
+                if (outputFileName == null) {
+                    outputFileName = "changed-" + decoding;
+                    File file = new File("." + File.separator + outputFileName);
+                    file.createNewFile();
+                }
+                Coder.decode(decoding, outputFileName);
             } else throw new IllegalArgumentException();
-            // if -out not defined create file: [inputFileName]-changed.txt
-            if (outputFileName == null) {
-                outputFileName = inputFileName + "-changed.txt";
-                File file = new File("." + File.separator + inputFileName + "-changed.txt");
-                file.createNewFile();
-            }
-            // Encoding or decoding
-            if (args[0].equals("-z")) Coder.encode(inputFileName, outputFileName);
-            else Coder.decode(inputFileName, outputFileName);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | ParseException e) {
             System.out.println("Something wrong with arguments");
-        } catch (FileDecodingException | IllegalFileFormatException e) {
-            System.out.println(e);
         } catch (IOException e) {
             System.out.println("Can't create output.txt file");
         }

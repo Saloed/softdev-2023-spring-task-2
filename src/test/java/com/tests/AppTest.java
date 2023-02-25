@@ -2,7 +2,6 @@ package com.tests;
 
 import com.utility.Coder;
 import com.utility.FileDecodingException;
-import com.utility.IllegalFileFormatException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -47,7 +46,7 @@ public class AppTest {
                 // Delete input and output files
                 inputFile.delete();
                 outputFile.delete();
-            } catch (IOException | FileDecodingException e) {
+            } catch (IOException e) {
                 Assert.fail();
             }
         }
@@ -90,7 +89,7 @@ public class AppTest {
                 // Delete input and output files
                 inputFile.delete();
                 outputFile.delete();
-            } catch (IOException | IllegalFileFormatException e) {
+            } catch (IOException e) {
                 Assert.fail();
             }
         }

@@ -1,0 +1,1 @@
+mvn pakcage assembly:single
