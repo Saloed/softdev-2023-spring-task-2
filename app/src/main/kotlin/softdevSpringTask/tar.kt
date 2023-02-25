@@ -15,9 +15,10 @@ import java.io.OutputStream
 """
 Puts some files together in one (commonly named "archiving") 
 or unarchives them from a file (pulls them out)
-"""])
+"""
+    ]
+)
 class Tar : Runnable {
-
     @Parameters(paramLabel = "files", description = ["one or more files to archive"])
     lateinit var filePaths: List<String>
 
@@ -40,7 +41,6 @@ class Tar : Runnable {
             }
         }
 
-
         fun readLine(inputStream: FileInputStream): String {
             val readChar = { inputStream.read().toChar() }
             var c = readChar()
@@ -51,6 +51,7 @@ class Tar : Runnable {
             }
             return string
         }
+
 
         if (unarchiveFile != null) {
             val toUnarchive = unarchiveFile!!
