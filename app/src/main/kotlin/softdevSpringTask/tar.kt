@@ -8,7 +8,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.OutputStream
 import java.lang.Integer.min
-import java.math.BigDecimal
 
 
 fun addFileContent(fileToCopy: File, outputFileOutputStream: OutputStream) {
@@ -77,7 +76,6 @@ class Tar : Runnable {
                     unarchiveInputStream.skip(1)
                 }
             }
-
         } else {
             val outputFile = outputFile
 
@@ -94,7 +92,7 @@ class Tar : Runnable {
                 outputStream.write("${filePaths.size}\n".toByteArray())
 
                 for (i in filePaths.indices) {
-                    val file = File(filePaths[i]) // TODO: error handling
+                    val file = File(filePaths[i])
                     outputStream.write("${filePaths[i]}\n".toByteArray())
 
                     outputStream.write("${file.length()}\n".toByteArray())
@@ -107,7 +105,6 @@ class Tar : Runnable {
     }
 
 }
-
 
 
 fun main(args: Array<String>) {
