@@ -60,6 +60,7 @@ class Tests {
 
     @Test
     fun tar() {
+
         val expected = """
             3
             file1.txt
@@ -85,7 +86,9 @@ class Tests {
             "-out",
             "out.txt"
         )
+
         main(args)
+
         val out = File("out.txt")
         val actual = out.bufferedReader().use { it.readText() }
         file1.delete()
