@@ -7,6 +7,8 @@ import picocli.CommandLine.Option
 import java.io.File
 import java.io.FileInputStream
 import java.io.OutputStream
+import java.lang.Integer.min
+import java.math.BigDecimal
 
 
 fun addFileContent(fileToCopy: File, outputFileOutputStream: OutputStream) {
@@ -51,7 +53,6 @@ class Tar : Runnable {
     @Option(names = ["-u"], description = ["file to unarchive"])
     var unarchiveFile: File? = null
 
-
     override fun run() {
         if (unarchiveFile != null) {
             val toUnarchive = unarchiveFile!!
@@ -61,13 +62,19 @@ class Tar : Runnable {
 
                 repeat(n) {
                     val filePath = readLine(unarchiveInputStream)
-                    val fileLength = readLine(unarchiveInputStream).toInt()
+                    var remainingFileLength = readLine(unarchiveInputStream).toInt()
 
                     val file = File(filePath)
+                    file.outputStream().use { fileOutputStream ->
+                        while (remainingFileLength > 0) {
+                            val buffer = ByteArray(min(remainingFileLength, DEFAULT_BUFFER_SIZE))
+                            unarchiveInputStream.read(buffer)
+                            fileOutputStream.write(buffer, 0, min(DEFAULT_BUFFER_SIZE, remainingFileLength))
 
-                    // TODO: предотвратить кучу места
-                    file.writeBytes(unarchiveInputStream.readNBytes(fileLength))
-                    unarchiveInputStream.skip(1) // skip \n
+                            remainingFileLength -= DEFAULT_BUFFER_SIZE
+                        }
+                    }
+                    unarchiveInputStream.skip(1)
                 }
             }
 
