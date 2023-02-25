@@ -8,6 +8,29 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.OutputStream
 
+
+fun addFileContent(fileToCopy: File, outputFileOutputStream: OutputStream) {
+    fileToCopy.inputStream().use { fileInputStream ->
+        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+        var bytes = fileInputStream.read(buffer)
+        while (bytes >= 0) {
+            outputFileOutputStream.write(buffer, 0, bytes)
+            bytes = fileInputStream.read(buffer)
+        }
+    }
+}
+
+fun readLine(inputStream: FileInputStream): String {
+    val readChar = { inputStream.read().toChar() }
+    var c = readChar()
+    var string = ""
+    while (c != '\n') {
+        string += c
+        c = readChar()
+    }
+    return string
+}
+
 @Command(
     name = "tar",
     mixinStandardHelpOptions = true,
@@ -30,29 +53,6 @@ class Tar : Runnable {
 
 
     override fun run() {
-        fun addFileContent(fileToCopy: File, outputFileOutputStream: OutputStream) {
-            fileToCopy.inputStream().use { fileInputStream ->
-                val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                var bytes = fileInputStream.read(buffer)
-                while (bytes >= 0) {
-                    outputFileOutputStream.write(buffer, 0, bytes)
-                    bytes = fileInputStream.read(buffer)
-                }
-            }
-        }
-
-        fun readLine(inputStream: FileInputStream): String {
-            val readChar = { inputStream.read().toChar() }
-            var c = readChar()
-            var string = ""
-            while (c != '\n') {
-                string += c
-                c = readChar()
-            }
-            return string
-        }
-
-
         if (unarchiveFile != null) {
             val toUnarchive = unarchiveFile!!
 
