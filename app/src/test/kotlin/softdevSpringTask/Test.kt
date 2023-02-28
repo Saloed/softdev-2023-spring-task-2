@@ -12,23 +12,62 @@ private fun fileOf(name: String, content: String): File {
 
 class Tests {
     @Test
+    fun fullCheck() {
+        var file1 = fileOf("file1.txt", "file1")
+        var file2 = fileOf("file2.txt", "file2")
+        var file3 = fileOf("file3.txt", "file3$\n")
+
+        var args = arrayOf(
+            "file1.txt",
+            "file2.txt",
+            "file3.txt",
+            "-out",
+            "out.txt"
+        )
+
+        main(args)
+
+        file1.delete()
+        file2.delete()
+        file3.delete()
+
+        args = arrayOf(
+            "-u",
+            "out.txt",
+        )
+
+        main(args)
+
+        File("out.txt").delete()
+
+        file1 = File("file1.txt")
+        file2 = File("file2.txt")
+        file3 = File("file3.txt")
+
+        assertEquals("file1", file1.bufferedReader().use { it.readText() })
+        assertEquals("file2", file2.bufferedReader().use { it.readText() })
+        assertEquals("file3\$\n", file3.bufferedReader().use { it.readText() })
+
+        file1.delete()
+        file2.delete()
+        file3.delete()
+    }
+
+    @Test
     fun u() {
         val out = fileOf(
             "out.txt",
             """
             3
-            file1.txt
-            5
-            file1
-            file2.txt
-            5
-            file2
-            file3.txt
-            6
+            9
+            file1.txt5
+            file19
+            file2.txt5
+            file29
+            file3.txt6
             file3
             
-            
-        """.trimIndent()
+            """.trimIndent()
         )
         val args = arrayOf(
             "-u",
@@ -63,18 +102,15 @@ class Tests {
 
         val expected = """
             3
-            file1.txt
-            5
-            file1
-            file2.txt
-            5
-            file2
-            file3.txt
-            7
+            9
+            file1.txt5
+            file19
+            file2.txt5
+            file29
+            file3.txt7
             file3$
             
-            
-        """.trimIndent()
+            """.trimIndent()
 
         val file1 = fileOf("file1.txt", "file1")
         val file2 = fileOf("file2.txt", "file2")

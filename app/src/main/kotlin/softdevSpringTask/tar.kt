@@ -37,7 +37,10 @@ fun unarchive(toUnarchive: File) {
 
         repeat(n) {
             val filePathLen = readLine(unarchiveInputStream).toInt()
-            val filePath = readLine(unarchiveInputStream)
+            var filePath = ""
+            repeat (filePathLen) {
+                filePath += unarchiveInputStream.read().toChar()
+            }
             var remainingFileLength = readLine(unarchiveInputStream).toInt()
 
             val file = File(filePath)
@@ -51,7 +54,6 @@ fun unarchive(toUnarchive: File) {
                     remainingFileLength -= DEFAULT_BUFFER_SIZE
                 }
             }
-            unarchiveInputStream.skip(1)
         }
     }
 }
@@ -73,12 +75,11 @@ fun archive(outputFile: File, filePaths: List<String>) {
         for (i in filePaths.indices) {
             val file = File(filePaths[i])
             outputStream.write("${filePaths[i].length}\n".toByteArray())
-            outputStream.write("${filePaths[i]}\n".toByteArray())
+            outputStream.write(filePaths[i].toByteArray())
 
             outputStream.write("${file.length()}\n".toByteArray())
 
             addFileContent(file, outputStream)
-            outputStream.write("\n".toByteArray())
         }
     }
 }
@@ -86,12 +87,6 @@ fun archive(outputFile: File, filePaths: List<String>) {
 @Command(
     name = "tar",
     mixinStandardHelpOptions = true,
-    description = [
-"""
-Puts some files together in one (commonly named "archiving") 
-or unarchives them from a file (pulls them out)
-"""
-    ]
 )
 class Tar : Runnable {
     @Parameters(paramLabel = "files", description = ["one or more files to archive"])
