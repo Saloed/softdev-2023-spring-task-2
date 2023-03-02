@@ -1,1 +1,1 @@
-mvn pakcage assembly:single
+mvn package assembly:single
