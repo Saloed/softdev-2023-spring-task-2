@@ -47,8 +47,7 @@ fun unarchive(toUnarchive: File) {
             file.outputStream().use { fileOutputStream ->
                 var buffer = ByteArray(DEFAULT_BUFFER_SIZE)
                 while (remainingFileLength > 0) {
-                    if (remainingFileLength < DEFAULT_BUFFER_SIZE) buffer = ByteArray(remainingFileLength)
-                    unarchiveInputStream.read(buffer)
+                    unarchiveInputStream.read(buffer, 0, min(DEFAULT_BUFFER_SIZE, remainingFileLength))
                     fileOutputStream.write(buffer, 0, min(DEFAULT_BUFFER_SIZE, remainingFileLength))
 
                     remainingFileLength -= DEFAULT_BUFFER_SIZE
