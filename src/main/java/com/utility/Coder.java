@@ -27,7 +27,7 @@ public class Coder {
     public static void encode(String inputFile, String outputFile) throws IOException {
         try (InputStream br = new FileInputStream(inputFile);
              OutputStream bw = new FileOutputStream(outputFile)) {
-            byte[] bytes = new byte[DEFINE_TYPE - 1];
+            byte[] bytes = new byte[DEFINE_TYPE];
             int size = -1;
             while (true) {
                 byte now = (byte) br.read();
@@ -46,7 +46,7 @@ public class Coder {
                         size = -1;
                     }
                 }
-                if (size == DEFINE_TYPE - 2) {
+                if (size == DEFINE_TYPE - 1) {
                     printByteArray(bytes, size, bw);
                     size = -1;
                 }
