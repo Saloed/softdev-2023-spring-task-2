@@ -17,21 +17,20 @@ public class Coder {
     private final static int DEFINE_TYPE = 128;
 
     // method used to encode and write sequence of bytes according to content of "bytes" list
-    public static void printByteArray(int[] bytes, int size, OutputStream os) throws IOException {
-        if (size == -1) return;
-        os.write(size + 1);
-        for (int i = 0; i <= size; i++) {
-            os.write(bytes[i]);
+    public static void printByteArray(byte[] bytes, int size, OutputStream os) throws IOException {
+        if (size != -1) {
+            os.write(size + 1);
+            os.write(bytes, 0, size + 1);
         }
     }
 
     public static void encode(String inputFile, String outputFile) throws IOException {
         try (InputStream br = new FileInputStream(inputFile);
              OutputStream bw = new FileOutputStream(outputFile)) {
-            int[] bytes = new int[DEFINE_TYPE - 1];
+            byte[] bytes = new byte[DEFINE_TYPE - 1];
             int size = -1;
             while (true) {
-                int now = br.read();
+                byte now = (byte) br.read();
                 if (now == -1) {
                     printByteArray(bytes, size, bw);
                     break;
@@ -39,11 +38,10 @@ public class Coder {
                 size++;
                 bytes[size] = now;
                 if (size > 1) {
-                    if (bytes[0] == bytes[1] && bytes[1] != bytes[2]) {
+                    if (bytes[size - 2] == bytes[size - 1] && bytes[size - 1] != bytes[size]) {
                         printByteArray(bytes, size, bw);
                         size = -1;
-                    }
-                    if (bytes[0] != bytes[1] && bytes[1] == bytes[2]) {
+                    } else if (bytes[size - 2] != bytes[size - 1] && bytes[size - 1] == bytes[size]) {
                         printByteArray(bytes, size, bw);
                         size = -1;
                     }
@@ -64,7 +62,7 @@ public class Coder {
             while (true) {
                 int now = br.read();
                 if (now == -1) break;
-                for (int i = 0; i < now; i++) bw.write((char)br.read());
+                for (int i = 0; i < now; i++) bw.write((char) br.read());
             }
         } catch (IOException e) {
             System.out.println("Can't find file");
