@@ -2,21 +2,19 @@ package tar.src.main.java.com.tar;
 
 import java.io.File;
 import java.nio.ByteBuffer;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import tar.src.main.java.com.tar.PFile;
 
 public class FileHeader {
-    ArrayList<PFile> files = new ArrayList<PFile>();
+    ArrayList<tar.src.main.java.com.tar.TFile> files = new ArrayList<tar.src.main.java.com.tar.TFile>();
     long size = 8;
     long currentOffset = 0;
 
-    public ArrayList<PFile> getFiles() {
+    public ArrayList<tar.src.main.java.com.tar.TFile> getFiles() {
         return files;
     }
 
-    public void addFile(PFile file) {
+    public void addFile(tar.src.main.java.com.tar.TFile file) {
         size += file.getFilename().getBytes().length + 12; // 4 bytes for filename size, 8 bytes for offset
         file.setOffset(currentOffset);
         currentOffset += file.getSize();
@@ -33,10 +31,11 @@ public class FileHeader {
 
     public FileHeader(ArrayList<String> files) {
         for (String filename : files) {
-            System.out.println(filename);
-            PFile pfile = new PFile(filename.split("\\\\")[filename.split("\\\\").length - 1], new File(filename).length());
-            System.out.println(pfile.getFilename());
-            this.addFile(pfile);
+            // TODO: Заменить на File.getflename
+            File f = new File(filename);
+            tar.src.main.java.com.tar.TFile file = new tar.src.main.java.com.tar.TFile(f.getName(), f.length());
+            file.setFilepath(filename);
+            this.addFile(file);
         }
     }
 
@@ -47,7 +46,7 @@ public class FileHeader {
             header[headerOffset] = i;
             headerOffset++;
         }
-        for (PFile file : files) {
+        for (tar.src.main.java.com.tar.TFile file : files) {
             for (byte i : getBytesInt(file.getFilename().getBytes().length)) {
                 header[headerOffset] = i;
                 headerOffset++;
@@ -91,7 +90,7 @@ public class FileHeader {
             fileNameSize = bytesToInt(b);
 
             b = new byte[fileNameSize];
-            for (int i = 0; i < fileNameSize; i++) {
+            for (int i = 0; i < fileNameSize; i++) { // memcpy (C)
                 b[i] = bytes[pointer++];
             }
             filename = new String(b);
@@ -101,14 +100,14 @@ public class FileHeader {
                 b[i] = bytes[pointer++];
             }
             fileSize = bytesToLong(b);
-            addFile(new PFile(filename, fileSize));
+            addFile(new tar.src.main.java.com.tar.TFile(filename, fileSize));
         }
     }
 
-    public static long bytesToLong(byte[] bytes) {
+    public static long bytesToLong(byte[] bytes) { // Заменить на DataInputStream
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.put(bytes);
-        buffer.flip(); // Потому что intel - little endian?? А что с другими платформами??
+        buffer.flip();
         return buffer.getLong();
     }
 

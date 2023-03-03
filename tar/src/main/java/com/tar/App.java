@@ -2,12 +2,9 @@ package com.tar;
 
 import org.apache.commons.cli.*;
 import tar.src.main.java.com.tar.FileHeader;
-import tar.src.main.java.com.tar.PFile;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 
@@ -38,8 +35,12 @@ public class App {
         if (cmd.hasOption("u")) { // Распаковать файл
             decombine(cmd.getOptionValue("u")); // Что делать с рантайм ошибками если файла не существует/ что-то еще
         } else if (cmd.hasOption("out")) { // Запаковать в файл
-            ArrayList<String> filenames = new ArrayList<String>(cmd.getArgList());
-            combine(filenames, cmd.getOptionValue("out"));
+            ArrayList<String> filenames = new ArrayList(cmd.getArgList());
+            try {
+                combine(filenames, cmd.getOptionValue("out"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else { // Неверные аргументы
             printUsage();
             System.exit(1);
@@ -66,34 +67,41 @@ public class App {
 //            }
 //        }
 
-
-//        filenames.add("ex.jpg");
-//        filenames.add("ex.txt");
-//        combine(filenames, "out.e");
-//        decombine("out.e");
     }
 
-    public static void combine(ArrayList<String> filesToCombine, String outFilePath) {
+    public static void combine(ArrayList<String> filesToCombine, String outFilePath) throws IOException {
         File outFile = new File(outFilePath);
+
         try (FileOutputStream fos = new FileOutputStream(outFile)) {
+
             FileHeader header = new FileHeader(filesToCombine);
             try {
                 fos.write(header.getHeader());
-            } catch (Exception e) { // TODO: Вообще это критическая ошибка, ее не нужно игнорировать
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            for (PFile inFilePath : header.getFiles()) {
-                File inFile = new File(inFilePath.getFilename());
+            for (tar.src.main.java.com.tar.TFile file : header.getFiles()) {
+                File inFile = new File(file.getFilepath());
                 try (FileInputStream fis = new FileInputStream(inFile)) {
-                    byte[] bytes = new byte[(int) inFile.length()]; // TODO: Сделать чтение по блокам
-                    fis.read(bytes);
-                    fos.write(bytes);
+                    long written = 0; // TODO: Изменить на записал столько, сколько прочитал
+                    byte[] chunk = new byte[4096];
+                    int read;
+                    while (file.getSize() > written + 4096) {
+                        read = fis.read(chunk);
+//                        fos.write(chunk,0,read); TODO: Как-то так
+                        fos.write(chunk);
+                        written += 4096;
+                    }
+                    byte[] chunk2 = new byte[(int) (file.getSize() - written)]; // TODO: тогда это не нужно
+                    if (file.getSize() - written > 0) {
+
+                        fis.read(chunk2);
+                        fos.write(chunk2);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -101,15 +109,15 @@ public class App {
     public static void decombine(String inFilePath) {
         File inFile = new File(inFilePath);
         try (FileInputStream fis = new FileInputStream(inFile)) {
-            byte[] headerLengthBytes = new byte[8];// Может, не самая лучшая идея кастить лонг в инт?))
+            byte[] headerLengthBytes = new byte[8];
             fis.read(headerLengthBytes);
             long headerLength = FileHeader.bytesToLong(headerLengthBytes);
 
             byte[] headerBytes = new byte[(int) headerLength - 8]; // Заголовок же не будет больше 2ГБ?
             fis.read(headerBytes);
             FileHeader header = new FileHeader(headerBytes);
-            ArrayList<PFile> files = header.getFiles();
-            for (PFile file : files) {
+            ArrayList<tar.src.main.java.com.tar.TFile> files = header.getFiles();
+            for (tar.src.main.java.com.tar.TFile file : files) {
                 File outFile = new File(file.getFilename());
                 try (FileOutputStream fos = new FileOutputStream(outFile)) {
                     long written = 0;
@@ -124,9 +132,6 @@ public class App {
                         fis.read(chunk);
                         fos.write(chunk);
                     }
-//                    byte[] data = new byte[(int) file.getSize()];
-//                    fis.read(data);
-//                    fos.write(data);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

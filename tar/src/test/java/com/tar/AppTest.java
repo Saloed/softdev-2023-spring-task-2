@@ -11,16 +11,11 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-//import org.apache.commons.io
 
 /**
  * Unit test for simple App.
  */
 public class AppTest {
-    @Test
-    public void testApp() {
-        assertTrue(true);
-    }
 
     @Test
     public void testPacking() throws IOException {
@@ -35,7 +30,7 @@ public class AppTest {
     }
 
     @Test
-    public void fullCycle() throws IOException {
+    public void fullCycleTest() throws IOException {
         App.main(new String[]{"testResources\\in\\test1.txt", "-out", "out.e"});
         App.main(new String[]{"-u", "out.e"});
 

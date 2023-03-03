@@ -1,13 +1,13 @@
 package tar.src.main.java.com.tar;
 
-public class PFile {
+public class TFile {
     private String filename;
 
-
+    private String filepath;
     private long size;
     private long offset;
 
-    public PFile(String filename, long size) {
+    public TFile(String filename, long size) {
         this.filename = filename;
         this.size = size;
 
@@ -37,4 +37,11 @@ public class PFile {
         this.filename = filename;
     }
 
+    public String getFilepath() {
+        return filepath;
+    }
+
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
+    }
 }
