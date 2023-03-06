@@ -16,11 +16,15 @@ public class Coder {
 
     private final static int DEFINE_TYPE = 128;
 
-    // method used to encode and write sequence of bytes according to content of "bytes" list
     public static void printByteArray(byte[] bytes, int size, OutputStream os) throws IOException {
         if (size != -1) {
-            os.write(size + 1);
-            os.write(bytes, 0, size + 1);
+            if (size >= DEFINE_TYPE) {
+                os.write(size);
+                os.write(bytes, 0, size - DEFINE_TYPE + 1);
+            } else {
+                os.write(size);
+                os.write(bytes, 0, 1);
+            }
         }
     }
 
@@ -32,22 +36,25 @@ public class Coder {
             while (true) {
                 byte now = (byte) br.read();
                 if (now == -1) {
-                    printByteArray(bytes, size, bw);
+                    if (size > 1)
+                        printByteArray(bytes, size + ((bytes[size - 1] == bytes[size]) ? 0 : 1) * DEFINE_TYPE, bw);
+                    else printByteArray(bytes, size + DEFINE_TYPE, bw);
                     break;
                 }
                 size++;
                 bytes[size] = now;
                 if (size > 1) {
                     if (bytes[size - 2] == bytes[size - 1] && bytes[size - 1] != bytes[size]) {
-                        printByteArray(bytes, size, bw);
-                        size = -1;
+                        printByteArray(bytes, size - 1, bw);
+                        bytes[0] = now;
+                        size = 0;
                     } else if (bytes[size - 2] != bytes[size - 1] && bytes[size - 1] == bytes[size]) {
-                        printByteArray(bytes, size, bw);
+                        printByteArray(bytes, size + DEFINE_TYPE, bw);
                         size = -1;
                     }
                 }
                 if (size == DEFINE_TYPE - 1) {
-                    printByteArray(bytes, size, bw);
+                    printByteArray(bytes, size + ((bytes[size - 1] == bytes[size]) ? 0 : 1) * DEFINE_TYPE, bw);
                     size = -1;
                 }
             }
@@ -62,7 +69,12 @@ public class Coder {
             while (true) {
                 int now = br.read();
                 if (now == -1) break;
-                for (int i = 0; i < now; i++) bw.write((char) br.read());
+                if (now >= DEFINE_TYPE) {
+                    for (int i = 0; i <= now - DEFINE_TYPE; i++) bw.write((char) br.read());
+                } else {
+                    char let = (char) br.read();
+                    for (int i = 0; i <= now; i++) bw.write(let);
+                }
             }
         } catch (IOException e) {
             System.out.println("Can't find file");
