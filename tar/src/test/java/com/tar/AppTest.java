@@ -25,8 +25,6 @@ public class AppTest {
         assertTrue(FileUtils.contentEquals(new File("testResources/reference/maven.zip"), new File("maven.zip")));
         File f = new File("maven.zip");
         f.delete();
-
-
     }
 
     @Test

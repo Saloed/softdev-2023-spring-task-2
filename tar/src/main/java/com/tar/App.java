@@ -33,13 +33,22 @@ public class App {
             System.exit(1);
         }
         if (cmd.hasOption("u")) { // Распаковать файл
-            decombine(cmd.getOptionValue("u")); // Что делать с рантайм ошибками если файла не существует/ что-то еще
+            try {
+                decombine(cmd.getOptionValue("u"));
+            } catch (java.io.IOException e) {
+                System.out.println("Ошибка при открытии файла");
+                System.out.println(e.getMessage());
+                System.exit(1);
+            }
+            // Что делать с рантайм ошибками если файла не существует/ что-то еще
         } else if (cmd.hasOption("out")) { // Запаковать в файл
             ArrayList<String> filenames = new ArrayList(cmd.getArgList());
             try {
                 combine(filenames, cmd.getOptionValue("out"));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (java.io.IOException e) {
+                System.out.println("Ошибка при открытии файла");
+                System.out.println(e.getMessage());
+                System.exit(1);
             }
         } else { // Неверные аргументы
             printUsage();
@@ -75,38 +84,41 @@ public class App {
         try (FileOutputStream fos = new FileOutputStream(outFile)) {
 
             FileHeader header = new FileHeader(filesToCombine);
-            try {
-                fos.write(header.getHeader());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+            fos.write(header.getHeader());
+
             for (tar.src.main.java.com.tar.TFile file : header.getFiles()) {
                 File inFile = new File(file.getFilepath());
                 try (FileInputStream fis = new FileInputStream(inFile)) {
                     long written = 0; // TODO: Изменить на записал столько, сколько прочитал
                     byte[] chunk = new byte[4096];
                     int read;
-                    while (file.getSize() > written + 4096) {
+                    while( file.getSize()!=written){
                         read = fis.read(chunk);
-//                        fos.write(chunk,0,read); TODO: Как-то так
-                        fos.write(chunk);
-                        written += 4096;
+                        fos.write(chunk,0,read);
+                        written+=read;
                     }
-                    byte[] chunk2 = new byte[(int) (file.getSize() - written)]; // TODO: тогда это не нужно
-                    if (file.getSize() - written > 0) {
-
-                        fis.read(chunk2);
-                        fos.write(chunk2);
-                    }
+//                    while (file.getSize() > written + 4096) {
+//                        read = fis.read(chunk);
+////                        fos.write(chunk,0,read); TODO: Как-то так
+//                        fos.write(chunk);
+//                        written += 4096;
+//                    }
+//                    byte[] chunk2 = new byte[(int) (file.getSize() - written)]; // TODO: тогда это не нужно
+//                    if (file.getSize() - written > 0) {
+//
+//                        fis.read(chunk2);
+//                        fos.write(chunk2);
+//                    }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    throw new IOException(file.getFilename());
                 }
             }
         }
     }
 
 
-    public static void decombine(String inFilePath) {
+    public static void decombine(String inFilePath) throws IOException {
         File inFile = new File(inFilePath);
         try (FileInputStream fis = new FileInputStream(inFile)) {
             byte[] headerLengthBytes = new byte[8];
@@ -121,23 +133,28 @@ public class App {
                 File outFile = new File(file.getFilename());
                 try (FileOutputStream fos = new FileOutputStream(outFile)) {
                     long written = 0;
-                    while (file.getSize() > written + 4096) {
-                        byte[] chunk = new byte[4096];
-                        fis.read(chunk);
-                        fos.write(chunk);
-                        written += 4096;
+                    int read = 0;
+                    byte[] chunk = new byte[4096];
+                    while( file.getSize()!=written){
+                        read = fis.read(chunk);
+                        fos.write(chunk,0,read);
+                        written+=read;
                     }
-                    if (file.getSize() - written > 0) {
-                        byte[] chunk = new byte[(int) (file.getSize() - written)];
-                        fis.read(chunk);
-                        fos.write(chunk);
-                    }
+//                    while (file.getSize() > written + 4096) {
+//                        byte[] chunk = new byte[4096];
+//                        fis.read(chunk);
+//                        fos.write(chunk);
+//                        written += 4096;
+//                    }
+//                    if (file.getSize() - written > 0) {
+//                        byte[] chunk = new byte[(int) (file.getSize() - written)];
+//                        fis.read(chunk);
+//                        fos.write(chunk);
+//                    }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    throw new IOException(file.getFilename());
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

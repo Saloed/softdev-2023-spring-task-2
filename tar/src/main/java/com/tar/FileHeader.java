@@ -31,7 +31,7 @@ public class FileHeader {
 
     public FileHeader(ArrayList<String> files) {
         for (String filename : files) {
-            // TODO: Заменить на File.getflename
+            // TODO: Заменить на File.getfilename и исправить TFile путь
             File f = new File(filename);
             tar.src.main.java.com.tar.TFile file = new tar.src.main.java.com.tar.TFile(f.getName(), f.length());
             file.setFilepath(filename);
@@ -47,7 +47,7 @@ public class FileHeader {
             headerOffset++;
         }
         for (tar.src.main.java.com.tar.TFile file : files) {
-            for (byte i : getBytesInt(file.getFilename().getBytes().length)) {
+            for (byte i : getBytesInt(file.getFilename().getBytes().length)) { // DataInputStream использовать сложно, так как все байты уже считаны в byte[];
                 header[headerOffset] = i;
                 headerOffset++;
             }
