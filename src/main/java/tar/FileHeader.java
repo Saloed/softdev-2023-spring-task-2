@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class FileHeader {
-    ArrayList<TFile> files = new ArrayList<TFile>();
+    ArrayList<TFile> files = new ArrayList<>();
     long size = 8;
     long currentOffset = 0;
 
@@ -41,7 +41,7 @@ public class FileHeader {
             headerOffset++;
         }
         for (TFile file : files) {
-            for (byte i : getBytesInt(file.getFilename().getBytes().length)) { // DataInputStream использовать сложно, так как все байты уже считаны в byte[];
+            for (byte i : getBytesInt(file.getFilename().getBytes().length)) { // DataInputStream использовать сложно, так как все байты уже считаны в один массив byte[];
                 header[headerOffset] = i;
                 headerOffset++;
             }
@@ -60,7 +60,7 @@ public class FileHeader {
 
 
     public byte[] getBytesLong(long x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES); // Можно сделать static
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES); // Можно было бы сделать статическим?
         buffer.putLong(x);
         return buffer.array();
     }
@@ -84,7 +84,7 @@ public class FileHeader {
             fileNameSize = bytesToInt(b);
 
             b = new byte[fileNameSize];
-            for (int i = 0; i < fileNameSize; i++) { // memcpy (C)
+            for (int i = 0; i < fileNameSize; i++) {
                 b[i] = bytes[pointer++];
             }
             filename = new String(b);
@@ -98,7 +98,7 @@ public class FileHeader {
         }
     }
 
-    public static long bytesToLong(byte[] bytes) { // Заменить на DataInputStream
+    public static long bytesToLong(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.put(bytes);
         buffer.flip();

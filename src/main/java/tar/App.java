@@ -90,7 +90,7 @@ public class App {
             fis.read(headerLengthBytes);
             long headerLength = FileHeader.bytesToLong(headerLengthBytes);
 
-            byte[] headerBytes = new byte[(int) headerLength - 8]; // Заголовок же не будет больше 2ГБ?
+            byte[] headerBytes = new byte[(int) headerLength - 8];
             fis.read(headerBytes);
             FileHeader header = new FileHeader(headerBytes);
             ArrayList<TFile> files = header.getFiles();
