@@ -1,39 +1,50 @@
 package tar;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FileHeader {
-    ArrayList<TFile> files = new ArrayList<>();
+    private final static int MIN_HEADER_SIZE = 12;
+    private List<TFile> files = new ArrayList<>();
     long size = 8;
     long currentOffset = 0;
 
-    public ArrayList<TFile> getFiles() {
+    private FileHeader() {
+
+    }
+
+    public List<TFile> getFiles() {
         return files;
     }
 
-    public void addFile(TFile file) {
-        size += file.getFilename().getBytes().length + 12;
-        file.setOffset(currentOffset);
-        currentOffset += file.getSize();
-        files.add(file);
-    }
-
-    public FileHeader(byte[] header) {
-        parseHeader(header);
-    }
-
-    public FileHeader(ArrayList<String> files) {
-        for (String filename : files) {
-            File f = new File(filename);
-            TFile file = new TFile(f.getName(), f.length());
-            file.setFilepath(filename);
-            this.addFile(file);
+    private FileHeader(List<TFile> files) {
+        this.files = files;// Нет ли шанса тут поймать nullpointer?
+        for (TFile file : files) {
+            size += file.getFilename().getBytes().length + MIN_HEADER_SIZE;
+            currentOffset += file.getSize();
         }
     }
 
-    public byte[] getHeader() {
+    public static FileHeader getHeader(List<String> files) {
+        return new FileHeader(createFileList(files));
+    }
+
+    public static List<TFile> createFileList(List<String> files) {
+        List<TFile> fl = new ArrayList<>();
+        for (String filename : files) {
+            File f = new File(filename);
+            TFile file = new TFile(f.getName(), f.length(), filename);
+            fl.add(file);
+        }
+        return fl;
+    }
+
+    public void writeHeader(FileOutputStream fos) throws IOException {
         byte[] header = new byte[(int) size];
         int headerOffset = 0;
         for (byte i : getBytesLong(size)) {
@@ -55,12 +66,12 @@ public class FileHeader {
             }
 
         }
-        return header;
+        fos.write(header);
     }
 
 
     public byte[] getBytesLong(long x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES); // Можно было бы сделать статическим?
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.putLong(x);
         return buffer.array();
     }
@@ -71,7 +82,15 @@ public class FileHeader {
         return buffer.array();
     }
 
-    public void parseHeader(byte[] bytes) {
+
+    public static FileHeader parseHeader(FileInputStream fis) throws IOException {
+        List<TFile> headerFiles = new ArrayList<>();
+
+        byte[] headerLengthBytes = new byte[8];
+        fis.read(headerLengthBytes);
+        long headerLength = FileHeader.bytesToLong(headerLengthBytes);
+        byte[] bytes = new byte[(int) headerLength-8];
+        fis.read(bytes);
         int pointer = 0;
         while (pointer < bytes.length) {
             int fileNameSize = 0;
@@ -94,8 +113,9 @@ public class FileHeader {
                 b[i] = bytes[pointer++];
             }
             fileSize = bytesToLong(b);
-            addFile(new TFile(filename, fileSize));
+            headerFiles.add(new TFile(filename, fileSize));
         }
+        return new FileHeader(headerFiles);
     }
 
     public static long bytesToLong(byte[] bytes) {

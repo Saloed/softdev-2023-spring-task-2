@@ -5,9 +5,12 @@ import org.apache.commons.cli.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class App {
+    private final static int BLOCK_SIZE = 4096;
+
     public static void main(String[] args) {
 
         Options options = new Options();
@@ -31,49 +34,42 @@ public class App {
             printUsage();
             System.exit(1);
         }
-        if (cmd.hasOption("u")) { // Распаковать файл
-            try {
+        try {
+            if (cmd.hasOption("u")) { // Распаковать файл
+
                 decombine(cmd.getOptionValue("u"));
-            } catch (java.io.IOException e) {
-                System.out.println("Ошибка при открытии файла");
-                System.out.println(e.getMessage());
-                System.exit(1);
-            }
-        } else if (cmd.hasOption("out")) { // Запаковать в файл
-            ArrayList<String> filenames = new ArrayList(cmd.getArgList());
-            try {
+
+            } else if (cmd.hasOption("out")) { // Запаковать в файл
+                List<String> filenames = new ArrayList(cmd.getArgList());
                 combine(filenames, cmd.getOptionValue("out"));
-            } catch (java.io.IOException e) {
-                System.out.println("Ошибка при открытии файла");
-                System.out.println(e.getMessage());
+
+            } else { // Неверные аргументы
+                printUsage();
                 System.exit(1);
             }
-        } else { // Неверные аргументы
-            printUsage();
+        } catch (java.io.IOException e) {
+            System.out.println("Ошибка при открытии файла");
+            System.out.println(e.getMessage());
             System.exit(1);
         }
 
     }
 
-    public static void combine(ArrayList<String> filesToCombine, String outFilePath) throws IOException {
+    public static void combine(List<String> filesToCombine, String outFilePath) throws IOException {
         File outFile = new File(outFilePath);
-
         try (FileOutputStream fos = new FileOutputStream(outFile)) {
-
-            FileHeader header = new FileHeader(filesToCombine);
-
-            fos.write(header.getHeader());
-
+            FileHeader header = FileHeader.getHeader(filesToCombine);
+            header.writeHeader(fos);
             for (TFile file : header.getFiles()) {
                 File inFile = new File(file.getFilepath());
                 try (FileInputStream fis = new FileInputStream(inFile)) {
                     long written = 0;
-                    byte[] chunk = new byte[4096];
+                    byte[] chunk = new byte[BLOCK_SIZE];
                     int read;
-                    while( file.getSize()!=written){
+                    while (file.getSize() != written) {
                         read = fis.read(chunk);
-                        fos.write(chunk,0,read);
-                        written+=read;
+                        fos.write(chunk, 0, read);
+                        written += read;
                     }
                 } catch (Exception e) {
                     throw new IOException(file.getFilename());
@@ -86,24 +82,18 @@ public class App {
     public static void decombine(String inFilePath) throws IOException {
         File inFile = new File(inFilePath);
         try (FileInputStream fis = new FileInputStream(inFile)) {
-            byte[] headerLengthBytes = new byte[8];
-            fis.read(headerLengthBytes);
-            long headerLength = FileHeader.bytesToLong(headerLengthBytes);
-
-            byte[] headerBytes = new byte[(int) headerLength - 8];
-            fis.read(headerBytes);
-            FileHeader header = new FileHeader(headerBytes);
-            ArrayList<TFile> files = header.getFiles();
+            FileHeader header = FileHeader.parseHeader(fis);
+            List<TFile> files = header.getFiles();
             for (TFile file : files) {
                 File outFile = new File(file.getFilename());
                 try (FileOutputStream fos = new FileOutputStream(outFile)) {
                     long written = 0;
                     int read = 0;
-                    byte[] chunk = new byte[4096];
-                    while( file.getSize()!=written){
+                    byte[] chunk = new byte[BLOCK_SIZE];
+                    while (file.getSize() != written) {
                         read = fis.read(chunk);
-                        fos.write(chunk,0,read);
-                        written+=read;
+                        fos.write(chunk, 0, read);
+                        written += read;
                     }
                 } catch (Exception e) {
                     throw new IOException(file.getFilename());

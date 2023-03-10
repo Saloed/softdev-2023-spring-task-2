@@ -1,30 +1,23 @@
 package tar;
 
 public class TFile {
-    private String filename;
+    private final String filename;
 
-    private String filepath;
-    private long size;
-    private long offset;
+    private final String filepath;
+    private final long size;
+
 
     public TFile(String filename, long size) {
+        this(filename, size, filename);
+    }
+
+    public TFile(String filename, long size, String filepath) {
         this.filename = filename;
         this.size = size;
-
+        this.filepath = filepath;
     }
 
-    public void setOffset(long offset) {
-        this.offset = offset;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
-
-    public long getOffset() {
-        return offset;
-    }
-
+    
     public long getSize() {
         return size;
     }
@@ -33,15 +26,8 @@ public class TFile {
         return filename;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
     public String getFilepath() {
         return filepath;
     }
 
-    public void setFilepath(String filepath) {
-        this.filepath = filepath;
-    }
 }
