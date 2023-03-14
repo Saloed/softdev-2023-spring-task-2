@@ -10,13 +10,10 @@ import java.util.List;
 
 public class FileHeader {
     private final static int MIN_HEADER_SIZE = 12;
-    private List<TFile> files = new ArrayList<>();
+    private final List<TFile> files;
     long size = 8;
     long currentOffset = 0;
 
-    private FileHeader() {
-
-    }
 
     public List<TFile> getFiles() {
         return files;
@@ -45,28 +42,16 @@ public class FileHeader {
     }
 
     public void writeHeader(FileOutputStream fos) throws IOException {
-        byte[] header = new byte[(int) size];
-        int headerOffset = 0;
-        for (byte i : getBytesLong(size)) {
-            header[headerOffset] = i;
-            headerOffset++;
-        }
-        for (TFile file : files) {
-            for (byte i : getBytesInt(file.getFilename().getBytes().length)) { // DataInputStream использовать сложно, так как все байты уже считаны в один массив byte[];
-                header[headerOffset] = i;
-                headerOffset++;
-            }
-            for (byte i : file.getFilename().getBytes()) {
-                header[headerOffset] = i;
-                headerOffset++;
-            }
-            for (byte i : getBytesLong(file.getSize())) {
-                header[headerOffset] = i;
-                headerOffset++;
-            }
+        ByteBuffer header = ByteBuffer.allocate((int) size);
 
+        header.put(getBytesLong(size));
+
+        for (TFile file : files) {
+            header.put(getBytesInt(file.getFilename().getBytes().length));
+            header.put(file.getFilename().getBytes());
+            header.put(getBytesLong(file.getSize()));
         }
-        fos.write(header);
+        fos.write(header.array());
     }
 
 
@@ -86,32 +71,25 @@ public class FileHeader {
     public static FileHeader parseHeader(FileInputStream fis) throws IOException {
         List<TFile> headerFiles = new ArrayList<>();
 
-        byte[] headerLengthBytes = new byte[8];
+        byte[] headerLengthBytes = new byte[Long.BYTES];
         fis.read(headerLengthBytes);
         long headerLength = FileHeader.bytesToLong(headerLengthBytes);
-        byte[] bytes = new byte[(int) headerLength-8];
-        fis.read(bytes);
-        int pointer = 0;
-        while (pointer < bytes.length) {
+        ByteBuffer header = ByteBuffer.allocate((int) headerLength-Long.BYTES);
+        fis.read(header.array());
+        while (header.hasRemaining()) {
             int fileNameSize = 0;
             String filename;
             long fileSize = 0;
             byte[] b = new byte[4];
-            for (int i = 0; i < 4; i++) {
-                b[i] = bytes[pointer++];
-            }
+            header.get(b);
             fileNameSize = bytesToInt(b);
 
             b = new byte[fileNameSize];
-            for (int i = 0; i < fileNameSize; i++) {
-                b[i] = bytes[pointer++];
-            }
+            header.get(b,0,fileNameSize);
             filename = new String(b);
 
             b = new byte[8];
-            for (int i = 0; i < 8; i++) {
-                b[i] = bytes[pointer++];
-            }
+            header.get(b);
             fileSize = bytesToLong(b);
             headerFiles.add(new TFile(filename, fileSize));
         }
