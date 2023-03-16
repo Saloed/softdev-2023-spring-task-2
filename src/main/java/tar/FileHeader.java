@@ -74,23 +74,28 @@ public class FileHeader {
         byte[] headerLengthBytes = new byte[Long.BYTES];
         fis.read(headerLengthBytes);
         long headerLength = FileHeader.bytesToLong(headerLengthBytes);
-        ByteBuffer header = ByteBuffer.allocate((int) headerLength-Long.BYTES);
-        fis.read(header.array());
+        byte[] headerBytes = new byte[(int) headerLength-Long.BYTES];
+        fis.read(headerBytes);
+        ByteBuffer header = ByteBuffer.wrap(headerBytes);
+
         while (header.hasRemaining()) {
             int fileNameSize = 0;
             String filename;
             long fileSize = 0;
-            byte[] b = new byte[4];
-            header.get(b);
-            fileNameSize = bytesToInt(b);
 
-            b = new byte[fileNameSize];
+            fileNameSize=header.getInt();
+//            byte[] b = new byte[4];
+//            header.get(b);
+//            fileNameSize = bytesToInt(b);
+
+            byte[] b = new byte[fileNameSize];
             header.get(b,0,fileNameSize);
             filename = new String(b);
 
-            b = new byte[8];
-            header.get(b);
-            fileSize = bytesToLong(b);
+            fileSize = header.getLong();
+//            b = new byte[8];
+//            header.get(b);
+//            fileSize = bytesToLong(b);
             headerFiles.add(new TFile(filename, fileSize));
         }
         return new FileHeader(headerFiles);
