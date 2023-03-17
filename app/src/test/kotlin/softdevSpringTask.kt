@@ -7,7 +7,6 @@ import java.io.File
 import kotlin.test.*
 
 class XorTest {
-
     private fun isEqual(firstFile: String, secondFile: String) {
         val first = File(firstFile).readText()
         val second = File(secondFile).readText()
