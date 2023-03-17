@@ -47,7 +47,7 @@ public class FileHeader {
         header.put(getBytesLong(size));
 
         for (TFile file : files) {
-            header.put(getBytesInt(file.getFilename().getBytes().length));
+            header.putInt(file.getFilename().getBytes().length);
             header.put(file.getFilename().getBytes());
             header.put(getBytesLong(file.getSize()));
         }
@@ -61,11 +61,6 @@ public class FileHeader {
         return buffer.array();
     }
 
-    public byte[] getBytesInt(int x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-        buffer.putInt(x);
-        return buffer.array();
-    }
 
 
     public static FileHeader parseHeader(FileInputStream fis) throws IOException {
@@ -74,28 +69,16 @@ public class FileHeader {
         byte[] headerLengthBytes = new byte[Long.BYTES];
         fis.read(headerLengthBytes);
         long headerLength = FileHeader.bytesToLong(headerLengthBytes);
-        byte[] headerBytes = new byte[(int) headerLength-Long.BYTES];
+        byte[] headerBytes = new byte[(int) headerLength - Long.BYTES];
         fis.read(headerBytes);
         ByteBuffer header = ByteBuffer.wrap(headerBytes);
 
         while (header.hasRemaining()) {
-            int fileNameSize = 0;
-            String filename;
-            long fileSize = 0;
-
-            fileNameSize=header.getInt();
-//            byte[] b = new byte[4];
-//            header.get(b);
-//            fileNameSize = bytesToInt(b);
-
+            int fileNameSize = header.getInt();
             byte[] b = new byte[fileNameSize];
-            header.get(b,0,fileNameSize);
-            filename = new String(b);
-
-            fileSize = header.getLong();
-//            b = new byte[8];
-//            header.get(b);
-//            fileSize = bytesToLong(b);
+            header.get(b, 0, fileNameSize);
+            String filename = new String(b);
+            long fileSize = header.getLong();
             headerFiles.add(new TFile(filename, fileSize));
         }
         return new FileHeader(headerFiles);
@@ -108,10 +91,4 @@ public class FileHeader {
         return buffer.getLong();
     }
 
-    public static int bytesToInt(byte[] bytes) {
-        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-        buffer.put(bytes);
-        buffer.flip();
-        return buffer.getInt();
-    }
 }

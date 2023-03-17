@@ -40,7 +40,7 @@ public class App {
                 decombine(cmd.getOptionValue("u"));
 
             } else if (cmd.hasOption("out")) { // Запаковать в файл
-                List<String> filenames = new ArrayList(cmd.getArgList());
+                List<String> filenames = new ArrayList<>(cmd.getArgList());
                 combine(filenames, cmd.getOptionValue("out"));
 
             } else { // Неверные аргументы
@@ -88,10 +88,14 @@ public class App {
                 File outFile = new File(file.getFilename());
                 try (FileOutputStream fos = new FileOutputStream(outFile)) {
                     long written = 0;
-                    int read = 0;
+                    int read;
                     byte[] chunk = new byte[BLOCK_SIZE];
                     while (file.getSize() != written) {
-                        read = fis.read(chunk);
+                        if (chunk.length <= file.getSize() - written) {
+                            read = fis.read(chunk);
+                        } else {
+                            read = fis.read(chunk, 0, (int) (file.getSize() - written));
+                        }
                         fos.write(chunk, 0, read);
                         written += read;
                     }
