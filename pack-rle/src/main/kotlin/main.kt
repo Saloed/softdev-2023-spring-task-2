@@ -27,8 +27,8 @@ class Parser private constructor (private val text: String) {
                     return res
                 }
                 count > 1 -> {
-                    while (curCount > 47) {
-                        res += "~$string"
+                    while (curCount > 47) {       // A * 142 = ~A~A~A!A
+                        res += "~$string"         //         47 * 3 + 1
                         curCount -= 47
                     }
                     res += if (curCount > 1) ('N' + curCount) + string
