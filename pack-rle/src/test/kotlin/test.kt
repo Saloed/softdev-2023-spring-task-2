@@ -18,4 +18,9 @@ class Tests {
         println(text.encoded)
         println(text.sizeRed)
     }
+
+    @Test
+    fun general() {
+        println(Char(30000).toString()[0].code)
+    }
 }

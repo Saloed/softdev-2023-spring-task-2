@@ -15,21 +15,21 @@ class Parser private constructor (private val text: String) {
                 count < 0 -> {
                     var i = 1
                     curCount *= -1
-                    if (curCount > 47) {
-                        while (curCount > 47) {
-                            res += "O" + string.substring(47 * (i - 1), 47 * i)
+                    if (curCount > 113) {
+                        while (curCount > 113) {
+                            res += Char(144) + string.substring(113 * (i - 1), 113 * i)
                             i++
-                            curCount -= 47
+                            curCount -= 113
                         }
-                        res += ('!' + curCount - 1) + string.substring(47 * i)
+                        res += (' ' + curCount - 1) + string.substring(112 * i)
                     }
-                    res += ('!' + curCount - 1) + string
+                    res += (' ' + curCount - 1) + string
                     return res
                 }
                 count > 1 -> {
-                    while (curCount > 47) {       // A * 142 = ~A~A~A!A
-                        res += "~$string"         //         47 * 3 + 1
-                        curCount -= 47
+                    while (curCount > 112) {       // A * 142 = ~A~A~A!A
+                        res += "${Char(255)}$string"         //
+                        curCount -= 112
                     }
                     res += if (curCount > 1) ('N' + curCount) + string
                     else "!$string"
@@ -40,7 +40,7 @@ class Parser private constructor (private val text: String) {
         }
         // chars from !(33 ASCII) to O(79) represent count values from -1 to -47
         // chars from P(80 ASCII) to ~(126) represent count values from 2 to 47
-        // full table can be seen in .resources
+        // 32 - 144 145 - 255
 
         fun countDif() {
             var count = 1
