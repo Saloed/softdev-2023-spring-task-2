@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 
+import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -22,7 +23,7 @@ public class Main {
     private Boolean reverse = false;
     @Option(name = "-o", aliases = "--output", usage = "Path of the output txt file")
     private String outputName;
-    @Option(name = "-f", aliases = "--file", usage = "Sets the path to the directory/file", required = true)
+    @Argument(usage = "Path of the output txt file", required = true)
     private String inputName;
 
     public static void main(final String[] args) throws CmdLineException, IOException {
@@ -33,7 +34,7 @@ public class Main {
 
 
     public void argsParse(final String[] args) throws CmdLineException {
-        if (args.length < 2) {
+        if (args.length < 1) {
             System.exit(-1);
         }
         CmdLineParser parser = new CmdLineParser(this);

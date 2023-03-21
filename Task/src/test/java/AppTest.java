@@ -20,7 +20,7 @@ public class AppTest {
     }
     @org.junit.jupiter.api.Test
     void SingleFile() throws CmdLineException, IOException {
-        String[] args = new String[]{"-h", "-f",
+        String[] args = new String[]{"-h",
                 "D:\\IntelliJ IDEA Community Edition 2022.2.1\\softdev-2023-spring-task-2\\files\\TestingFiles\\Test1.txt"};
         Main newMain = new Main();
         newMain.argsParse(args);
@@ -30,7 +30,7 @@ public class AppTest {
     }
     @org.junit.jupiter.api.Test
     void SingleFileBytes() throws CmdLineException, IOException {
-        String[] args = new String[]{"-f",
+        String[] args = new String[]{
                 "D:\\IntelliJ IDEA Community Edition 2022.2.1\\softdev-2023-spring-task-2\\files\\TestingFiles\\Test1.txt"};
         Main newMain = new Main();
         newMain.argsParse(args);
@@ -40,7 +40,7 @@ public class AppTest {
     }
     @org.junit.jupiter.api.Test
     void Directory() throws CmdLineException, IOException {
-        String[] args = new String[]{"-l", "-h", "-f",
+        String[] args = new String[]{"-l", "-h",
                 "D:\\IntelliJ IDEA Community Edition 2022.2.1\\softdev-2023-spring-task-2\\files\\TestingFiles\\"};
         Main newMain = new Main();
         newMain.argsParse(args);
@@ -58,7 +58,7 @@ public class AppTest {
                 "D:\\IntelliJ IDEA Community Edition 2022.2.1\\softdev-2023-spring-task-2\\files\\Test.txt\\";
 
         String[] args = new String[]
-                {"-l", "-h", "-o", outputName, "-f",
+                {"-l", "-h", "-o", outputName,
                         "D:\\IntelliJ IDEA Community Edition 2022.2.1\\softdev-2023-spring-task-2\\files\\TestingFiles\\"};
 
         File file = new File(outputName);
