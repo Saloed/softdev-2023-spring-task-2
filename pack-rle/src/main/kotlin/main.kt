@@ -2,7 +2,7 @@ fun main() {
 }
 
 
-class Parser private constructor (private val text: String) {
+class EncodeParser private constructor (private val text: String) {
     private val originalLength = text.length
     private fun encode(): String {
         var index = 0
@@ -31,16 +31,13 @@ class Parser private constructor (private val text: String) {
                         res += "${Char(255)}$string"         //
                         curCount -= 112
                     }
-                    res += if (curCount > 1) ('N' + curCount) + string
-                    else "!$string"
+                    res += if (curCount > 1) (Char(143) + curCount) + string
+                    else Char(32) + string
                 }
                 else -> throw IllegalArgumentException()
             }
             return res
         }
-        // chars from !(33 ASCII) to O(79) represent count values from -1 to -47
-        // chars from P(80 ASCII) to ~(126) represent count values from 2 to 47
-        // 32 - 144 145 - 255
 
         fun countDif() {
             var count = 1
@@ -62,7 +59,6 @@ class Parser private constructor (private val text: String) {
             }
             result += fromIntToString(count, text[index].toString())
         }
-
         while (index < originalLength) {
             if (text[index] == text[index + 1]) {
                 countSim()
@@ -72,10 +68,11 @@ class Parser private constructor (private val text: String) {
         }
         return result
     }
+
     val encoded = encode()
     val sizeRed = originalLength.toDouble() / encoded.length.toDouble()
     companion object {
-        fun create(text: String) = Parser(text)
+        fun create(text: String) = EncodeParser(text)
     }
 }
 
