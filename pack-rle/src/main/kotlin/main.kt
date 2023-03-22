@@ -1,4 +1,12 @@
-fun main() {
+import java.io.File
+
+fun main(arguments: Array<String>) {
+    val text = File(arguments[1]).readLines().toString()
+    when (arguments.first()) {
+        "-z" -> File(arguments.last()).bufferedWriter().use { EncodeParser.create(text).encoded }
+        "-u" -> File(arguments.last()).bufferedWriter().use { DecodeParser.create(text).decoded }
+        else -> throw IllegalArgumentException()
+    }
 }
 
 
@@ -13,17 +21,14 @@ class EncodeParser private constructor (private val text: String) {
             var res = ""
             when {
                 count < 0 -> {
-                    var i = 1
+                    var i = 0
                     curCount *= -1
-                    if (curCount > 113) {
-                        while (curCount > 113) {
-                            res += Char(144) + string.substring(113 * (i - 1), 113 * i)
-                            i++
-                            curCount -= 113
-                        }
-                        res += (' ' + curCount - 1) + string.substring(112 * i)
+                    while (curCount > 113) {
+                        i++
+                        res += Char(144) + string.substring(113 * (i - 1), 113 * i)
+                        curCount -= 113
                     }
-                    res += (' ' + curCount - 1) + string
+                    res += (' ' + curCount - 1) + string.substring(113 * i, string.length)
                     return res
                 }
                 count > 1 -> {

@@ -15,9 +15,10 @@ class Tests {
         text = EncodeParser.create("A".repeat(113))
         assertEquals("${Char(255)}A${Char(32)}A", text.encoded)
         println(text.sizeRed)
-        text = EncodeParser.create("A".repeat(113))
-        assertEquals("${Char(255)}A${Char(32)}A", text.encoded)
-        println(text.sizeRed)
+        text = EncodeParser.create("AB".repeat(56))
+        assertEquals("${Char(143)}${"AB".repeat(56)}", text.encoded)
+        text = EncodeParser.create("AB".repeat(113))
+        assertEquals("${Char(144)}${"AB".repeat(56)}A${Char(144)}B${"AB".repeat(56)}", text.encoded)
     }
 
     @Test
@@ -28,8 +29,10 @@ class Tests {
         assertEquals("A".repeat(112), text.decoded)
         text = DecodeParser.create("${Char(255)}A${Char(32)}A")
         assertEquals("A".repeat(113), text.decoded)
-        text = DecodeParser.create("${Char(255)}A${Char(32)}A")
-        assertEquals("A".repeat(113), text.decoded)
-    }
+        text = DecodeParser.create("${Char(143)}${"AB".repeat(56)}")
+        assertEquals("AB".repeat(56), text.decoded)
+        text = DecodeParser.create("${Char(144)}${"AB".repeat(56)}A${Char(144)}B${"AB".repeat(56)}")
+        assertEquals("AB".repeat(113), text.decoded)
+        }
 
 }
