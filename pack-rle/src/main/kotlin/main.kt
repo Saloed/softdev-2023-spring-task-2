@@ -76,3 +76,26 @@ class EncodeParser private constructor (private val text: String) {
     }
 }
 
+class DecodeParser private constructor (private val text: String) {
+    private fun decode(): String {
+        var index = 0
+        var result = ""
+        while (index < text.length) {
+            if (text[index].code in 32..144) {
+                result += text.substring(index + 1, index + text[index].code - 30)
+                index += text[index].code - 30
+            }
+            else {
+                result += text[index + 1].toString().repeat(text[index].code - 143)
+                index += 2
+            }
+        }
+        return result
+    }
+
+    val decoded = decode()
+    companion object {
+        fun create(text: String) = DecodeParser(text)
+    }
+}
+
