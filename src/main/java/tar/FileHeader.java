@@ -43,24 +43,16 @@ public class FileHeader {
 
     public void writeHeader(FileOutputStream fos) throws IOException {
         ByteBuffer header = ByteBuffer.allocate((int) size);
-
-        header.put(getBytesLong(size));
+        header.putLong(size);
 
         for (TFile file : files) {
-            header.putInt(file.getFilename().getBytes().length);
-            header.put(file.getFilename().getBytes());
-            header.put(getBytesLong(file.getSize()));
+            byte[] fileNameBytes = file.getFilename().getBytes();
+            header.putInt(fileNameBytes.length);
+            header.put(fileNameBytes);
+            header.putLong(file.getSize());
         }
         fos.write(header.array());
     }
-
-
-    public byte[] getBytesLong(long x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(x);
-        return buffer.array();
-    }
-
 
 
     public static FileHeader parseHeader(FileInputStream fis) throws IOException {
@@ -85,7 +77,8 @@ public class FileHeader {
     }
 
     public static long bytesToLong(byte[] bytes) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        byte[] buf = new byte[Long.BYTES];
+        ByteBuffer buffer = ByteBuffer.wrap(buf);
         buffer.put(bytes);
         buffer.flip();
         return buffer.getLong();
