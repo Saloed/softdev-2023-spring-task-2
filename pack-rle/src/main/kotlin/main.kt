@@ -1,11 +1,22 @@
 import java.io.File
+import java.lang.Exception
 
-fun main(arguments: Array<String>) {
-    val text = File(arguments[1]).readLines().toString()
-    when (arguments.first()) {
-        "-z" -> File(arguments.last()).bufferedWriter().use { EncodeParser.create(text).encoded }
-        "-u" -> File(arguments.last()).bufferedWriter().use { DecodeParser.create(text).decoded }
-        else -> throw IllegalArgumentException()
+fun main(args: Array<String>) {
+    if (!File(args[1]).exists()) throw Exception("File does not exist. Please, check the path.")
+    val text = File(args[1]).readLines().toString()
+    when (args.first()) {
+        "-z" -> {
+            println("Processing...")
+            File(args.last()).bufferedWriter().use { EncodeParser.create(text).encoded }
+            println("${args.last()} saved successfully!/nHave a good day!")
+        }
+        "-u" -> {
+            println("Processing...")
+            File(args.last()).bufferedWriter().use { DecodeParser.create(text).decoded }
+            println("${args.last()} saved successfully!/nHave a good day!")
+        }
+        else -> throw IllegalArgumentException("(-u) and (-z) are the only available arguments./n" +
+                "Choose one of them or do not choose at all")
     }
 }
 
@@ -103,4 +114,3 @@ class DecodeParser private constructor (private val text: String) {
         fun create(text: String) = DecodeParser(text)
     }
 }
-
