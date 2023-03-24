@@ -35,7 +35,6 @@ tasks.named<Test>("test") {
 
 tasks.jar {
     manifest {
-        attributes["Tar-Class"] = "TarKt"
         attributes["Main-Class"] = "softdevSpringTask.TarKt"
     }
     configurations["compileClasspath"].forEach { file: File ->
