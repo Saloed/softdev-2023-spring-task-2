@@ -6,13 +6,18 @@ public class TestSplit {
         Main.main(args);
     }
     @Test
+    public void test_l_base() throws Exception {
+        String[]args={"-d","-l","src/test/resources/test1.txt"};
+        Main.main(args);
+    }
+    @Test
     public void test1() throws Exception {
         String[]args={"-c","500","-o","-","src/test/resources/file.txt"};
         Main.main(args);
     }
     @Test
     public void test2() throws Exception {
-        String[]args={"-c","50","-o","outFile","src/test/resources/file.txt"};
+        String[]args={"-c","500","-o","outFile","src/test/resources/file.txt"};
         Main.main(args);
     }
     @Test

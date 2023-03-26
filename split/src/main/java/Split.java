@@ -29,7 +29,7 @@ public class Split {
                     cNum=Integer.parseInt(args[i+1]);
                 }
                 catch (NumberFormatException e){
-                    throw new Exception("РќРµС‚ РєРѕР»РёС‡РµСЃС‚РІР° СЃРёРјРІРѕР»РѕРІ");
+                    throw new Exception("Не введено число");
                 }
             }
             if (args[i].matches("-n")){
@@ -38,7 +38,7 @@ public class Split {
                     nNum=Integer.parseInt(args[i+1]);
                 }
                 catch (NumberFormatException e){
-                    throw new Exception("РќРµС‚ РєРѕР»РёС‡РµСЃС‚РІР° С„Р°Р№Р»РѕРІ");
+                    throw new Exception("Не введено число");
                 }
             }
             if (args[i].matches("-o")){
@@ -48,7 +48,7 @@ public class Split {
             fileName=args[args.length-1];
         }
         if ((l & c & n )| (l & c) | (l & n) |( c & n )| (!l & !c & !n))
-            throw new Exception("РќРµРїСЂР°РІРёР»СЊРЅРѕ РІРІРµРґРµРЅС‹ РґР°РЅРЅС‹Рµ");
+            throw new Exception("Слишком много аргументов");
     }
     String str(int i) {
         return i < 0 ? "" : str((i / 26) - 1) + (char)(65 + i % 26);
@@ -96,7 +96,7 @@ public class Split {
         }
         catch (IOException e){
             e.printStackTrace();
-            System.out.println("РќРµС‚ С„Р°Р№Р»Р° СЃ С‚Р°РєРёРј РёРјРµРЅРµРј");
+            System.out.println("Нет файла");
         }
     }
 
@@ -122,7 +122,7 @@ public class Split {
             }
         }
         catch (IOException e){
-            System.out.println("РќРµС‚ С„Р°Р№Р»Р° СЃ С‚Р°РєРёРј РёРјРµРЅРµРј");
+            System.out.println("Нет файла");
         }
         catch (NullPointerException e){
         }
@@ -163,7 +163,7 @@ public class Split {
             }
         }
         catch (IOException e){
-            System.out.println("РќРµС‚ С„Р°Р№Р»Р° СЃ С‚Р°РєРёРј РёРјРµРЅРµРј");
+            System.out.println("Нет файла");
         }
     }
     public void split() {
