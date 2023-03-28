@@ -4,8 +4,7 @@ import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.CmdLineParser;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
+import java.util.List;
 public class GrepLauncher {
     @Option(name = "-v", usage = "Inverts the filtering condition (only what does NOT match it is displayed)")
     private Boolean inv = false;
@@ -34,7 +33,7 @@ public class GrepLauncher {
             return;
         }
         Grep grep = new Grep();
-        ArrayList result;
+        List result;
         try {
             result = grep.grep(inv, reg, ign, word, inputFile);
             for (Object line : result) {

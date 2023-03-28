@@ -3,14 +3,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 class GrepTest {
 
     @Test
     void testAllFalse() throws IOException {
         Grep grep = new Grep();
-        ArrayList result = grep.grep(false, false, false, "pipi", "test");
+        List result = grep.grep(false, false, false, "pipi", "test");
         assertEquals(2, result.size());
         assertEquals("Word - pipi.", result.get(0));
         assertEquals("All args false string pipi.", result.get(1));
@@ -19,7 +19,7 @@ class GrepTest {
     @Test
     void testInverted() throws IOException {
         Grep grep = new Grep();
-        ArrayList result = grep.grep(true, false, false, "pipi", "test");
+        List result = grep.grep(true, false, false, "pipi", "test");
         assertEquals(4, result.size());
         assertEquals("Thelinewhereeverythingisconnectedpipi.", result.get(0));
         assertEquals("IgNoReCasE true string piPI.", result.get(1));
@@ -30,7 +30,7 @@ class GrepTest {
     @Test
     void testRegex() throws IOException {
         Grep grep = new Grep();
-        ArrayList result = grep.grep(false, true, false, "pipi", "test");
+        List result = grep.grep(false, true, false, "pipi", "test");
         assertEquals(3, result.size());
         assertEquals("Word - pipi.", result.get(0));
         assertEquals("All args false string pipi.", result.get(1));
@@ -40,7 +40,7 @@ class GrepTest {
     @Test
     void testIgnoreCase() throws IOException {
         Grep grep = new Grep();
-        ArrayList result = grep.grep(false, false, true, "PIPI", "test");
+        List result = grep.grep(false, false, true, "PIPI", "test");
         assertEquals(3, result.size());
         assertEquals("Word - pipi.", result.get(0));
         assertEquals("All args false string pipi.", result.get(1));
@@ -50,7 +50,7 @@ class GrepTest {
     @Test
     void testAllTrue() throws IOException {
         Grep grep = new Grep();
-        ArrayList result = grep.grep(true, true, true, "pipi", "test");
+        List result = grep.grep(true, true, true, "pipi", "test");
         assertEquals(1, result.size());
         assertEquals("123", result.get(0));
     }

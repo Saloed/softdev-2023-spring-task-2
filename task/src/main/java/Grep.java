@@ -2,10 +2,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.util.List;
 public class Grep {
-    public ArrayList grep(Boolean inv, Boolean reg, Boolean ign, String word, String inputFile) throws IOException {
-        ArrayList filteredFile = new ArrayList();
+    public List grep(Boolean inv, Boolean reg, Boolean ign, String word, String inputFile) throws IOException {
+        List<String> filteredFile = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
