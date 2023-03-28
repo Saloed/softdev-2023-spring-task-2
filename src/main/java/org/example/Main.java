@@ -47,6 +47,9 @@ public class Main {
             PrintStream output = new PrintStream(outputName);
             System.setOut(output);
         }
+        if (!files.exists()) {
+            throw new NullPointerException("Such file does not exist");
+        }
         if (files.isFile()) {
             BasicFileAttributes attr = Files.readAttributes(files.toPath(), BasicFileAttributes.class);
             String str = checkAccess("", files) + ' ';
