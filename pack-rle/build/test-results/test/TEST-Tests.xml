@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Tests" tests="2" skipped="0" failures="0" errors="0" timestamp="2023-03-22T15:56:53" hostname="DESKTOP-AE7SB0K" time="0.028">
+  <properties/>
+  <testcase name="decode()" classname="Tests" time="0.022"/>
+  <testcase name="encode()" classname="Tests" time="0.004"/>
+  <system-out><![CDATA[1.2307692307692308
+56.0
+28.25
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
