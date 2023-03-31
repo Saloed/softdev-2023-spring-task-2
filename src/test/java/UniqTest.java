@@ -1,38 +1,59 @@
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-
-import java.io.File;
-import java.io.FileInputStream;
+import org.junit.jupiter.api.Test;
 
 public class UniqTest {
     @Test
     public void test(){
            String[] args = {"-o","output.txt","input\\test1.txt"};
            Uniq.main(args);
+        Assertions.assertEquals("""
+                Hello, World
+                hello, world
+                Hello, Worlds
+                Hi, Yooondooo""", Uniq.toString);
     }
     @Test
     public void test2(){
-        String[] args = {"input\\test1.txt"};
+        String[] args = {"-o","output.txt","input\\test1.txt"};
         Uniq.main(args);
+        Assertions.assertEquals("""
+                Hello, World
+                hello, world
+                Hello, Worlds
+                Hi, Yooondooo""", Uniq.toString);
     }
     @Test
     public void test3(){
-        String[] args = {"-i","input\\test1.txt"};
+        String[] args = {"-o","output.txt","-i","input\\test1.txt"};
         Uniq.main(args);
+        Assertions.assertEquals("""
+                hello, world
+                Hello, Worlds
+                Hi, Yooondooo""", Uniq.toString);
     }
     @Test
     public void test4(){
-        String[] args = {"-c","input\\test1.txt"};
+        String[] args = {"-o","output.txt","-c","input\\test1.txt"};
         Uniq.main(args);
+        Assertions.assertEquals("""
+                2 Hello, World
+                2 hello, world
+                0 Hello, Worlds
+                2 Hi, Yooondooo""", Uniq.toString);
     }
     @Test
     public void test5(){
-        String[] args = {"-c","-i","input\\test1.txt"};
+        String[] args = {"-o","output.txt","-c","-i","input\\test1.txt"};
         Uniq.main(args);
+        Assertions.assertEquals("""
+                4 hello, world
+                0 Hello, Worlds
+                2 Hi, Yooondooo""", Uniq.toString);
     }
     @Test
     public void test6(){
-        String[] args = {"-u","input\\test1.txt"};
+        String[] args = {"-o","output.txt","-u","input\\test1.txt"};
         Uniq.main(args);
+        Assertions.assertEquals("Hello, Worlds", Uniq.toString);
     }
 }

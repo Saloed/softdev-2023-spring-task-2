@@ -6,6 +6,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Uniq {
+
+    public static String toString = "";
     public static void main(String[] args){
         Options option = new Options();
         ArrayList<String> inFile;
@@ -28,6 +30,7 @@ public class Uniq {
                     cmd.hasOption("u"), cmd.hasOption("c"));
             inFile = jojo.res();
             Filek output = new Filek(inFile);
+            toString = String.join("\n", inFile);
             if (cmd.hasOption("o")) {
                 String m2 = cmd.getOptionValue("o");
                 File f12 = new File(m2);
@@ -41,5 +44,9 @@ public class Uniq {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String print(){
+        return toString;
     }
 }

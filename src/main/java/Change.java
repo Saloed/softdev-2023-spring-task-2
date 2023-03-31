@@ -38,7 +38,6 @@ public class Change {
                             exp.add(in.get(i - 1));
 
                         }
-                        count = 0;
                     } else {
                         if (count != 0) {
                             count++;
@@ -48,8 +47,8 @@ public class Change {
                         } else {
                             exp.add(in.get(i - 1));
                         }
-                        count = 0;
                     }
+                    count = 0;
                 }
             } else {
                 if (a.equals(b)) {
@@ -59,7 +58,6 @@ public class Change {
                         if (count == 0) {
                             exp.add(in.get(i - 1));
                         }
-                        count = 0;
                     } else {
                         if (count != 0) {
                             count++;
@@ -69,8 +67,8 @@ public class Change {
                         } else {
                             exp.add(in.get(i - 1));
                         }
-                        count = 0;
                     }
+                    count = 0;
                 }
             }
         }
