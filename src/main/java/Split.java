@@ -14,9 +14,6 @@ public class Split {
     private Path fileName;
     private String oArg;
     public void getArgs(String[] args) throws Exception {
-//        Path x = Paths.get("src/test/resources/file");
-//        x.getFileName();
-
         for (int i = 0; i < args.length; i++) {
             if (args[i].matches("-d")) d = true;
             if (args[i].matches("-l")) {
@@ -60,9 +57,8 @@ public class Split {
     }
     String dNum(int fileNum){
         if (!d) {
-            for (int i = 25+fileNum; i < 27*27; ++i) {
-                return str(i);
-            }
+            int i = 25+fileNum;
+            return str(i);
         }
         return String.valueOf(fileNum);
     }
@@ -84,7 +80,6 @@ public class Split {
                 int i = 0;
                 String outName=oName()+ dNum(fileNum) +".txt";
                 File outFile=new File(outName);
-                //outFile.createNewFile();
                 FileWriter writer=new FileWriter(outFile);
                 while (i++<lNum) {
                     if ((line= br.readLine())!=null){
@@ -116,7 +111,6 @@ public class Split {
                 int i = 0;
                 String outName=oName()+ dNum(fileNum) +".txt";
                 File outFile=new File(outName);
-                //outFile.createNewFile();
                 FileWriter writer=new FileWriter(outFile);
                 if (last!=0) writer.write(last);
                 writer.write(value);
@@ -145,7 +139,6 @@ public class Split {
             int i=0;
             String outName=oName()+ dNum(fileNum) +".txt";
             File outFile=new File(outName);
-            //outFile.createNewFile();
             FileWriter writer=new FileWriter(outFile);
             while (fileNum<=nNum & (value=br.read()) != -1 ) {
                 writer.write(value);

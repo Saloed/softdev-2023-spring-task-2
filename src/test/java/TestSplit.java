@@ -5,7 +5,6 @@ public class TestSplit {
     public void test() throws Exception {
         String[]args={"-d","-l","37","src/test/resources/file.txt"};
         Main.main(args);
-        //Files.deleteIfExists(Path.of("softdev-2023-spring-task-2"));
     }
     @Test
     public void test_l_base() throws Exception {
