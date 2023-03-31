@@ -4,6 +4,7 @@ import jdk.jfr.BooleanFlag
 import picocli.CommandLine
 import picocli.CommandLine.Option
 import picocli.CommandLine.Parameters
+import picocli.CommandLine.ArgGroup
 import java.io.*
 import java.util.concurrent.Callable
 import kotlin.experimental.xor
@@ -61,16 +62,23 @@ class XOR : Callable<File> {
     @Parameters(index = "0")
     lateinit var inputName: String
 
-    @Option(names = ["-c"])
-    var key: String = ""
+    @ArgGroup(exclusive = true, multiplicity = "1")
+    lateinit var exclusive: Exclusive
 
-    @Option(names = ["-d"])
-    lateinit var dkey: String
+    class Exclusive {
+        @Option(names = ["-c"], required = true)
+        var key: String = ""
 
-    @Option(names = ["-o"])
+        @Option(names = ["-d"], required = true)
+        var dkey: String = ""
+    }
+
+    @Option(names = ["-o"], required = true)
     lateinit var outputName: String
 
     override fun call(): File {
+        val key = exclusive.key
+        val dkey = exclusive.dkey
         return if (key.isNotEmpty()) encryption(key.toByteArray(), inputName, outputName)
         else decryption(dkey.toByteArray(), inputName, outputName)
     }
