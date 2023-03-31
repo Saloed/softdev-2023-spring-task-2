@@ -1,4 +1,6 @@
 import java.io.*;
+import java.nio.file.Path;
+import java.util.Objects;
 
 public class Split {
     private boolean d = false;
@@ -9,9 +11,12 @@ public class Split {
     private boolean n = false;
     private int nNum;
     private boolean o = false;
-    private String fileName;
+    private Path fileName;
     private String oArg;
     public void getArgs(String[] args) throws Exception {
+//        Path x = Paths.get("src/test/resources/file");
+//        x.getFileName();
+
         for (int i = 0; i < args.length; i++) {
             if (args[i].matches("-d")) d = true;
             if (args[i].matches("-l")) {
@@ -45,7 +50,7 @@ public class Split {
                 o = true;
                 oArg=args[i+1];
             }
-            fileName=args[args.length-1];
+            fileName=Path.of(args[args.length-1]);
         }
         if ((l & c & n )| (l & c) | (l & n) |( c & n )| (!l & !c & !n))
             throw new Exception("Слишком много аргументов");
@@ -63,13 +68,15 @@ public class Split {
     }
     String oName(){
         if (!o) return "x";
-        else if (o & oArg=="-"){
-            return fileName.split("\\.")[0];
+        else if (Objects.equals(oArg, "-")){
+            return fileName.getFileName().toString().split("\\.")[0];
         }
-        else return oArg;
+        else {
+            return oArg;
+        }
     }
     public void lSplit() {
-        try(BufferedReader br = new BufferedReader(new FileReader(fileName))){
+        try(BufferedReader br = new BufferedReader(new FileReader(fileName.toFile()))){
             int fileNum=1;
             String line;
             boolean k =true;
@@ -77,7 +84,7 @@ public class Split {
                 int i = 0;
                 String outName=oName()+ dNum(fileNum) +".txt";
                 File outFile=new File(outName);
-                outFile.createNewFile();
+                //outFile.createNewFile();
                 FileWriter writer=new FileWriter(outFile);
                 while (i++<lNum) {
                     if ((line= br.readLine())!=null){
@@ -101,7 +108,7 @@ public class Split {
     }
 
     public void cSplit(){
-        try(BufferedReader br = new BufferedReader(new FileReader(fileName))){
+        try(BufferedReader br = new BufferedReader(new FileReader(fileName.toFile()))){
             int fileNum=1;
             int value;
             int last=0;
@@ -109,7 +116,7 @@ public class Split {
                 int i = 0;
                 String outName=oName()+ dNum(fileNum) +".txt";
                 File outFile=new File(outName);
-                outFile.createNewFile();
+                //outFile.createNewFile();
                 FileWriter writer=new FileWriter(outFile);
                 if (last!=0) writer.write(last);
                 writer.write(value);
@@ -124,22 +131,21 @@ public class Split {
         catch (IOException e){
             System.out.println("Нет файла");
         }
-        catch (NullPointerException e){
+        catch (NullPointerException ignored){
         }
     }
 
     public void nSplit(){
-        try(BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+        try(BufferedReader br = new BufferedReader(new FileReader(fileName.toFile()))) {
             int fileNum = 1;
-            int fileLength = (int) new File(fileName).length()/2;
-            boolean k=false;
-            if (fileLength%nNum>0) k=true;
+            int fileLength = (int) new File(fileName.toUri()).length()/2;
+            boolean k= fileLength % nNum > 0;
             fileLength/=nNum;
             int value;
             int i=0;
             String outName=oName()+ dNum(fileNum) +".txt";
             File outFile=new File(outName);
-            outFile.createNewFile();
+            //outFile.createNewFile();
             FileWriter writer=new FileWriter(outFile);
             while (fileNum<=nNum & (value=br.read()) != -1 ) {
                 writer.write(value);
@@ -156,7 +162,7 @@ public class Split {
                     if (fileNum>nNum) break;
                     outName=oName()+ dNum(fileNum) +".txt";
                     outFile=new File(outName);
-                    outFile.createNewFile();
+                    //outFile.createNewFile();
                     writer=new FileWriter(outFile);
                     i=0;
                 }

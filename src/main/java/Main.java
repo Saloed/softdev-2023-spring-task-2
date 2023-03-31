@@ -4,6 +4,5 @@ public class Main {
         Split split=new Split();
         split.getArgs(args);
         split.split();
-
     }
 }
