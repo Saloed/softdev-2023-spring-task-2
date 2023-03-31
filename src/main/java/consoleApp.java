@@ -51,12 +51,12 @@ public class consoleApp {
      Boolean nameOutputFile; +
      Boolean nameInputFile;
 
-     https://docs.github.com/en/get-started/quickstart/fork-a-repo
      */
 
+    // командная строка
+    public static void main(String[] args) throws IOException {
+    }
     // методы для ввода информации
-
-
 
     private static List<Pair<Integer, String>> counting(File input) throws IOException {
 
@@ -199,10 +199,5 @@ public class consoleApp {
             }
         }
         return res;
-    }
-
-
-
-    public static void main(String[] args) throws IOException {
     }
 }
