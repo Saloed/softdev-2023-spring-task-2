@@ -55,6 +55,7 @@ public class consoleApp {
 
     // командная строка
     public static void main(String[] args) throws IOException {
+        parser pars = new parser(args);
     }
     // методы для ввода информации
 
@@ -190,7 +191,7 @@ public class consoleApp {
         return res;
     }
 
-    static List<String> uniq (File input) throws IOException {
+    static List<String> unique (File input) throws IOException {
         List <Pair<Integer, String>> list = counting(input);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {

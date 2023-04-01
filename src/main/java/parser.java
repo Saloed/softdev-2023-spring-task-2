@@ -1,7 +1,11 @@
 import org.kohsuke.args4j.*;
-import java.io.*;
+import java.io.IOException;
 
 public class parser {
+
+    public parser(String[] args) {
+    }
+
     @Argument(metaVar = "-i", required = false, usage = "ignore case")
     Boolean flag_i = false;
 
@@ -18,14 +22,16 @@ public class parser {
     String flag_o = "";
 
 
-   /** @Argument(required = false, metaVar = "inputName", usage = "Input file name")
-    private String inputFileName;
-
-    @Argument(required = false, metaVar = "OutputName", index = 1, usage = "Output file name")
-    private String outputFileName;*/
-
     private void commandLine(String[] args){
+        CmdLineParser parser = new CmdLineParser(this);
 
+        try {
+            parser.parseArgument(args);
+
+        } catch (CmdLineException e){
+            System.err.println(e.getMessage());
+            return;
+        }
     }
 
     /**private void launch(String[] args) {
@@ -47,7 +53,6 @@ public class parser {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-
 
     }*/
 }
