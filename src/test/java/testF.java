@@ -11,7 +11,7 @@ public class testF {
 
     @Test
         public void flagU() throws IOException {
-        String args[] = {"-u", "input\\times.txt"};
+        String args[] = {"-u", "input\\повторы.txt"};
         consoleApp.main(args);
     }
 
@@ -29,7 +29,7 @@ public class testF {
 
     @Test
         public void flagO() throws IOException {
-        String args[] = {"-o", "timesOut.txt", "-i", "input\\times.txt"};
+        String args[] = {"-o", "timesOut.txt", "-i", "input\\повторы.txt"};
         consoleApp.main(args);
     }
 
