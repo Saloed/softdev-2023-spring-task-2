@@ -40,14 +40,11 @@ import java.util.Locale;
 public class consoleApp {
 
     private static List<Pair<Integer, String>> counting(List<String> input) {
-
-        //BufferedReader reader = new BufferedReader(new FileReader(input));
         List<Pair<Integer, String>> res = new ArrayList<>();
         int c = 1;
-        //String actualLine = reader.readLine();
         String previousLine = "";
 
-        for (int i = 0; i < input.size(); ++i){//(actualLine != null) {
+        for (int i = 0; i < input.size(); ++i){
             String actualLine = input.get(i);
             if (!actualLine.equals(previousLine)) {
                 c = 1;
@@ -59,7 +56,6 @@ public class consoleApp {
             }
 
             previousLine = actualLine;
-            //actualLine = reader.readLine();
             ++c;
 
         }
@@ -81,15 +77,16 @@ public class consoleApp {
     // методы для вывода информации
     static void outputFile(List<String> list, String output) throws IOException {
         FileWriter writer =  new FileWriter(output);
-        for (int i = 0; i <= list.size(); i++){
+        for (int i = 0; i < list.size(); i++){
             writer.write(list.get(i));
+            writer.write("\n");
         }
         writer.close();
     }
 
     static void outputStream(List<String> list) {
-        for (int i = 0; i <= list.size(); ++i) {
-            System.out.print(list.get(i));
+        for (int i = 0; i < list.size(); ++i) {
+            System.out.println(list.get(i));
         }
     }
 
