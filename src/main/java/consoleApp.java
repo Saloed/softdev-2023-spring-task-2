@@ -39,15 +39,6 @@ import java.util.Locale;
 
 public class consoleApp {
 
-    public static void main(String[] args) {
-        new parser(args).commandLine(args);
-    }
-
-    // подготовка информации с консоли или из файла
-
-    //static List<String> fromFile(File input) throws IOException{}
-
-
     private static List<Pair<Integer, String>> counting(List<String> input) {
 
         //BufferedReader reader = new BufferedReader(new FileReader(input));
@@ -73,6 +64,18 @@ public class consoleApp {
 
         }
 
+        return res;
+    }
+
+    // подготовка информации с консоли или из файла
+    private static List<String> fromFile (File input) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(input));
+        List<String> res = new ArrayList<>();
+        String actualLine = reader.readLine();
+        while (actualLine != null) {
+            res.add(actualLine);
+            actualLine = reader.readLine();
+        }
         return res;
     }
 
@@ -185,5 +188,9 @@ public class consoleApp {
             }
         }
         return res;
+    }
+
+    public static void main(String[] args) {
+        new parser(args).commandLine(args);
     }
 }
