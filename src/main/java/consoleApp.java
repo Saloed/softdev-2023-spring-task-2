@@ -44,13 +44,11 @@ public class consoleApp {
         int c = 1;
         String previousLine = "";
 
-        for (int i = 0; i < input.size(); ++i){
-            String actualLine = input.get(i);
+        for (String actualLine : input) {
             if (!actualLine.equals(previousLine)) {
                 c = 1;
                 res.add(new Pair<>(c, actualLine));
-            }
-            else {
+            } else {
                 res.remove(res.size() - 1);
                 res.add(new Pair<>(c, actualLine));
             }
@@ -77,16 +75,16 @@ public class consoleApp {
     // методы для вывода информации
     static void outputFile(List<String> list, String output) throws IOException {
         FileWriter writer =  new FileWriter(output);
-        for (int i = 0; i < list.size(); i++){
-            writer.write(list.get(i));
+        for (String s : list) {
+            writer.write(s);
             writer.write("\n");
         }
         writer.close();
     }
 
     static void outputStream(List<String> list) {
-        for (int i = 0; i < list.size(); ++i) {
-            System.out.println(list.get(i));
+        for (String s : list) {
+            System.out.println(s);
         }
     }
 
@@ -97,9 +95,7 @@ public class consoleApp {
 
         List<String> res = new ArrayList<>();
 
-        for (int i = 0; i < input.size(); ++i) {
-
-            String actualLine = input.get(i);
+        for (String actualLine : input) {
 
             if (!previousLine.equals(actualLine)) {
                 res.add(actualLine);
@@ -113,8 +109,7 @@ public class consoleApp {
         String previousLine = "";
         List<String> res = new ArrayList<>();
 
-        for (int i = 0; i < input.size(); ++i ) {
-            String actualLine = input.get(i);
+        for (String actualLine : input) {
             if (!previousLine.toLowerCase(Locale.ROOT).equals(actualLine.toLowerCase())) {
                 res.add(actualLine);
             }
@@ -129,19 +124,18 @@ public class consoleApp {
 
         List<String> res = new ArrayList<>();
 
-        for (int i = 0; i < input.size(); ++i ) {
-            String actualLine = input.get(i);
+        for (String actualLine : input) {
             String subStr = "";
             if (actualLine.length() > num) {
-                subStr = actualLine.substring(num );
+                subStr = actualLine.substring(num);
             }
             String prevSubStr = "";
 
-            if(previousLine.length() > num)  {
-                prevSubStr = previousLine.substring(num );
+            if (previousLine.length() > num) {
+                prevSubStr = previousLine.substring(num);
             }
 
-            if (!prevSubStr.equals(subStr)|| prevSubStr.equals("")){
+            if (!prevSubStr.equals(subStr) || prevSubStr.equals("")) {
                 res.add(actualLine);
             }
             previousLine = actualLine;
@@ -172,7 +166,7 @@ public class consoleApp {
     public static void main(String[] args) throws IOException {
 
         parser pars = new parser(args);
-        List commands = pars.getCommands();
+        List<String> commands = pars.getCommands();
         List list;
         Scanner input;
 
@@ -189,10 +183,9 @@ public class consoleApp {
         if (commands.isEmpty()) {
             list = defaultFun(list);
         } else {
-            for (int i = 0; i < commands.size(); ++i) {
-                String actCom = commands.get(i).toString();
-                switch (actCom){
-                    case("i"):
+            for (String command : commands) {
+                switch (command) {
+                    case ("i"):
                         list = notSensitiveCase(list);
                         break;
                     case ("u"):
