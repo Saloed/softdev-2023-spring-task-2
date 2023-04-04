@@ -38,37 +38,26 @@ import java.util.Locale;
  */
 
 public class consoleApp {
-    /**
-     * //без учета регистра
-     Boolean i; +
-     //игнорирования n первых символов
-     Boolean s; +
-     //уникальные строки
-     Boolean u; +
-     //префикс количества
-     Boolean c; +
 
-     Boolean nameOutputFile; +
-     Boolean nameInputFile;
-
-     */
-
-    // командная строка
-    public static void main(String[] args) throws IOException {
-        parser pars = new parser(args);
+    public static void main(String[] args) {
+        new parser(args).commandLine(args);
     }
-    // методы для ввода информации
 
-    private static List<Pair<Integer, String>> counting(File input) throws IOException {
+    // подготовка информации с консоли или из файла
 
-        BufferedReader reader = new BufferedReader(new FileReader(input));
+    //static List<String> fromFile(File input) throws IOException{}
+
+
+    private static List<Pair<Integer, String>> counting(List<String> input) {
+
+        //BufferedReader reader = new BufferedReader(new FileReader(input));
         List<Pair<Integer, String>> res = new ArrayList<>();
         int c = 1;
-        String actualLine = reader.readLine();
+        //String actualLine = reader.readLine();
         String previousLine = "";
 
-        while (actualLine != null) {
-
+        for (int i = 0; i < input.size(); ++i){//(actualLine != null) {
+            String actualLine = input.get(i);
             if (!actualLine.equals(previousLine)) {
                 c = 1;
                 res.add(new Pair<>(c, actualLine));
@@ -79,7 +68,7 @@ public class consoleApp {
             }
 
             previousLine = actualLine;
-            actualLine = reader.readLine();
+            //actualLine = reader.readLine();
             ++c;
 
         }
@@ -88,20 +77,16 @@ public class consoleApp {
     }
 
 
-    // методы для выводов информации
-    static void outputFile(List<String> list, parser pars) throws IOException {
-        FileWriter writer;
-        if (pars.flag_o.matches("^*.txt$")) {
-            writer = new FileWriter(pars.flag_o);
-        }
-        else throw new FileNotFoundException("Неккоректное имя файла");
+    // методы для вывода информации
+    static void outputFile(List<String> list, String output) throws IOException {
+        FileWriter writer =  new FileWriter(output);
         for (int i = 0; i <= list.size(); i++){
             writer.write(list.get(i));
         }
         writer.close();
     }
 
-    static void outputStream(List<String> list) throws IOException {
+    static void outputStream(List<String> list) {
         for (int i = 0; i <= list.size(); ++i) {
             System.out.print(list.get(i));
         }
@@ -172,7 +157,7 @@ public class consoleApp {
                 prevSubStr = previousLine.substring(num );
             }
 
-            if (!prevSubStr.equals(subStr)|| prevSubStr == ""){
+            if (!prevSubStr.equals(subStr)|| prevSubStr.equals("")){
                 res.add(actualLine);
             }
             previousLine = actualLine;
@@ -182,7 +167,7 @@ public class consoleApp {
         return res;
     }
 
-    static ArrayList<String> countingLines (File input) throws IOException {
+    static ArrayList<String> countingLines (List<String> input) {
         List<Pair<Integer, String>> list = counting(input);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {
@@ -191,7 +176,7 @@ public class consoleApp {
         return res;
     }
 
-    static List<String> unique (File input) throws IOException {
+    static List<String> unique (List<String> input) {
         List <Pair<Integer, String>> list = counting(input);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {

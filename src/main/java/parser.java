@@ -1,58 +1,90 @@
-import org.kohsuke.args4j.*;
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class parser {
 
-    public parser(String[] args) {
+    private int num = 0;
+    private boolean o = false;
+    private boolean in = false;
+    private String outputName = "";
+    private String inputName = "";
+
+    //список комманд
+    List<String> commands = new ArrayList<>();
+
+    private final Pattern fileName = Pattern.compile("^\\.*.txt$");
+    parser(@NotNull String[] args) {
+        for (int i = 0; i < args.length; ++i) {
+            switch (args[i]) {
+                case ("-i"):
+                    commands.add("-i");
+                    break;
+                case ("-c"):
+                    commands.add("c");
+                    break;
+                case ("-u"):
+                    commands.add("u");
+                    break;
+                case ("-s"):
+                    commands.add("s");
+                    num = Integer.parseInt(args[++i]);
+                    break;
+                case ("-o"):
+                    o = true;
+                    outputName = args[++i];
+                    break;
+                default:
+                    inputName = args[i];
+                    in = true;
+                    break;
+            }
+
+        }
+            }
+
+    //геттеры
+
+
+    public int getNum() {
+        return num;
     }
 
-    @Argument(metaVar = "-i", required = false, usage = "ignore case")
-    Boolean flag_i = false;
-
-    @Argument(metaVar = "-s", usage = "ignore first n- chars")
-    Integer n = 0;
-
-    @Argument(metaVar = "-u", required = false, usage = "unique lines only")
-    Boolean flag_u = false;
-
-    @Argument(metaVar = "-c", required = false, usage = "counting lines")
-    Boolean flag_c = false;
-
-    @Option(name = "-o", required = false)
-    String flag_o = "";
-
-
-    private void commandLine(String[] args){
-        CmdLineParser parser = new CmdLineParser(this);
-
-        try {
-            parser.parseArgument(args);
-
-        } catch (CmdLineException e){
-            System.err.println(e.getMessage());
-            return;
-        }
+    public boolean ToFile(){
+        return o;
     }
 
-    /**private void launch(String[] args) {
-        CmdLineParser parser = new CmdLineParser(this);
+    public boolean FromFile(){
+        return in;
+    }
 
-        try {
-            parser.parseArgument(args);
-        } catch (CmdLineException e) {
-            System.err.println(e.getMessage());
-            System.err.println("java -jar recoder.jar -ie EncodingI -oe EncodingO InputName OutputName");
-            parser.printUsage(System.err);
-            return;
+    public String getOutputName() {
+        if (!outputName.matches("^\\.*.txt$") && !o)
+            try {
+                throw new FileNotFoundException("Некорректное имя файла");
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        return outputName;
+    }
+
+    public String getInputName() {
+        Matcher matcher = fileName.matcher(inputName);
+        if (!in && !matcher.matches()){
+            try {
+                throw new FileNotFoundException("Некорректное имя файла или его не существует");
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
+        return inputName;
+    }
 
-        Recoder recoder = new Recoder(inputEncoding, outputEncoding);
-        try {
-            int result = recoder.recode(inputFileName, outputFileName);
-            System.out.println("Total of " + result + " symbols recoded");
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+    public void commandLine(String[] args){
+    }
 
-    }*/
 }
