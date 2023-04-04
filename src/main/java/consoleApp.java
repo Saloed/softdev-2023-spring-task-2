@@ -68,13 +68,11 @@ public class consoleApp {
     }
 
     // подготовка информации с консоли или из файла
-    private static List<String> fromFile (File input) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(input));
+    private static List<String> readOut(Scanner input) {
         List<String> res = new ArrayList<>();
-        String actualLine = reader.readLine();
-        while (actualLine != null) {
+        while (input.hasNext()) {
+            String actualLine = input.nextLine();
             res.add(actualLine);
-            actualLine = reader.readLine();
         }
         return res;
     }
@@ -97,59 +95,45 @@ public class consoleApp {
 
 
     // флаги
-    static List<String> defaultFun (File input) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(input));
-
-        String actualLine = reader.readLine();
+    static List<String> defaultFun (List<String> input) {
         String previousLine = "";
 
         List<String> res = new ArrayList<>();
 
-        while (actualLine != null) {
+        for (int i = 0; i < input.size(); ++i) {
 
-            if (!previousLine.equals(actualLine)){
+            String actualLine = input.get(i);
+
+            if (!previousLine.equals(actualLine)) {
                 res.add(actualLine);
             }
-
             previousLine = actualLine;
-            actualLine = reader.readLine();
         }
-        reader.close();
-        //writer.close();
         return res;
     }
 
-    static List<String> notSensitiveCase (File input) throws  IOException{
-        BufferedReader reader = new BufferedReader(new FileReader(input));
-
-        String actualLine = reader.readLine();
+    static List<String> notSensitiveCase (List<String> input) {
         String previousLine = "";
-
         List<String> res = new ArrayList<>();
-        while (actualLine != null) {
 
+        for (int i = 0; i < input.size(); ++i ) {
+            String actualLine = input.get(i);
             if (!previousLine.toLowerCase(Locale.ROOT).equals(actualLine.toLowerCase())) {
                 res.add(actualLine);
-
             }
             previousLine = actualLine;
-            actualLine = reader.readLine();
         }
-        reader.close();
-        //writer.close();
         return res;
     }
 
-    static List<String> numChar (File input, int num) throws  IOException{
+    static List<String> numChar (List<String> input, int num) {
 
-        BufferedReader reader = new BufferedReader(new FileReader(input));
-
-        String actualLine = reader.readLine();
         String previousLine = "";
 
         List<String> res = new ArrayList<>();
 
-        while (actualLine != null) {
+        for (int i = 0; i < input.size(); ++i ) {
+            String actualLine = input.get(i);
             String subStr = "";
             if (actualLine.length() > num) {
                 subStr = actualLine.substring(num );
@@ -164,9 +148,7 @@ public class consoleApp {
                 res.add(actualLine);
             }
             previousLine = actualLine;
-            actualLine = reader.readLine();
         }
-        reader.close();
         return res;
     }
 
@@ -190,7 +172,51 @@ public class consoleApp {
         return res;
     }
 
-    public static void main(String[] args) {
-        new parser(args).commandLine(args);
+    public static void main(String[] args) throws IOException {
+
+        parser pars = new parser(args);
+        List commands = pars.getCommands();
+        List list;
+        Scanner input;
+
+        //получение и запись строчек в список
+        if (pars.FromFile()) {
+            input = new Scanner(new FileReader(pars.getInputName()));
+        }
+        else {
+            input = new Scanner(new InputStreamReader(System.in));
+        }
+        list = readOut(input);
+
+        //выполнение флагов
+        if (commands.isEmpty()) {
+            list = defaultFun(list);
+        } else {
+            for (int i = 0; i < commands.size(); ++i) {
+                String actCom = commands.get(i).toString();
+                switch (actCom){
+                    case("i"):
+                        list = notSensitiveCase(list);
+                        break;
+                    case ("u"):
+                        list = unique(list);
+                        break;
+                    case ("c"):
+                        list = countingLines(list);
+                        break;
+                    case ("s"):
+                        list = numChar(list, pars.getNum());
+                        break;
+                }
+            }
+        }
+
+        //вывод полученного списка строк как файл или построчно на консоль
+        if (pars.ToFile()){
+            outputFile(list, pars.getOutputName());
+        }
+        else {
+            outputStream(list);
+        }
     }
 }

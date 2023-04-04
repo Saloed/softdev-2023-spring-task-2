@@ -14,15 +14,16 @@ public class parser {
     private String outputName = "";
     private String inputName = "";
 
+
     //список комманд
-    List<String> commands = new ArrayList<>();
+    private List<String> commands = new ArrayList<>();
 
     private final Pattern fileName = Pattern.compile("^\\.*.txt$");
-    parser(@NotNull String[] args) {
+    parser(String[] args) {
         for (int i = 0; i < args.length; ++i) {
             switch (args[i]) {
                 case ("-i"):
-                    commands.add("-i");
+                    commands.add("i");
                     break;
                 case ("-c"):
                     commands.add("c");
@@ -45,7 +46,7 @@ public class parser {
             }
 
         }
-            }
+    }
 
     //геттеры
 
@@ -84,7 +85,8 @@ public class parser {
         return inputName;
     }
 
-    public void commandLine(String[] args){
+    public List<String> getCommands() {
+        return commands;
     }
 
 }
