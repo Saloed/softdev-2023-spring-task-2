@@ -33,7 +33,7 @@ public class Main {
     }
 
 
-    public void argsParse(final String[] args) throws CmdLineException {
+    private void argsParse(final String[] args) throws CmdLineException {
         if (args.length < 1) {
             System.exit(-1);
         }
@@ -41,7 +41,7 @@ public class Main {
         parser.parseArgument(args);
     }
 
-    public void app() throws IOException {
+    private void app() throws IOException {
         File files = new File(inputName);
         if (outputName != null) {
             PrintStream output = new PrintStream(outputName);
