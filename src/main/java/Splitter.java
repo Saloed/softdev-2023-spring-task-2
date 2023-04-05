@@ -4,13 +4,13 @@ import java.util.*;
 import java.nio.file.Files;
 
 public class Splitter {
-    boolean flagD = false;
-    boolean FlagO = false;
-    Type splitT;
-    int sizeFile = 100;
-    String inputFile;
-    String outputFile = "x";
-    List<String> content;
+    boolean flag_D = false; //Означает, что выходные файлы следует называть ofile1...
+    boolean flag_O = false; //Pадаёт базовое имя выходного файла
+    int sizeFile = 100; //Размер по умолчанию
+    String inputFile; //Имя входного файла
+    String outputFile = "x"; //Базовое имя выходного файла равняется “x”.
+    List<String> content; //Содержимое входного файла
+    Type splitType;
 
     enum Type {
         LINE, CHAR, FILE
@@ -18,7 +18,7 @@ public class Splitter {
 
     public Splitter(String[] args) throws IOException {
         initialize(args);
-        if (splitT == null) splitT = Type.LINE;
+        if (splitType == null) splitType = Type.LINE;
         File file = new File(inputFile);
         if (!file.exists()) throw new FileNotFoundException("File " + inputFile + " not found");
         content = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
@@ -31,21 +31,21 @@ public class Splitter {
             String arg = args[i];
             switch (arg) {
                 case "-d":
-                    flagD = true;
+                    flag_D = true;
                     break;
                 case "-l":
                 case "-c":
                 case "-n":
-                    if (splitT != null) {
+                    if (splitType != null) {
                         throw new IllegalFormatFlagsException("Multiple size-operating flags written");
                     }
-                    splitT = arg.equals("-l") ? Type.LINE : arg.equals("-c") ? Type.CHAR : Type.FILE;
+                    splitType = arg.equals("-l") ? Type.LINE : arg.equals("-c") ? Type.CHAR : Type.FILE;
                     sizeFile = Integer.parseInt(args[++i]);
                     break;
                 case "-o":
                     String value = args[++i];
                     if (value.equals("-")) {
-                        FlagO = true;
+                        flag_O = true;
                     } else {
                         outputFile = value;
                     }
@@ -66,7 +66,7 @@ public class Splitter {
 
     //Метод разбивает содержимое на список строк фиксированного размера типа LINE
     public List<String> splitLine() {
-        if (splitT != Type.LINE) throw new IllegalStateException();
+        if (splitType != Type.LINE) throw new IllegalStateException();
         List<String> result = new ArrayList<>();
         int startSize = content.size();
         for (int i = 0; i < startSize / sizeFile; i++) {
@@ -81,7 +81,7 @@ public class Splitter {
 
     //Метод разбивает содержимое на список строк фиксированного размера типа CHAR
     public List<String> splitChar() {
-        if (splitT != Type.CHAR) throw new IllegalStateException();
+        if (splitType != Type.CHAR) throw new IllegalStateException();
         List<String> result = new ArrayList<>();
         String content = String.join("", this.content);
         int i = 0;
@@ -94,7 +94,7 @@ public class Splitter {
 
     //Метод разбивает содержимое на список строк фиксированного размера типа BYTE
     public byte[][] splitFile() throws IOException {
-        if (splitT != Type.FILE) throw new IllegalStateException();
+        if (splitType != Type.FILE) throw new IllegalStateException();
         File file = new File(inputFile);
         int arrayLength = (int) Math.ceil((double) file.length() / sizeFile);
         byte[][] result = new byte[sizeFile][];
@@ -109,9 +109,9 @@ public class Splitter {
     }
 
     public void save() throws IOException {
-        outputFile = (FlagO) ? inputFile : outputFile;
-        if (splitT == Type.LINE || splitT == Type.CHAR) {
-            List<String> files = (splitT == Type.LINE) ? splitLine() : splitChar();
+        outputFile = (flag_O) ? inputFile : outputFile;
+        if (splitType == Type.LINE || splitType == Type.CHAR) {
+            List<String> files = (splitType == Type.LINE) ? splitLine() : splitChar();
             for (int i = 0; i < files.size(); i++) {
                 File file = new File(outputFile + getPostfix(i));
                 FileWriter wr = new FileWriter(file);
@@ -132,7 +132,7 @@ public class Splitter {
     //Метод возвращает строку, которая является постфиксом для заданного целочисленного значения.
     private String getPostfix(int i) {
         String chars = "qwertyuiopasdfghjklzxcvbnm";
-        if (flagD) {
+        if (flag_D) {
             return String.valueOf(i);
         }
         StringBuilder postfix = new StringBuilder();
