@@ -7,12 +7,11 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
-//AAA test methodology
 public class SplitterTest {
     @Test
     public void TestSplitLine() throws IOException {
         Splitter splitter = new Splitter(new String[]{"-l", "3", "-o", "out", "src/test/resources/line.txt"});
-        assertEquals(splitter.splitLine(), Arrays.asList("123\r\n456\r\n7890", "abcd\r\nefg"));
+        assertEquals(splitter.splitLine(), Arrays.asList("123\n456\n7890", "abcd\nefg"));
     }
 
     @Test
@@ -25,9 +24,9 @@ public class SplitterTest {
     public void TestSplitFile() {
         try {
             Splitter splitter = new Splitter(new String[]{"-n", "2", "-o", "out", "src/test/resources/line.txt"});
-            assertEquals(Files.readAllLines(Paths.get("outaa")), Arrays.asList("123", "456", "789"));
-            assertEquals(Files.readAllLines(Paths.get("outab")), Arrays.asList("0", "abcd", "efg"));
             splitter.save();
+            assertEquals(Files.readAllLines(Paths.get("outa")), Arrays.asList("123", "456", "789"));
+            assertEquals(Files.readAllLines(Paths.get("outb")), Arrays.asList("0", "abcd", "efg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
