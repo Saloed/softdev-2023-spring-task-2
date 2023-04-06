@@ -37,7 +37,7 @@ import java.util.Locale;
 
  */
 
-public class consoleApp {
+public class ConsoleApp {
 
     private static List<Pair<Integer, String>> counting(List<String> input) {
         List<Pair<Integer, String>> res = new ArrayList<>();
@@ -73,13 +73,16 @@ public class consoleApp {
 
 
     // методы для вывода информации
-    static void outputFile(List<String> list, String output) throws IOException {
-        FileWriter writer =  new FileWriter(output);
-        for (String s : list) {
-            writer.write(s);
-            writer.write("\n");
+    static void outputFile(List<String> list, String output) {
+        //FileWriter writer = null;
+        try (FileWriter writer = new FileWriter(output)) {
+            for (String s : list) {
+                writer.write(s);
+                writer.write("\n");
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
-        writer.close();
     }
 
     static void outputStream(List<String> list) {
@@ -90,28 +93,21 @@ public class consoleApp {
 
 
     // флаги
-    static List<String> defaultFun (List<String> input) {
+    static List<String> defaultFun (List<String> input, boolean Case) {
         String previousLine = "";
 
         List<String> res = new ArrayList<>();
 
         for (String actualLine : input) {
-
+            if (!Case){
             if (!previousLine.equals(actualLine)) {
                 res.add(actualLine);
+                }
             }
-            previousLine = actualLine;
-        }
-        return res;
-    }
-
-    static List<String> notSensitiveCase (List<String> input) {
-        String previousLine = "";
-        List<String> res = new ArrayList<>();
-
-        for (String actualLine : input) {
-            if (!previousLine.toLowerCase(Locale.ROOT).equals(actualLine.toLowerCase())) {
-                res.add(actualLine);
+            else {
+                if (!previousLine.toLowerCase(Locale.ROOT).equals(actualLine.toLowerCase())) {
+                    res.add(actualLine);
+                }
             }
             previousLine = actualLine;
         }
@@ -143,7 +139,7 @@ public class consoleApp {
         return res;
     }
 
-    static ArrayList<String> countingLines (List<String> input) {
+    static List<String> countingLines (List<String> input) {
         List<Pair<Integer, String>> list = counting(input);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {
@@ -167,7 +163,7 @@ public class consoleApp {
 
         parser pars = new parser(args);
         List<String> commands = pars.getCommands();
-        List list;
+        List<String> list;
         Scanner input;
 
         //получение и запись строчек в список
@@ -181,12 +177,13 @@ public class consoleApp {
 
         //выполнение флагов
         if (commands.isEmpty()) {
-            list = defaultFun(list);
+            list = defaultFun(list, pars.insensitiveCase());
         } else {
             for (String command : commands) {
                 switch (command) {
                     case ("i"):
-                        list = notSensitiveCase(list);
+                        list = defaultFun(list, pars.insensitiveCase());
+                        //list = notSensitiveCase(list);
                         break;
                     case ("u"):
                         list = unique(list);

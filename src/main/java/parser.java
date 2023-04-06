@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.NotNull;
-
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +7,7 @@ import java.util.regex.Pattern;
 public class parser {
 
     private int num = 0;
+    private boolean sen = false;
     private boolean o = false;
     private boolean in = false;
     private String outputName = "";
@@ -24,6 +23,7 @@ public class parser {
             switch (args[i]) {
                 case ("-i"):
                     commands.add("i");
+                    sen = true;
                     break;
                 case ("-c"):
                     commands.add("c");
@@ -53,6 +53,10 @@ public class parser {
 
     public int getNum() {
         return num;
+    }
+
+    public boolean insensitiveCase(){
+        return sen;
     }
 
     public boolean ToFile(){

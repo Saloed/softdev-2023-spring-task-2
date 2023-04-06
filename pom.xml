@@ -5,12 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.vasilisazhuk</groupId>
-    <artifactId>softdev-2023-spring-task-2</artifactId>
+    <artifactId>2023-spring-task-2-uniq</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
-        <jvm.version>11</jvm.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>

@@ -31,12 +31,8 @@ public class Pair<F, S> {
             return false;
         }
 
-        Pair<Integer, String> pair = (Pair<Integer, String>) o;
-        if (this.first == pair.first && this.second.equals(pair.second)){
-            return true;
-        }
-
-        else return false;
+        Pair<F, S> pair = (Pair<F, S>) o;
+        return this.first == pair.first && this.second.equals(pair.second);
 
     }
 
