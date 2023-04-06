@@ -1,5 +1,6 @@
 import java.io.File
 import kotlinx.cli.*
+import java.io.FileInputStream
 
 
 fun main(args: Array<String>) {
@@ -13,24 +14,29 @@ fun main(args: Array<String>) {
     parser.parse(args)
     val outputFile = File(output)
     val inputFile = File(input)
+    val text: String
 
     if (!inputFile.exists()) {
         println("File does not exist. Please, check the path.")
         kotlin.system.exitProcess(-1)
         }
 
+    FileInputStream(inputFile).use {
+        text = it.readBytes().toString()
+    }
+
     when (type) {
         "-z" -> {
             println("Processing...")
             outputFile.bufferedWriter().use {
-                for (line in inputFile.readLines()) it.write(EncodeParser.create(line).encoded)
+                it.write(EncodeParser.create(text).encoded)
             }
             println("File saved successfully!/nHave a good day!")
         }
         "-u" -> {
             println("Processing...")
             outputFile.bufferedWriter().use {
-                for (line in inputFile.readLines()) it.write(DecodeParser.create(line).decoded)
+                it.write(DecodeParser.create(text).decoded)
             }
             println("File saved successfully!/nHave a good day!")
         }
