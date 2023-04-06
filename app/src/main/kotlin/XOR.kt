@@ -1,6 +1,5 @@
 package softdevSpringTask
 
-import jdk.jfr.BooleanFlag
 import picocli.CommandLine
 import picocli.CommandLine.Option
 import picocli.CommandLine.Parameters
@@ -10,14 +9,14 @@ import java.util.concurrent.Callable
 import kotlin.experimental.xor
 import kotlin.system.exitProcess
 
-fun encryption(key: ByteArray, inputName: String, outputName: String): File {
+fun encryption(key: ByteArray, inputName: String, outputName: String) {
     FileInputStream(inputName).use { inputStream ->
         val file = DataInputStream(inputStream)
         FileOutputStream(outputName).use { outputStream ->
             val data = DataOutputStream(outputStream)
             file.use { reader ->
                 data.use { writer ->
-                    val text = reader.readAllBytes()
+                    val text = reader.readBytes()
                     var y = 0
                     for (i in text) {
                         val temp = i xor key[y]
@@ -29,17 +28,16 @@ fun encryption(key: ByteArray, inputName: String, outputName: String): File {
             }
         }
     }
-    return File(outputName)
 }
 
-    fun decryption(key: ByteArray, inputName: String, outputName: String): File {
+    fun decryption(key: ByteArray, inputName: String, outputName: String) {
         FileInputStream(inputName).use { inputStream ->
             val file = DataInputStream(inputStream)
             FileOutputStream(outputName).use { outputStream ->
                 val data = DataOutputStream(outputStream)
                 file.use { reader ->
                     data.use { writer ->
-                        val text = reader.readAllBytes()
+                        val text = reader.readBytes()
                         var y = 0
                         for (i in text) {
                             val temp = i xor key[y]
@@ -51,13 +49,11 @@ fun encryption(key: ByteArray, inputName: String, outputName: String): File {
                 }
             }
         }
-        return File(outputName)
     }
 
-fun main(args: Array<String>):
-    Unit = exitProcess(CommandLine(XOR()).execute(*args))
+fun main(args: Array<String>): Unit = exitProcess(CommandLine(XOR()).execute(*args))
 
-class XOR : Callable<File> {
+class XOR : Callable<Any> {
 
     @Parameters(index = "0")
     lateinit var inputName: String
@@ -76,7 +72,7 @@ class XOR : Callable<File> {
     @Option(names = ["-o"], required = true)
     lateinit var outputName: String
 
-    override fun call(): File {
+    override fun call() {
         val key = exclusive.key
         val dkey = exclusive.dkey
         return if (key.isNotEmpty()) encryption(key.toByteArray(), inputName, outputName)
