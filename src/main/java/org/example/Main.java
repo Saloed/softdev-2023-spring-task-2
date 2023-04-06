@@ -23,7 +23,7 @@ public class Main {
     private Boolean reverse = false;
     @Option(name = "-o", aliases = "--output", usage = "Path of the output txt file")
     private String outputName;
-    @Argument(usage = "Path of the output txt file", required = true)
+    @Argument(usage = "Path of the input file/directory", required = true)
     private String inputName;
 
     public static void main(final String[] args) throws CmdLineException, IOException {
@@ -51,15 +51,7 @@ public class Main {
             throw new NullPointerException("Such file does not exist");
         }
         if (files.isFile()) {
-            BasicFileAttributes attr = Files.readAttributes(files.toPath(), BasicFileAttributes.class);
-            String str = checkAccess("", files) + ' ';
-            str += attr.lastModifiedTime() + " ";
-            if (humanReadable) {
-                str += FileUtils.byteCountToDisplaySize(files.length()).replaceAll(" ", "");
-            } else {
-                str += files.length();
-            }
-            System.out.println(str);
+            System.out.println(stringAssembler(0, files));
         } else {
             if (!reverse) {
                 for (int i = 0; i < Objects.requireNonNull(files.listFiles()).length; i++) {
@@ -95,7 +87,14 @@ public class Main {
     }
 
     private String stringAssembler(int i, File directory) throws IOException {
-        File file = Objects.requireNonNull(directory.listFiles())[i];
+        File file;
+        if (directory.listFiles() != null) {
+            file = Objects.requireNonNull(directory.listFiles())[i];
+        }
+        else {
+            file = directory;
+            longArg = true;
+        }
         String str = file.getName() + " ";
         if (longArg) {
             str = checkAccess(str, file);

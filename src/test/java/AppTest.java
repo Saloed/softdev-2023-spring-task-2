@@ -23,7 +23,7 @@ public class AppTest {
     void SingleFile() throws CmdLineException, IOException {
         String[] args = new String[]{"-h", "files\\TestingFiles\\Test1.txt"};
         main(args);
-        assertEquals("111 2KB", outputStreamCaptor.toString()
+        assertEquals("Test1.txt 111 2KB", outputStreamCaptor.toString()
                 .trim().replaceAll("2023-[\\d\\-:.TZ]+ ","")); //Без проверки даты изменения
         // (иначе, по-моему, тесты почти никогда проходить не будут)
     }
@@ -31,7 +31,7 @@ public class AppTest {
     void SingleFileBytes() throws CmdLineException, IOException {
         String[] args = new String[]{"files\\TestingFiles\\Test1.txt"};
         main(args);
-        assertEquals("111 2415", outputStreamCaptor.toString()
+        assertEquals("Test1.txt 111 2415", outputStreamCaptor.toString()
                 .trim().replaceAll("2023-[\\d\\-:.TZ]+ ",""));
     }
     @org.junit.jupiter.api.Test
