@@ -48,4 +48,12 @@ public class FindTests {
         Assertions.assertEquals(new Parser().parse(input), res);
     }
 
+    @Test
+    public void test5() throws IOException {
+        String[] input = {"build.gradle"};
+        ArrayList<String> res = new ArrayList<>();
+        res.add(curDir + "\\build.gradle.kts");
+        Assertions.assertEquals(new Parser().parse(input), res);
+    }
+
 }

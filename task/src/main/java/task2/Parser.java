@@ -3,6 +3,7 @@ package task2;
 import org.kohsuke.args4j.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.kohsuke.args4j.CmdLineException;
 
@@ -23,7 +24,7 @@ public class Parser {
         }
     }
 
-    public ArrayList<String> parse(String[] args) throws IOException {
+    public List<String> parse(String[] args) throws IOException {
         CmdLineParser parser = new CmdLineParser(this);
         try {
             parser.parseArgument(args);
