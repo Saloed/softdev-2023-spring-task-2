@@ -7,19 +7,19 @@ public class UniqParser {
     @Option(name = "-o", metaVar = "-o")
             private boolean isToFile;
     @Argument(metaVar = "-o")
-            private String outputName;
+            private String o;
     @Option(name = "-i")
-            private boolean insensitive;
+            private boolean sen;
     @Option(name = "-u")
-            private boolean uniq;
+            private boolean uni;
     @Option(name = "-s", metaVar = "-s")
-            private boolean ignoreCh;
+            private boolean ign;
     @Argument(metaVar = "-s")
-            private int chars;
+            private int num;
     @Option(name = "-c")
             private boolean count;
     @Argument(metaVar = "")
-            private String inputName;
+            private String in;
     UniqParser(String[] args){
         CmdLineParser parser = new CmdLineParser(this);
         try {

@@ -38,8 +38,8 @@ public class TestF {
         ConsoleApp.main(args);
     }
     @Test
-    public void oisu() throws IOException {
-        String[] args = {"-s", "22","-i", "input\\фейрверк.txt"};
+    public void iu() throws IOException {
+        String[] args = {"-i","-c", "r.txt"};
         ConsoleApp.main(args);
     }
     @Test

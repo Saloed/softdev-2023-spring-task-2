@@ -22,7 +22,6 @@ public class Parser {
         for (int i = 0; i < args.length; ++i) {
             switch (args[i]) {
                 case ("-i"):
-                    commands.add("i");
                     sen = true;
                     break;
                 case ("-c"):
