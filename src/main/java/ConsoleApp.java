@@ -31,7 +31,7 @@ import java.util.Locale;
  -u -c
  1 xxx
 
- -c
+ -c -u
  1 xxx
  2 avc
 
@@ -74,7 +74,6 @@ public class ConsoleApp {
 
     // методы для вывода информации
     static void outputFile(List<String> list, String output) {
-        //FileWriter writer = null;
         try (FileWriter writer = new FileWriter(output)) {
             for (String s : list) {
                 writer.write(s);
@@ -161,8 +160,9 @@ public class ConsoleApp {
 
     public static void main(String[] args) throws IOException {
 
-        parser pars = new parser(args);
+        Parser pars = new Parser(args);
         List<String> commands = pars.getCommands();
+        //UniqParser pars = new UniqParser(args);
         List<String> list;
         Scanner input;
 
@@ -183,7 +183,6 @@ public class ConsoleApp {
                 switch (command) {
                     case ("i"):
                         list = defaultFun(list, pars.insensitiveCase());
-                        //list = notSensitiveCase(list);
                         break;
                     case ("u"):
                         list = unique(list);
