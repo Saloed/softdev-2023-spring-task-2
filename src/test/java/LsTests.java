@@ -1,3 +1,6 @@
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -6,14 +9,24 @@ import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LsTests {
+    /*private final PrintStream standardOut = System.out;
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+    @BeforeEach
+    public void setUp() {
+        System.setOut(new PrintStream(outputStreamCaptor));
+    }
+    @AfterEach
+    public void tearDown() {
+        System.setOut(standardOut);
+    }*/
     public void testOutput(boolean l, boolean h, boolean r, String expected) throws IOException {
         String dir = "files";
         String o = "output.txt";
         Args args = new Args(l, h, r, o, dir);
         Main.start(args);
         File output = new File(args.out);
-        System.out.println(Files.readString(output.toPath()));
-        assertEquals(Files.readString(output.toPath()), expected);
+        System.out.println(FileUtils.readFileToString(output));
+        assertEquals(FileUtils.readFileToString(output), expected);
         output.delete();
     }
 
