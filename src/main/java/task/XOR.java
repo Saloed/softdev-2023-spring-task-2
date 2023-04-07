@@ -39,8 +39,7 @@ public class XOR {
 
         try {
             if (outputFileName.isEmpty()) outputFileName = inputFileName + ".ciph";
-            try (FileInputStream inputStream = new FileInputStream(inputFileName);
-                 FileOutputStream outputStream = new FileOutputStream(outputFileName)) {
+            try (FileInputStream inputStream = new FileInputStream(inputFileName); FileOutputStream outputStream = new FileOutputStream(outputFileName)) {
                 byte[] buffer = new byte[4096];
                 byte[] byteOutput;
                 int n;
