@@ -2,7 +2,12 @@
 .idea
 /build/
 /target/
-
+.tmp
+/caches/
+/daemon/
+/jdks/
+/native/
+/wrapper/
 # Ignore Gradle GUI config
 gradle-app.setting
 
