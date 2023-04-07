@@ -5,11 +5,13 @@ public class FileInfo {
     private final File file;
     private final String name;
 
+    StringBuilder result = new StringBuilder();
+
     public String toString(Args args) {
-        String result = name;
-        if (args.longFormat && !args.humanReadable) result += toLongFormat();
-        if (args.longFormat && args.humanReadable) result += toHumanReadable();
-        return result;
+        result.append(name);
+        if (args.longFormat && !args.humanReadable) result.append(toLongFormat());
+        if (args.longFormat && args.humanReadable) result.append(toHumanReadable());
+        return result.toString();
     }
 
     public FileInfo(File fl) {
