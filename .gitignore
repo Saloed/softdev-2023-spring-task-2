@@ -2,8 +2,8 @@
 .idea
 /build/
 /target/
-.tmp
 /caches/
+.tmp
 /daemon/
 /jdks/
 /native/
