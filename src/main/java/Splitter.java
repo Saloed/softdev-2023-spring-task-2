@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import org.apache.commons.cli.*;
 
 
+
 public class Splitter {
     private boolean flagD = false; //Означает, что выходные файлы следует называть ofile1...
     private boolean flagO = false; //Задаёт базовое имя выходного файла
