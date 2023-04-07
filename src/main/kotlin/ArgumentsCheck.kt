@@ -26,7 +26,7 @@ class ArgumentsCheck(args: Array<String>) {
 
     init {
         if (indent != "-c" && indent != "-w")
-            throw java.lang.IllegalArgumentException()
+            kotlin.system.exitProcess(-1)
 
         try {
             if (oFilePath != null)
@@ -38,7 +38,7 @@ class ArgumentsCheck(args: Array<String>) {
                     iFilePath = null
                 } else inputFile = File(iFilePath)
 
-            val range = Regex("""\D""").split(rangeParam!!)
+            val range = Regex("""\D+""").split(rangeParam!!)
             if (range[1] <= range[0]) throw Exception()
             rangeStart =
                 if (range[0].isNotBlank() && range[0][0] != '-') range[0].toInt()
@@ -47,7 +47,7 @@ class ArgumentsCheck(args: Array<String>) {
                 if (range[1].isNotBlank() && range[1][0] != '-') range[1].toInt()
                 else null
         } catch (e: Exception) {
-            throw IllegalArgumentException()
+            kotlin.system.exitProcess(-1)
         }
     }
 

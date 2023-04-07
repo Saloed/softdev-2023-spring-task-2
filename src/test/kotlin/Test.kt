@@ -1,0 +1,46 @@
+import org.junit.jupiter.api.Test
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
+import kotlin.test.assertTrue
+
+private fun isEqual(firstFile: Path, secondFile: Path): Boolean {
+    if (Files.size(firstFile) != Files.size(secondFile)) {
+        return false
+    }
+    val first = Files.readString(firstFile)
+    val second = Files.readString(secondFile)
+    return first!!.contentEquals(second)
+}
+
+class Test {
+    lateinit var args: Array<String>
+    lateinit var result: File
+
+    @Test // даны необходимые файлы, ошибок в передаваемых аргументах нет
+    fun testMain() {
+        val argsExamples =
+            listOf(
+                arrayOf("-c", "-o", "src/test/testFiles/output.txt", "src/test/testFiles/input.txt", "2-5"),
+                arrayOf("-w", "-o", "src/test/testFiles/output.txt", "src/test/testFiles/input.txt", "-2"),
+                arrayOf("")
+            )
+        val results =
+            listOf(
+                File("src/test/testFiles/result1.txt").toPath(),
+                File("src/test/testFiles/result2.txt").toPath(),
+
+            )
+
+        for (example in argsExamples.indices) {
+            main(argsExamples[example])
+
+            assertTrue(
+                isEqual(
+                    results[example],
+                    File("src/test/testFiles/output.txt").toPath()
+                )
+            )
+        }
+    }
+}

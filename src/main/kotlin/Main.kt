@@ -4,9 +4,13 @@ import java.io.BufferedWriter
 
 fun main(args: Array<String>) {
     val arguments = ArgumentsCheck(args)
+    cutting(arguments)
+}
 
+fun cutting(arguments: ArgumentsCheck) {
     val writer: BufferedWriter? = arguments.outputFile?.bufferedWriter()
     var newLine: String
+    var firstLine = true
 
     if (arguments.inputFile == null) {
         var inputText = ""
@@ -19,13 +23,15 @@ fun main(args: Array<String>) {
 
         textFromUser.forEach { line ->
             newLine = cutString(line, arguments.indent, arguments.rangeStart, arguments.rangeEnd)
-            writeNewLine(newLine, writer)
+            writeNewLine(newLine, writer, firstLine)
+            firstLine = false
         }
     } else {
         arguments.inputFile!!.forEachLine { line ->
-                newLine = cutString(line, arguments.indent, arguments.rangeStart, arguments.rangeEnd)
-                writeNewLine(newLine, writer)
-            }
+            newLine = cutString(line, arguments.indent, arguments.rangeStart, arguments.rangeEnd)
+            writeNewLine(newLine, writer, firstLine)
+            firstLine = false
+        }
     }
 
     writer?.close()
@@ -49,21 +55,23 @@ fun cutString(
                     else rangeEnd + 1
                 )
 
-            "-w" ->
-                Regex("""\s""").split(string).subList(
+            "-w" -> {
+                val splitStr = Regex("""\s""").split(string)
+                splitStr.subList(
                     rangeStart,
-                    if (rangeEnd == null || rangeEnd > string.length - 1)
-                        string.length
+                    if (rangeEnd == null || rangeEnd > splitStr.size - 1)
+                        splitStr.size
                     else rangeEnd + 1
                 ).joinToString(separator = " ")
+            }
 
             else -> throw IllegalArgumentException()
         }
     else ""
 
-fun writeNewLine(newLine: String, writer: BufferedWriter?) {
+fun writeNewLine(newLine: String, writer: BufferedWriter?, firstLine: Boolean) {
     if (writer != null) {
+        if (!firstLine) writer.newLine()
         writer.write(newLine)
-        writer.newLine()
     } else println(newLine)
 }
