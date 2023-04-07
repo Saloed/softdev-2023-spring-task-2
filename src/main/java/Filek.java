@@ -27,4 +27,11 @@ public class Filek {
             System.out.println(s);
         }
     }
+    public String print(){
+        StringBuilder si = new StringBuilder();
+        for (String s : in) {
+            si.append(s).append("\n");
+        }
+        return si.toString();
+    }
 }

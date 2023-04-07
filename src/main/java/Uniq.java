@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Uniq {
-
-    private static String string;
-    public static void main(String[] args){
+    public static String main(String[] args){
         Options option = new Options();
         int countS = 0;
         option.addOption("i","register");
@@ -18,6 +16,7 @@ public class Uniq {
         option.addOption("s",true,"ignore");
         option.addOption("c","counter");
         CommandLineParser parser = new DefaultParser();
+        List<String> out = null;
         try {
             CommandLine cmd = parser.parse(option, args);
             String tuti = String.join("",cmd.getArgList());
@@ -27,9 +26,8 @@ public class Uniq {
             }
             Change jojo = new Change(inFile, cmd.hasOption("i"), countS,
                     cmd.hasOption("u"), cmd.hasOption("c"));
-            List<String> out = jojo.res();
+            out = jojo.res();
             Filek output = new Filek(out);
-            string = String.join("\n", out);
             if (cmd.hasOption("o")) {
                 String m2 = cmd.getOptionValue("o");
                 File f12 = new File(m2);
@@ -37,6 +35,7 @@ public class Uniq {
             } else {
                 output.stressOut();
             }
+
         } catch (ParseException e) {
             System.err.println(e.getMessage());
             System.exit(1);
@@ -44,8 +43,6 @@ public class Uniq {
             System.out.println(e.getMessage());
             System.exit(1);
         }
-    }
-    public static String out(){
-        return string;
+        return String.join("\n", out);
     }
 }
