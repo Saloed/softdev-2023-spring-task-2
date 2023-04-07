@@ -1,28 +1,30 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Change {
 
-    private final ArrayList<String> in;
+    private final List<String> in;
     private final boolean funI;
     private final int funS;
     private final boolean funU;
     private final boolean funC;
+    private final ArrayList<String> exp;
 
-    public Change(ArrayList<String> i, boolean fuI, int fuS,
+    public Change(List<String> i, boolean fuI, int fuS,
                   boolean fuU, boolean fuC) {
         in = i;
         funI = fuI;
         funS = fuS;
         funU = fuU;
         funC = fuC;
+        exp = new ArrayList<>();
     }
 
-    public ArrayList<String> res() {
+    public List<String> res() {
         return expi();
     }
 
-    private ArrayList<String> expi() {
-        ArrayList<String> exp = new ArrayList<>();
+    private List<String> expi() {
         String a;
         String b;
         int count = 0;
@@ -33,68 +35,37 @@ public class Change {
                 if (a.equalsIgnoreCase(b)) {
                     count++;
                 } else {
-                    if (funU) {
-                        if (count == 0) {
-                            exp.add(in.get(i - 1));
-
-                        }
-                    } else {
-                        if (count != 0) {
-                            count++;
-                        }
-                        if (funC) {
-                            exp.add(Integer.toString(count) + " " + in.get(i - 1));
-                        } else {
-                            exp.add(in.get(i - 1));
-                        }
-                    }
+                    addList(count,i);
                     count = 0;
+
                 }
             } else {
                 if (a.equals(b)) {
                     count++;
                 } else {
-                    if (funU) {
-                        if (count == 0) {
-                            exp.add(in.get(i - 1));
-                        }
-                    } else {
-                        if (count != 0) {
-                            count++;
-                        }
-                        if (funC) {
-                            exp.add(Integer.toString(count) + " " + in.get(i - 1));
-                        } else {
-                            exp.add(in.get(i - 1));
-                        }
-                    }
+                    addList(count,i);
                     count = 0;
                 }
             }
         }
-        if (funC) {
-            if (!funU) {
-                if (count != 0) {
-                    count++;
-                }
-                exp.add(Integer.toString(count) + " " + in.get(in.size() - 1));
-            } else {
-                if (count == 0) {
-                    exp.add(Integer.toString(count) + " " + in.get(in.size() - 1));
-                }
+        addList(count,in.size() - 1 );
+        return exp;
+    }
+    private void addList(int count, int i){
+        if (funU) {
+            if (count == 0) {
+                exp.add(in.get(i - 1));
+
             }
         } else {
-            if (!funU) {
-                if (count != 0) {
-                    count++;
-                }
-                exp.add(in.get(in.size() - 1));
+            if (count != 0) {
+                count++;
+            }
+            if (funC) {
+                exp.add(Integer.toString(count) + " " + in.get(i - 1));
             } else {
-                if (count == 0) {
-                    exp.add(in.get(in.size() - 1));
-                }
+                exp.add(in.get(i - 1));
             }
         }
-        return exp;
     }
 }

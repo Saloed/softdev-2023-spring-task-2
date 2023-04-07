@@ -4,13 +4,13 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Uniq {
 
-    public static String toString = "";
+    private static String string;
     public static void main(String[] args){
         Options option = new Options();
-        ArrayList<String> inFile;
         int countS = 0;
         option.addOption("i","register");
         option.addOption("u", "unique");
@@ -19,18 +19,17 @@ public class Uniq {
         option.addOption("c","counter");
         CommandLineParser parser = new DefaultParser();
         try {
-            CommandLine cmdLine = parser.parse(option, args);
-            String tuti = String.join("",cmdLine.getArgList());
             CommandLine cmd = parser.parse(option, args);
-            inFile = (ArrayList<String>) Files.readAllLines(Paths.get(tuti));
+            String tuti = String.join("",cmd.getArgList());
+            List<String> inFile =  Files.readAllLines(Paths.get(tuti));
             if (cmd.hasOption("s")) {
                 countS = Integer.parseInt(cmd.getOptionValue("s"));
             }
             Change jojo = new Change(inFile, cmd.hasOption("i"), countS,
                     cmd.hasOption("u"), cmd.hasOption("c"));
-            inFile = jojo.res();
-            Filek output = new Filek(inFile);
-            toString = String.join("\n", inFile);
+            List<String> out = jojo.res();
+            Filek output = new Filek(out);
+            string = String.join("\n", out);
             if (cmd.hasOption("o")) {
                 String m2 = cmd.getOptionValue("o");
                 File f12 = new File(m2);
@@ -42,11 +41,11 @@ public class Uniq {
             System.err.println(e.getMessage());
             System.exit(1);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
+            System.exit(1);
         }
     }
-
-    public String print(){
-        return toString;
+    public static String out(){
+        return string;
     }
 }

@@ -1,12 +1,13 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Filek {
 
-    private final ArrayList<String> in;
+    private final List<String> in;
 
-    public Filek( ArrayList<String> input){
+    public Filek(List<String> input){
 
         in = input;
     }
