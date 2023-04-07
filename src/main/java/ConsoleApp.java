@@ -31,31 +31,43 @@ import java.util.Locale;
  -u -c
  1 xxx
 
- -c -u
+ -c
  1 xxx
  2 avc
-
+порядок не важен
  */
 
 public class ConsoleApp {
 
-    private static List<Pair<Integer, String>> counting(List<String> input) {
+    private static List<Pair<Integer, String>> counting(List<String> input, boolean Case) {
         List<Pair<Integer, String>> res = new ArrayList<>();
         int c = 1;
         String previousLine = "";
 
         for (String actualLine : input) {
-            if (!actualLine.equals(previousLine)) {
-                c = 1;
-                res.add(new Pair<>(c, actualLine));
+            if (!Case) {
+                if (!actualLine.equals(previousLine)) {
+                    c = 1;
+                    res.add(new Pair<>(c, actualLine));
+                } else {
+                    res.remove(res.size() - 1);
+                    res.add(new Pair<>(c, actualLine));
+                }
+
+                previousLine = actualLine;
+                ++c;
             } else {
-                res.remove(res.size() - 1);
-                res.add(new Pair<>(c, actualLine));
+                if (!actualLine.toLowerCase(Locale.ROOT).equals(previousLine.toLowerCase())) {
+                    c = 1;
+                    res.add(new Pair<>(c, actualLine));
+                } else {
+                    res.remove(res.size() - 1);
+                    res.add(new Pair<>(c, actualLine));
+                }
+
+                previousLine = actualLine;
+                ++c;
             }
-
-            previousLine = actualLine;
-            ++c;
-
         }
 
         return res;
@@ -113,33 +125,48 @@ public class ConsoleApp {
         return res;
     }
 
-    static List<String> numChar (List<String> input, int num) {
+    static List<String> numChar (List<String> input, int num, boolean Case) {
 
         String previousLine = "";
 
         List<String> res = new ArrayList<>();
 
         for (String actualLine : input) {
-            String subStr = "";
-            if (actualLine.length() > num) {
-                subStr = actualLine.substring(num);
-            }
-            String prevSubStr = "";
+            if (!Case) {
+                String subStr = "";
+                if (actualLine.length() > num) {
+                    subStr = actualLine.substring(num);
+                }
+                String prevSubStr = "";
 
-            if (previousLine.length() > num) {
-                prevSubStr = previousLine.substring(num);
-            }
+                if (previousLine.length() > num) {
+                    prevSubStr = previousLine.substring(num);
+                }
+                if (!prevSubStr.equals(subStr) || prevSubStr.equals("")) {
+                    res.add(actualLine);
+                }
+                previousLine = actualLine;
+            } else {
+                String subStr = "";
+                if (actualLine.length() > num) {
+                    subStr = actualLine.toLowerCase(Locale.ROOT).substring(num);
+                }
+                String prevSubStr = "";
 
-            if (!prevSubStr.equals(subStr) || prevSubStr.equals("")) {
-                res.add(actualLine);
+                if (previousLine.length() > num) {
+                    prevSubStr = previousLine.toLowerCase(Locale.ROOT).substring(num);
+                }
+                if (!prevSubStr.equals(subStr) || prevSubStr.equals("")) {
+                    res.add(actualLine);
+                }
+                previousLine = actualLine;
             }
-            previousLine = actualLine;
         }
         return res;
     }
 
-    static List<String> countingLines (List<String> input) {
-        List<Pair<Integer, String>> list = counting(input);
+    static List<String> countingLines (List<String> input, boolean Case) {
+        List<Pair<Integer, String>> list = counting(input, Case);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {
             res.add(integerStringPair.toString());
@@ -147,8 +174,8 @@ public class ConsoleApp {
         return res;
     }
 
-    static List<String> unique (List<String> input) {
-        List <Pair<Integer, String>> list = counting(input);
+    static List<String> unique (List<String> input, boolean Case) {
+        List <Pair<Integer, String>> list = counting(input, Case);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {
             if (integerStringPair.first == 1) {
@@ -185,13 +212,13 @@ public class ConsoleApp {
                         list = defaultFun(list, pars.insensitiveCase());
                         break;
                     case ("u"):
-                        list = unique(list);
+                        list = unique(list, pars.insensitiveCase());
                         break;
                     case ("c"):
-                        list = countingLines(list);
+                        list = countingLines(list, pars.insensitiveCase());
                         break;
                     case ("s"):
-                        list = numChar(list, pars.getNum());
+                        list = numChar(list, pars.getNum(), pars.insensitiveCase());
                         break;
                 }
             }

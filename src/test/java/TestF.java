@@ -39,7 +39,7 @@ public class TestF {
     }
     @Test
     public void oisu() throws IOException {
-        String[] args = {"-o", "фейрверкISU.txt","-i", "-s", "22", "u", "input\\фейрверк.txt"};
+        String[] args = {"-s", "22","-i", "input\\фейрверк.txt"};
         ConsoleApp.main(args);
     }
     @Test
