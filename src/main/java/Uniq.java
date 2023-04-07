@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Uniq {
+
     public static String main(String[] args){
         Options option = new Options();
         int countS = 0;
