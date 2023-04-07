@@ -14,7 +14,7 @@ import java.io.IOException;
 
 
 public class XOR {
-    @Option(name = "-c", usage = "key for encryption file",forbids = "-d")
+    @Option(name = "-c", usage = "key for encryption file", forbids = "-d")
     private String encryptionKey;
     @Option(name = "-d", usage = "key for decryption file", forbids = "-c")
     private String decryptionKey;
@@ -41,26 +41,30 @@ public class XOR {
             if (outputFileName.isEmpty()) outputFileName = inputFileName + ".ciph";
             try (FileInputStream inputStream = new FileInputStream(inputFileName);
                  FileOutputStream outputStream = new FileOutputStream(outputFileName)) {
-                byte[] input = inputStream.readAllBytes();
+                byte[] buffer = new byte[4096];
                 byte[] byteOutput;
-                if (encryptionKey == null) byteOutput = ciph(input, decryptionKey);
-                else byteOutput = ciph(input, encryptionKey);
-                outputStream.write(byteOutput);
+                int n;
+                while ((n = inputStream.read(buffer)) >= 0) {
+                    if (encryptionKey == null) byteOutput = ciph(buffer, decryptionKey);
+                    else byteOutput = ciph(buffer, encryptionKey);
+                    outputStream.write(byteOutput, 0, n);
+                }
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
-        }}
-
-
-        public static byte[] ciph ( byte[] input, String key){
-            byte[] byteKey = key.getBytes();
-            byte[] result = new byte[input.length];
-            int keySize = byteKey.length;
-            for (int i = 0; i < input.length; i++) {
-                result[i] = (byte) (input[i] ^ byteKey[ i % keySize]);
-            }
-            return result;
         }
     }
+
+
+    public static byte[] ciph(byte[] input, String key) {
+        byte[] byteKey = key.getBytes();
+        byte[] result = new byte[input.length];
+        int keySize = byteKey.length;
+        for (int i = 0; i < input.length; i++) {
+            result[i] = (byte) (input[i] ^ byteKey[i % keySize]);
+        }
+        return result;
+    }
+}
 
 
