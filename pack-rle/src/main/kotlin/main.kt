@@ -29,7 +29,7 @@ fun main(args: Array<String>) {
             FileInputStream(inputFile).use { reader ->
                 outputFile.bufferedWriter().use { writer ->
                     while (reader.read(byteArray) != -1) {
-                        writer.write(EncodeParser.create(byteArray.toString()).encoded)
+                        writer.write(EncodeParser.create(String(byteArray)).encoded)
                     }
                 }
             }
@@ -39,9 +39,7 @@ fun main(args: Array<String>) {
             println("Processing...")
             FileInputStream(inputFile).use { reader ->
                 outputFile.bufferedWriter().use { writer ->
-                    while (reader.read(byteArray) != -1) {
-                        writer.write(DecodeParser.create(byteArray.toString()).decoded)
-                    }
+                    writer.write(DecodeParser.create(FileInputStream(inputFile)).decoded)
                 }
             }
             println("File saved successfully!/nHave a good day!")
@@ -71,7 +69,8 @@ class EncodeParser private constructor (private val text: String) {
                 curCount *= -1
                 while (curCount > 113) {
                     maxSequenceCounter++
-                    localResult.append(Char(144)).append(string.substring(113 * (maxSequenceCounter - 1), 113 * maxSequenceCounter))
+                    localResult.append(Char(144))
+                        .append(string.substring(113 * (maxSequenceCounter - 1), 113 * maxSequenceCounter))
                     curCount -= 113
                 }
                 localResult.append(' ' + curCount - 1).append(string.substring(113 * maxSequenceCounter, string.length))
@@ -130,25 +129,62 @@ class EncodeParser private constructor (private val text: String) {
     }
 }
 
-class DecodeParser private constructor (private val text: String) {
+class DecodeParser private constructor (private val FileIS: FileInputStream) {
+
+    private var byteArray = ByteArray(2048)
+    private val result = StringBuilder()
+    private var text = ""
+    private var index = 0
+
     private fun decode(): String {
-        var index = 0
-        var result = ""
-        while (index < text.length) {
+        read()
+        while (true) {
             if (text[index].code in 32..144) {
-                result += text.substring(index + 1, index + text[index].code - 30)
-                index += text[index].code - 30
+                appendDiff(text[index].code)
             }
             else {
-                result += text[index + 1].toString().repeat(text[index].code - 143)
-                index += 2
+                println(text[index].code)
+                appendSim(text[index].code)
             }
+            if (text[index].code == 0 || (index >= text.length && read() == -1)) break
         }
-        return result
+        FileIS.close()
+        return result.toString()
     }
+
+    private fun read(): Int {
+        val res = FileIS.read(byteArray)
+        text = String(byteArray)
+        return res
+    }
+
+    private fun appendDiff(int: Int) {
+        if (index + int - 30 <= text.length) {
+            result.append(text.substring(index + 1, index + int - 30))
+            index += int - 30
+        }
+        else {
+            result.append(text.substring(index + 1))
+            index = index + int - 30 - text.length
+            read()
+            result.append(text.substring(0, index))
+        }
+    }
+    private fun appendSim(int: Int) {
+        if (index + 1 < text.length) {
+            result.append(text[index + 1].toString().repeat(int - 143))
+            index += 2
+        }
+        else {
+            read()
+            result.append(text[0].toString().repeat(int - 143))
+            index = 1
+        }
+    }
+
 
     val decoded = decode()
     companion object {
-        fun create(text: String) = DecodeParser(text)
+        fun create(FileIS: FileInputStream) = DecodeParser(FileIS)
     }
 }
