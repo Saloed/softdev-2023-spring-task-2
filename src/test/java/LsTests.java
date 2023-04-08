@@ -8,16 +8,6 @@ import java.io.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LsTests {
-    private final PrintStream standardOut = System.out;
-    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-    @BeforeEach
-    public void setUp() {
-        System.setOut(new PrintStream(outputStreamCaptor));
-    }
-    @AfterEach
-    public void tearDown() {
-        System.setOut(standardOut);
-    }
     public void testOutput(boolean l, boolean h, boolean r, String expected) throws IOException {
         String dir = "files";
         String o = "output.txt";
@@ -26,8 +16,8 @@ public class LsTests {
         File output = new File(args.out);
         System.out.println(FileUtils.readFileToString(output).trim()
                 .replaceAll(" \\d+/\\d+/\\d+ \\d+:\\d+:\\d+",""));
-        assertEquals(expected, outputStreamCaptor.toString()
-                .trim().replaceAll(" \\d+/\\d+/\\d+ \\d+:\\d+:\\d+",""));
+        assertEquals(expected, FileUtils.readFileToString(output).trim()
+                .replaceAll(" \\d+/\\d+/\\d+ \\d+:\\d+:\\d+",""));
         output.delete();
     }
 
