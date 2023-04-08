@@ -15,18 +15,23 @@ public class FileInfoList {
         } else files.add(new FileInfo(dir));
     }
 
+    StringBuilder result = new StringBuilder();
+
     public void output(Args args) throws IOException {
         if (args.reverse) Collections.reverse(files);
         if (args.out == null) {
             for (FileInfo file : files) {
-                System.out.println(file.toString(args));
+                file.toString(args, result);
+                result.append(System.lineSeparator());
             }
+            System.out.println(result);
         } else {
             FileWriter writer = new FileWriter(args.out);
             for (int i = 0; i < files.size(); i++) {
-                writer.write(files.get(i).toString(args));
-                if (i < files.size() - 1) writer.write(System.getProperty("line.separator"));
+                files.get(i).toString(args, result);
+                if (i < files.size() - 1) result.append(System.lineSeparator());
             }
+            writer.write(result.toString());
             writer.close();
         }
     }
