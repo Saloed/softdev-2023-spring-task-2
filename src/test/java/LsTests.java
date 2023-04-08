@@ -24,10 +24,10 @@ public class LsTests {
         Args args = new Args(l, h, r, o, dir);
         Main.start(args);
         File output = new File(args.out);
-        System.out.println(FileUtils.readFileToString(output).trim()
-                .replaceAll(" \\d+/\\d+/\\d+ \\d+:\\d+:\\d+",""));
-        assertEquals(expected, outputStreamCaptor.toString()
-                .trim().replaceAll(" \\d+/\\d+/\\d+ \\d+:\\d+:\\d+",""));
+        String x = outputStreamCaptor.toString()
+                .trim().replaceAll(" \\d+/\\d+/\\d+ \\d+:\\d+:\\d+", "");
+        System.out.println(x);
+        assertEquals(expected, x);
         output.delete();
     }
 
