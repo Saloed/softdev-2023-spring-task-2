@@ -154,7 +154,7 @@ class DecodeParser private constructor (private val FileIS: FileInputStream) {
 
     private fun read(): Int {
         val res = FileIS.read(byteArray)
-        text = String(byteArray, 0, res)
+        text = if (res != -1) String(byteArray, 0, res) else ""
         return res
     }
 
