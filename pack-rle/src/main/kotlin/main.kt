@@ -146,7 +146,7 @@ class DecodeParser private constructor (private val FileIS: FileInputStream) {
                 println(text[index].code)
                 appendSim(text[index].code)
             }
-            if (text[index].code == 0 || (index >= text.length && read() == -1)) break
+            if (index >= text.length && read() == -1) break
         }
         FileIS.close()
         return result.toString()
@@ -154,7 +154,7 @@ class DecodeParser private constructor (private val FileIS: FileInputStream) {
 
     private fun read(): Int {
         val res = FileIS.read(byteArray)
-        text = String(byteArray)
+        text = String(byteArray, 0, res)
         return res
     }
 
