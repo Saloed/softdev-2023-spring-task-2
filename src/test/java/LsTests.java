@@ -14,7 +14,6 @@ public class LsTests {
         File output = new File(args.out);
         System.out.println(FileInfoList.setOfFiles);
         assertEquals(expected, FileInfoList.setOfFiles);
-        FileInfoList.setOfFiles.clear();
         output.delete();
     }
 
@@ -25,6 +24,7 @@ public class LsTests {
                 "Vopros_21.docx 111 55720",
                 "Vopros_3.docx 111 160181",
                 "Vopros_9.docx 111 74587"));
+        FileInfoList.setOfFiles.clear();
     }
 
   @Test
@@ -34,6 +34,7 @@ public class LsTests {
                         "Vopros_21.docx rwx 54,4KB",
                         "Vopros_3.docx rwx 156,4KB",
                         "Vopros_9.docx rwx 72,8KB"));
+      FileInfoList.setOfFiles.clear();
     }
 
     @Test
@@ -43,6 +44,7 @@ public class LsTests {
                         "Vopros_3.docx",
                         "Vopros_21.docx",
                         "Vopros_10.docx"));
+        FileInfoList.setOfFiles.clear();
     }
 
     @Test
@@ -52,6 +54,7 @@ public class LsTests {
                         "Vopros_21.docx",
                         "Vopros_3.docx",
                         "Vopros_9.docx"));
+        FileInfoList.setOfFiles.clear();
     }
 
     @Test
@@ -61,5 +64,6 @@ public class LsTests {
                         "Vopros_3.docx 111 160181",
                         "Vopros_21.docx 111 55720",
                         "Vopros_10.docx 111 88041"));
+        FileInfoList.setOfFiles.clear();
     }
 }
