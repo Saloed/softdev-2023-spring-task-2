@@ -34,10 +34,10 @@ public class LsTests {
     public void testH() throws IOException {
         FileInfoList.setOfFiles.clear();
         testOutput(true, true, false,
-                Set.of("Vopros_10.docx rw- 86,0KB",
-                        "Vopros_21.docx rw- 54,4KB",
-                        "Vopros_3.docx rw- 156,4KB",
-                        "Vopros_9.docx rw- 72,8KB"));
+                Set.of("Vopros_10.docx rw- 86.0KB",
+                        "Vopros_21.docx rw- 54.4KB",
+                        "Vopros_3.docx rw- 156.4KB",
+                        "Vopros_9.docx rw- 72.8KB"));
     }
 
     @Test
