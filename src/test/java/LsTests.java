@@ -20,20 +20,20 @@ public class LsTests {
     @Test
     public void testL() throws IOException {
         testOutput(true, false, false,
-                Set.of("Vopros_10.docx 111 88041",
-                "Vopros_21.docx 111 55720",
-                "Vopros_3.docx 111 160181",
-                "Vopros_9.docx 111 74587"));
+                Set.of("Vopros_10.docx 110 88041",
+                "Vopros_21.docx 110 55720",
+                "Vopros_3.docx 110 160181",
+                "Vopros_9.docx 110 74587"));
         FileInfoList.setOfFiles.clear();
     }
 
   @Test
     public void testH() throws IOException {
         testOutput(true, true, false,
-                Set.of("Vopros_10.docx rwx 86,0KB",
-                        "Vopros_21.docx rwx 54,4KB",
-                        "Vopros_3.docx rwx 156,4KB",
-                        "Vopros_9.docx rwx 72,8KB"));
+                Set.of("Vopros_10.docx rw- 86,0KB",
+                        "Vopros_21.docx rw- 54,4KB",
+                        "Vopros_3.docx rw- 156,4KB",
+                        "Vopros_9.docx rw- 72,8KB"));
       FileInfoList.setOfFiles.clear();
     }
 
@@ -60,10 +60,10 @@ public class LsTests {
     @Test
     public void testLR() throws IOException {
         testOutput(true, false, true,
-                Set.of("Vopros_9.docx 111 74587",
-                        "Vopros_3.docx 111 160181",
-                        "Vopros_21.docx 111 55720",
-                        "Vopros_10.docx 111 88041"));
+                Set.of("Vopros_9.docx 110 74587",
+                        "Vopros_3.docx 110 160181",
+                        "Vopros_21.docx 110 55720",
+                        "Vopros_10.docx 110 88041"));
         FileInfoList.setOfFiles.clear();
     }
 }
