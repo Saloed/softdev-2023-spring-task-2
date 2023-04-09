@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,7 +12,6 @@ public class LsTests {
         Args args = new Args(l, h, r, o, dir);
         Main.start(args);
         File output = new File(args.out);
-        System.out.println(FileInfoList.setOfFiles);
         assertEquals(expected, FileInfoList.setOfFiles);
         output.delete();
     }
