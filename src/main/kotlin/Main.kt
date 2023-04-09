@@ -1,7 +1,5 @@
 import java.io.BufferedWriter
 
-// [-c|-w] [-o ofile] [file] range
-
 fun main(args: Array<String>) {
     val arguments = ArgumentsCheck(args)
     cutting(arguments)

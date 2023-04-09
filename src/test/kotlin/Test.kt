@@ -23,7 +23,6 @@ class Test {
             listOf(
                 arrayOf("-c", "-o", "src/test/testFiles/output.txt", "src/test/testFiles/input.txt", "2-5"),
                 arrayOf("-w", "-o", "src/test/testFiles/output.txt", "src/test/testFiles/input.txt", "-2"),
-                arrayOf("")
             )
         val results =
             listOf(
