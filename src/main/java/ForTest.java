@@ -1,26 +1,26 @@
 import org.apache.commons.cli.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class Uniq {
-
-    public static void main(String[] args){
+public class ForTest {
+    public static String forTest(String[] args) {
         Options option = new Options();
         int countS = 0;
-        option.addOption("i","register");
+        option.addOption("i", "register");
         option.addOption("u", "unique");
-        option.addOption("o","output", true, "file name");
-        option.addOption("s",true,"ignore");
-        option.addOption("c","counter");
+        option.addOption("o", "output", true, "file name");
+        option.addOption("s", true, "ignore");
+        option.addOption("c", "counter");
         CommandLineParser parser = new DefaultParser();
         List<String> out = null;
         try {
             CommandLine cmd = parser.parse(option, args);
-            String tuti = String.join("",cmd.getArgList());
-            List<String> inFile =  Files.readAllLines(Paths.get(tuti));
+            String tuti = String.join("", cmd.getArgList());
+            List<String> inFile = Files.readAllLines(Paths.get(tuti));
             if (cmd.hasOption("s")) {
                 countS = Integer.parseInt(cmd.getOptionValue("s"));
             }
@@ -43,6 +43,6 @@ public class Uniq {
             System.out.println(e.getMessage());
             System.exit(1);
         }
-//        return String.join("\n", out);
+        return String.join("\n", out);
     }
 }

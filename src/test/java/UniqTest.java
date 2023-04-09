@@ -9,7 +9,7 @@ public class UniqTest {
                 Hello, World
                 hello, world
                 Hello, Worlds
-                Hi, Yooondooo""", Uniq.main(args));
+                Hi, Yooondooo""", ForTest.forTest(args));
 
     }
     @Test
@@ -19,7 +19,7 @@ public class UniqTest {
                 Hello, World
                 hello, world
                 Hello, Worlds
-                Hi, Yooondooo""", Uniq.main(args));
+                Hi, Yooondooo""", ForTest.forTest(args));
     }
     @Test
     public void test3(){
@@ -27,7 +27,7 @@ public class UniqTest {
         Assertions.assertEquals("""
                 hello, world
                 Hello, Worlds
-                Hi, Yooondooo""", Uniq.main(args));
+                Hi, Yooondooo""", ForTest.forTest(args));
     }
     @Test
     public void test4(){
@@ -36,7 +36,7 @@ public class UniqTest {
                 2 Hello, World
                 2 hello, world
                 0 Hello, Worlds
-                2 Hi, Yooondooo""", Uniq.main(args));
+                2 Hi, Yooondooo""", ForTest.forTest(args));
     }
     @Test
     public void test5(){
@@ -44,11 +44,11 @@ public class UniqTest {
         Assertions.assertEquals("""
                 4 hello, world
                 0 Hello, Worlds
-                2 Hi, Yooondooo""", Uniq.main(args));
+                2 Hi, Yooondooo""", ForTest.forTest(args));
     }
     @Test
     public void test6(){
         String[] args = {"-o","output.txt","-u","input\\test1.txt"};
-        Assertions.assertEquals("Hello, Worlds", Uniq.main(args));
+        Assertions.assertEquals("Hello, Worlds", ForTest.forTest(args));
     }
 }

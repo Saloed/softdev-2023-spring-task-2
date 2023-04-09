@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Filek {
@@ -26,12 +25,5 @@ public class Filek {
         for (String s : in) {
             System.out.println(s);
         }
-    }
-    public String print(){
-        StringBuilder si = new StringBuilder();
-        for (String s : in) {
-            si.append(s).append("\n");
-        }
-        return si.toString();
     }
 }
