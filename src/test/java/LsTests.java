@@ -13,6 +13,7 @@ public class LsTests {
         Main.start(args);
         File output = new File(args.out);
         assertEquals(expected, FileInfoList.setOfFiles);
+        FileInfoList.setOfFiles.clear();
         output.delete();
     }
 
