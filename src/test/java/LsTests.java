@@ -10,7 +10,6 @@ public class LsTests {
     public void testOutput(boolean l, boolean h, boolean r, Set<String> expected) throws IOException {
         String dir = "files";
         String o = "output.txt";
-        Set<String> result = new HashSet<>();
         Args args = new Args(l, h, r, o, dir);
         Main.start(args);
         File output = new File(args.out);
