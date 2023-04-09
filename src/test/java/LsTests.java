@@ -12,6 +12,7 @@ public class LsTests {
         Args args = new Args(l, h, r, o, dir);
         Main.start(args);
         File output = new File(args.out);
+        System.out.println(FileInfoList.setOfFiles);
         assertEquals(expected, FileInfoList.setOfFiles);
         FileInfoList.setOfFiles.clear();
         output.delete();
