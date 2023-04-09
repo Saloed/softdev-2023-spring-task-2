@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class FileInfoList {
+    public static Set<String> setOfFiles = new HashSet<>();
     private final List<FileInfo> files = new ArrayList<>();
 
     public FileInfoList(String way) {
@@ -21,14 +22,14 @@ public class FileInfoList {
         if (args.reverse) Collections.reverse(files);
         if (args.out == null) {
             for (FileInfo file : files) {
-                file.toString(args, result);
+                file.toString(args, result, setOfFiles);
                 result.append(System.lineSeparator());
             }
             System.out.println(result);
         } else {
             FileWriter writer = new FileWriter(args.out);
             for (int i = 0; i < files.size(); i++) {
-                files.get(i).toString(args, result);
+                files.get(i).toString(args, result, setOfFiles);
                 if (i < files.size() - 1) result.append(System.lineSeparator());
             }
             writer.write(result.toString());
