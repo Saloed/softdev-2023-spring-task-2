@@ -40,7 +40,6 @@ public class Split {
                 type = "n";
                 size = Integer.parseInt(cmd.getOptionValue("n"));
             }
-
             if (cmd.hasOption("o")) {
                 String value = cmd.getOptionValue("-o");
                 if (value.equals("-")) oValue = input;
@@ -50,7 +49,7 @@ public class Split {
                 String[] arguments = cmd.getArgs();
                 input = arguments[0];
             }
-            catch (Exception e){
+            catch (Exception ignored){
             }
         }
         catch (Exception e) {
@@ -96,7 +95,6 @@ public class Split {
             e.printStackTrace();
         }
     }
-
     public void cSplit(){
         try(BufferedReader br = new BufferedReader(new FileReader(fileName.toFile()))){
             String outName;
@@ -150,20 +148,12 @@ public class Split {
             e.printStackTrace();
         }
     }
-    public void split() throws FileNotFoundException {
+    public void split() {
         fileName= Path.of(input);
-        try(BufferedReader br = new BufferedReader(new FileReader(fileName.toFile()))) {
-            int fileNum = 1;
-            String outName;
-            FileWriter writer;
         switch (type) {
             case "l" -> lSplit();
             case "c" -> cSplit();
             case "n" -> nSplit();
-        }
-        }
-        catch (IOException e){
-            e.printStackTrace();
         }
     }
 }
