@@ -8,6 +8,7 @@ import org.kohsuke.args4j.Option;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Scanner;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Main {
     @Option(name = "-c")
     boolean charIndent = false;
     @Argument()
-    ArrayList<String> inputText = new ArrayList<>();
+    List<String> inputText = new ArrayList<>();
 
     public static void main(String[] args) throws CmdLineException, IOException {
         final Main instance = new Main();
@@ -32,14 +33,13 @@ public class Main {
     private void doMain(String[] args) throws CmdLineException, IOException {
         final CmdLineParser parser = new CmdLineParser(this);
         parser.parseArgument(args);
-        ArrayList<ArrayList<String>> answer;
-        ArrayList<String> stringsText = new ArrayList<>();
+        List<List<String>> answer;
+        List<String> stringsText = new ArrayList<>();
         if (wordIndent == charIndent) throw new IllegalArgumentException("Ошибка во флагах -c/-w");
-        if ((inputText != null) && (inputText.size() == 1)) {
+        if (inputText.contains("input/input.txt")) {
             stringsText = getText(inputText.get(0));
         } else {
             StringBuilder inputTxt = new StringBuilder();
-            assert inputText != null;
             inputText.forEach(s -> inputTxt.append(s).append(" "));
             stringsText.add(String.valueOf(inputTxt));
         }
@@ -49,19 +49,19 @@ public class Main {
         else writeOutput(answer);
     }
 
-    private ArrayList<Integer> countRange(String startData) {
-        ArrayList<Integer> answer = new ArrayList<>();
+    private List<Integer> countRange(String startData) {
+        List<Integer> answer = new ArrayList<>();
         String[] textAnswer = startData.split("-");
         answer.add(Integer.parseInt(textAnswer[0]));
         answer.add(Integer.parseInt(textAnswer[1]));
-        if (answer.get(0) < answer.get(1) || answer.get(0) < 0)
+        if (answer.get(0) > answer.get(1) || answer.get(0) < 0)
             throw new IllegalArgumentException("Неправильно указан range");
         return answer;
     }
 
-    private ArrayList<String> getText(String inputName) throws FileNotFoundException {
+    private List<String> getText(String inputName) throws FileNotFoundException {
         File inputFile = new File(inputName);
-        ArrayList<String> stringsText = new ArrayList<>();
+        List<String> stringsText = new ArrayList<>();
         Scanner scanner = new Scanner(inputFile);
         while (scanner.hasNextLine()) {
             stringsText.add(scanner.nextLine());
@@ -70,29 +70,29 @@ public class Main {
         return stringsText;
     }
 
-    private void writeFileOutput(ArrayList<ArrayList<String>> answer, String outputName) throws FileNotFoundException {
+    private void writeFileOutput(List<List<String>> answer, String outputName) throws FileNotFoundException {
         File outputFile = new File(outputName);
         PrintWriter output = new PrintWriter(outputFile);
-        for (ArrayList<String> strings : answer) {
+        for (List<String> strings : answer) {
             output.println(strings);
         }
         output.close();
     }
 
-    private void writeOutput(ArrayList<ArrayList<String>> answer) {
-        for (ArrayList<String> currentString : answer) {
+    private void writeOutput(List<List<String>> answer) {
+        for (List<String> currentString : answer) {
             for (String s : currentString) {
                 System.out.print(s + " ");
             }
-            System.out.println("");
+            System.out.println();
         }
     }
-    private ArrayList<ArrayList<String>> wordIndention(ArrayList<String> stringsText){
-        ArrayList<Integer> intRange = countRange(range);
-        ArrayList<ArrayList<String>> answer = new ArrayList<>();
+    private List<List<String>> wordIndention(List<String> stringsText){
+        List<Integer> intRange = countRange(range);
+        List<List<String>> answer = new ArrayList<>();
         for (String value : stringsText) {
             String[] currentString = value.split(" ");
-            ArrayList<String> needSymbols = new ArrayList<>();
+            List<String> needSymbols = new ArrayList<>();
             for (int numberSymbol = 0; numberSymbol < currentString.length; numberSymbol++) {
                 if ((numberSymbol >= intRange.get(0)) &&
                         (numberSymbol <= intRange.get(1))) needSymbols.add(currentString[numberSymbol]);
@@ -101,12 +101,12 @@ public class Main {
         }
         return answer;
     }
-    private ArrayList<ArrayList<String>> charIndention(ArrayList<String> stringsText){
-        ArrayList<Integer> intRange = countRange(range);
-        ArrayList<ArrayList<String>> answer = new ArrayList<>();
+    private List<List<String>> charIndention(List<String> stringsText){
+        List<Integer> intRange = countRange(range);
+        List<List<String>> answer = new ArrayList<>();
         for (String value : stringsText) {
-            ArrayList<String> needSymbols = new ArrayList<>();
-            needSymbols.add(value.substring(intRange.get(0),intRange.get(1)));
+            List<String> needSymbols;
+            needSymbols=List.of((value.substring(intRange.get(0),intRange.get(1))).split(" "));
             answer.add(needSymbols);
         }
         return answer;

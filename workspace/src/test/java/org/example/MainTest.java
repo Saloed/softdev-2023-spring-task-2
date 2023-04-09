@@ -8,6 +8,7 @@ import org.kohsuke.args4j.CmdLineException;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +31,7 @@ class MainTest {
     @Test
     void falseArgs() {
         IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            String falseArgs[] = {"-c", "-w", "-o output.txt", "-r", "1-14"};
+            String[] falseArgs = {"-c", "-w", "-o output.txt", "-r", "1-14"};
             Main.main(falseArgs);
         });
     }
@@ -42,8 +43,8 @@ class MainTest {
         File outputFile = new File("outputFile.txt");
         Scanner expectedScanner = new Scanner(expectedFile);
         Scanner answerScanner = new Scanner(outputFile);
-        ArrayList<String> answer = new ArrayList<>();
-        ArrayList<String> expected = new ArrayList<>();
+        List<String> answer = new ArrayList<>();
+        List<String> expected = new ArrayList<>();
         while (expectedScanner.hasNextLine()) {
             expected.add(expectedScanner.nextLine());
         }
@@ -55,7 +56,7 @@ class MainTest {
 
     @Test
     void workWithConsole() throws IOException, CmdLineException {
-        String[] args = {"-c", "-r", "7-21", "vhkvvk", "fafafaf", "fsgsgs", "gsgsgsg", "gaggsg"};
+        String[] args = {"-c", "-r", "7-21", "vhkvvk fafafaf fsgsgs gsgsgsg gaggsg"};
         Main.main(args);
         String expectedAnswer = "fafafaf fsgsgs ";
         assertEquals(expectedAnswer,outContent.toString().replaceAll("\n",""));
