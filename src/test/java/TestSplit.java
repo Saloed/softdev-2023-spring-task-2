@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 public class TestSplit {
     @Test
     public void test() throws Exception {
-        String[]args={"-d","-l","37","src/test/resources/file.txt"};
+        String[]args={"-l","37","src/test/resources/file.txt"};
         Main.main(args);
     }
     @Test
