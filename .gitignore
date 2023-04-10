@@ -1,6 +1,8 @@
+app/output.txt
+
 .gradle
 .idea
-/build/
+/app/build/
 /target/
 
 # Ignore Gradle GUI config
