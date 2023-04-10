@@ -53,13 +53,14 @@ public class Main {
         if (files.isFile()) {
             System.out.println(stringAssembler(0, files));
         } else {
+            int dirFileCount = Objects.requireNonNull(files.listFiles()).length;
             if (!reverse) {
-                for (int i = 0; i < Objects.requireNonNull(files.listFiles()).length; i++) {
+                for (int i = 0; i < dirFileCount; i++) {
                     System.out.println(stringAssembler(i, files));
                 }
             }
             else {
-                for (int i = Objects.requireNonNull(files.listFiles()).length - 1; i > 0; i--) {
+                for (int i = dirFileCount - 1; i > 0; i--) {
                     System.out.println(stringAssembler(i, files));
                 }
             }
