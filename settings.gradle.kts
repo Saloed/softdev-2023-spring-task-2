@@ -1,2 +1,2 @@
-rootProject.name = "org.example"
-/*include("app")*/
+rootProject.name = "softdev2023springtask2"
+

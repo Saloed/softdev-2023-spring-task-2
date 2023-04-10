@@ -10,34 +10,53 @@ fun main(args: Array<String>) {
     CommandLine(Parser()).execute(*args)
 }
 
-fun task(inputFiles: List<String>?, outputFile: File?, characters: Int?, numLines: Int?) {
-    val fileOutput = outputFile?.bufferedWriter()
-    var fileInput = inputFiles
-    if (fileInput.isNullOrEmpty()) {
-        File("files/writer.txt").writeText(readln())
-        fileInput = listOf("files/writer.txt")
+fun inputNull (outputFile: File?, characters: Int?, numLines: Int?) {
+    val inputStream = readln()
+    val outputStream = outputFile?.bufferedWriter()
+    if (characters == null && numLines == null) {
+        if (outputStream == null) println(inputStream)
+        else outputStream.write(inputStream)
+    } else {
+        if (characters != null) {
+            if (outputStream == null) println(inputStream.takeLast(characters))
+            else outputStream.write(inputStream.takeLast(characters))
+        }
+        if (numLines != null) {
+            if (outputStream == null) println(inputStream)
+            else outputStream.write(inputStream)
+        }
     }
-    for (file in fileInput) {
-        val fileReadlines = File(file).readLines()
-        if (fileInput.size > 1) {
-            if (fileInput.indexOf(file) == 0 && fileOutput != null) fileOutput.write(file + "\n")
-            else if (fileOutput == null) println(file) else fileOutput.write("\n" + file + "\n")
+    outputStream?.close()
+    println("\nSuccessful execution of the operation!!")
+}
+
+
+
+
+
+fun task(inputFiles: List<String>, outputFile: File?, characters: Int?, numLines: Int?) {
+    val fileOutput = outputFile?.bufferedWriter()
+    for (file in inputFiles) {
+        val fileReadLines = File(file).readLines()
+        if (inputFiles.size > 1) {
+            if (inputFiles.indexOf(file) == 0 && fileOutput != null) fileOutput.write(file + "\n")
+            else if (fileOutput == null) println(file)
+                 else fileOutput.write("\n" + file + "\n")
         }
         if (characters == null && numLines == null) {
-            if (fileOutput == null) println(fileReadlines.takeLast(10).joinToString("\n"))
-            else fileOutput.write( fileReadlines.takeLast(10).joinToString("\n") )
+            if (fileOutput == null) println(fileReadLines.takeLast(10))
+            else fileOutput.write( fileReadLines.takeLast(10).joinToString("\n"))
         } else {
             if (characters != null) {
                 if (fileOutput == null) println(File(file).readText().takeLast(characters))
                 else fileOutput.write(File(file).readText().takeLast(characters))
             }
             if (numLines != null) {
-                if (fileOutput == null) println(fileReadlines.takeLast(numLines).joinToString("\n"))
-                else fileOutput.write( fileReadlines.takeLast(numLines).joinToString("\n"))
+                if (fileOutput == null) println(fileReadLines.takeLast(numLines))
+                else fileOutput.write( fileReadLines.takeLast(numLines).joinToString("\n"))
             }
         }
     }
-
     fileOutput?.close()
     println("\nSuccessful execution of the operation!")
 }
@@ -62,6 +81,7 @@ class Parser : Runnable {
 
     override fun run() {
         if (characters != null && numLines != null) throw Exception("Error: Can't enter -c and -n together")
-            else task(inputFiles, outputFile, characters, numLines)
+            else if (inputFiles == null) inputNull(outputFile, characters, numLines)
+                 else task(inputFiles!!, outputFile, characters, numLines)
     }
 }
