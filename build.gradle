@@ -1,0 +1,32 @@
+plugins {
+    // Apply the application plugin to add support for building a CLI application in Java.
+    id 'application'
+    id 'java'
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'softdev.spring.task.App'
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+jar {
+    manifest {
+        attributes(
+                "Main-Class": application.mainClass
+        )
+    }
+}
