@@ -1,3 +1,1 @@
-[afaf, afafa, afafa, fafaf]
-[afa, fa, gwg, wfwfwf]
-[gegeg, egge]
+[[afaf, afafa, afafa, fafaf], [afa, fa, gwg, wfwfwf], [gegeg, egge]]

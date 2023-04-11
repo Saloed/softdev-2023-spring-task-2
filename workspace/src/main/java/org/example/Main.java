@@ -5,12 +5,10 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
@@ -23,7 +21,7 @@ public class Main {
     @Option(name = "-c")
     boolean charIndent = false;
     @Argument()
-    List<String> inputText = new ArrayList<>();
+    String inputText = "";
 
     public static void main(String[] args) throws CmdLineException, IOException {
         final Main instance = new Main();
@@ -36,17 +34,15 @@ public class Main {
         List<List<String>> answer;
         List<String> stringsText = new ArrayList<>();
         if (wordIndent == charIndent) throw new IllegalArgumentException("Ошибка во флагах -c/-w");
-        if (inputText.contains("input/input.txt")) {
-            stringsText = getText(inputText.get(0));
+        if (new File(inputText).exists()) {
+            stringsText = getText(inputText);
         } else {
-            StringBuilder inputTxt = new StringBuilder();
-            inputText.forEach(s -> inputTxt.append(s).append(" "));
-            stringsText.add(String.valueOf(inputTxt));
+            stringsText.add(inputText + " ");
         }
         if (wordIndent) answer = wordIndention(stringsText);
         else answer = charIndention(stringsText);
-        if (outputName != null) writeFileOutput(answer, outputName);
-        else writeOutput(answer);
+        if (outputName != null) writeOutput(outputName, answer.toString());
+        else writeOutput(System.out.toString(), answer.toString());
     }
 
     private List<Integer> countRange(String startData) {
@@ -70,23 +66,6 @@ public class Main {
         return stringsText;
     }
 
-    private void writeFileOutput(List<List<String>> answer, String outputName) throws FileNotFoundException {
-        File outputFile = new File(outputName);
-        PrintWriter output = new PrintWriter(outputFile);
-        for (List<String> strings : answer) {
-            output.println(strings);
-        }
-        output.close();
-    }
-
-    private void writeOutput(List<List<String>> answer) {
-        for (List<String> currentString : answer) {
-            for (String s : currentString) {
-                System.out.print(s + " ");
-            }
-            System.out.println();
-        }
-    }
     private List<List<String>> wordIndention(List<String> stringsText){
         List<Integer> intRange = countRange(range);
         List<List<String>> answer = new ArrayList<>();
@@ -110,5 +89,15 @@ public class Main {
             answer.add(needSymbols);
         }
         return answer;
+    }
+    private void writeOutput(String place, String data) throws IOException {
+        byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
+        if (new File(place).isFile()){
+            OutputStream out = new FileOutputStream(place);
+            out.write(bytes);
+        } else {
+            OutputStream out = System.out;
+            out.write(bytes);
+        }
     }
 }

@@ -58,7 +58,7 @@ class MainTest {
     void workWithConsole() throws IOException, CmdLineException {
         String[] args = {"-c", "-r", "7-21", "vhkvvk fafafaf fsgsgs gsgsgsg gaggsg"};
         Main.main(args);
-        String expectedAnswer = "fafafaf fsgsgs ";
+        String expectedAnswer = "[[fafafaf, fsgsgs]]";
         assertEquals(expectedAnswer,outContent.toString().replaceAll("\n",""));
     }
 }
