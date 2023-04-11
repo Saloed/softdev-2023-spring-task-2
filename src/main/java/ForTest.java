@@ -7,38 +7,18 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class ForTest {
-    public static String forTest(String[] args) {
-        Options option = new Options();
+    public static String forTest(CommandLine cmd) {
         int countS = 0;
-        option.addOption("i", "register");
-        option.addOption("u", "unique");
-        option.addOption("o", "output", true, "file name");
-        option.addOption("s", true, "ignore");
-        option.addOption("c", "counter");
-        CommandLineParser parser = new DefaultParser();
         List<String> out = null;
         try {
-            CommandLine cmd = parser.parse(option, args);
-            String tuti = String.join("", cmd.getArgList());
-            List<String> inFile = Files.readAllLines(Paths.get(tuti));
+            String openFile = String.join("", cmd.getArgList());
+            List<String> inFile = Files.readAllLines(Paths.get(openFile));
             if (cmd.hasOption("s")) {
                 countS = Integer.parseInt(cmd.getOptionValue("s"));
             }
-            Change jojo = new Change(inFile, cmd.hasOption("i"), countS,
+            Change changeFile = new Change(inFile, cmd.hasOption("i"), countS,
                     cmd.hasOption("u"), cmd.hasOption("c"));
-            out = jojo.res();
-            Filek output = new Filek(out);
-            if (cmd.hasOption("o")) {
-                String m2 = cmd.getOptionValue("o");
-                File f12 = new File(m2);
-                output.out(f12);
-            } else {
-                output.stressOut();
-            }
-
-        } catch (ParseException e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
+            out = changeFile.res();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(1);

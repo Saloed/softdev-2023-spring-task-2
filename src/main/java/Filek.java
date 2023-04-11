@@ -6,11 +6,12 @@ public class Filek {
 
     private final List<String> in;
 
-    public Filek(List<String> input){
+    public Filek(List<String> input) {
 
         in = input;
     }
-    public void out (File file){
+
+    public void out(File file) {
         try (FileWriter fis = new FileWriter(file)) {
             for (String s : in) {
                 fis.write(s);
@@ -21,7 +22,8 @@ public class Filek {
             e.printStackTrace();
         }
     }
-    public void stressOut(){
+
+    public void stressOut() {
         for (String s : in) {
             System.out.println(s);
         }

@@ -7,26 +7,18 @@ import java.util.List;
 
 public class Uniq {
 
-    public static void main(String[] args){
-        Options option = new Options();
+    public static void main(String[] args) {
         int countS = 0;
-        option.addOption("i","register");
-        option.addOption("u", "unique");
-        option.addOption("o","output", true, "file name");
-        option.addOption("s",true,"ignore");
-        option.addOption("c","counter");
-        CommandLineParser parser = new DefaultParser();
-        List<String> out = null;
         try {
-            CommandLine cmd = parser.parse(option, args);
-            String tuti = String.join("",cmd.getArgList());
-            List<String> inFile =  Files.readAllLines(Paths.get(tuti));
+            CommandLine cmd = line(args);
+            String openFile = String.join("", cmd.getArgList());
+            List<String> inFile = Files.readAllLines(Paths.get(openFile));
             if (cmd.hasOption("s")) {
                 countS = Integer.parseInt(cmd.getOptionValue("s"));
             }
-            Change jojo = new Change(inFile, cmd.hasOption("i"), countS,
+            Change changeFile = new Change(inFile, cmd.hasOption("i"), countS,
                     cmd.hasOption("u"), cmd.hasOption("c"));
-            out = jojo.res();
+            List<String> out = changeFile.res();
             Filek output = new Filek(out);
             if (cmd.hasOption("o")) {
                 String m2 = cmd.getOptionValue("o");
@@ -43,6 +35,26 @@ public class Uniq {
             System.out.println(e.getMessage());
             System.exit(1);
         }
-//        return String.join("\n", out);
+    }
+
+    public static CommandLine line(String[] args) throws ParseException {
+        Options option = new Options();
+        option.addOption("i", "register");
+        option.addOption("u", "unique");
+        option.addOption("o", "output", true, "file name");
+        option.addOption("s", true, "ignore");
+        option.addOption("c", "counter");
+        CommandLineParser parser = new DefaultParser();
+        return parser.parse(option, args);
+    }
+
+    public static String gop(String[] args) {
+        try {
+            return ForTest.forTest(line(args));
+        } catch (ParseException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
+        return "";
     }
 }

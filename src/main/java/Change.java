@@ -8,7 +8,7 @@ public class Change {
     private final int funS;
     private final boolean funU;
     private final boolean funC;
-    private final ArrayList<String> exp;
+    private final List<String> exp;
 
     public Change(List<String> i, boolean fuI, int fuS,
                   boolean fuU, boolean fuC) {
@@ -35,7 +35,7 @@ public class Change {
                 if (a.equalsIgnoreCase(b)) {
                     count++;
                 } else {
-                    addList(count,i);
+                    addList(count, i);
                     count = 0;
 
                 }
@@ -43,15 +43,16 @@ public class Change {
                 if (a.equals(b)) {
                     count++;
                 } else {
-                    addList(count,i);
+                    addList(count, i);
                     count = 0;
                 }
             }
         }
-        addList(count,in.size() - 1 );
+        addList(count, in.size() - 1);
         return exp;
     }
-    private void addList(int count, int i){
+
+    private void addList(int count, int i) {
         if (funU) {
             if (count == 0) {
                 exp.add(in.get(i - 1));
