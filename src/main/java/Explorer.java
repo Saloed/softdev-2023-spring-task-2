@@ -9,8 +9,8 @@ public class Explorer {
         this.arrayForExplore = arrayForExplore;
     }
 
-    public ArrayList<Long> makingLongArrayList(){
-        ArrayList<Long> longArrayList = new ArrayList<Long>();
+    public List<Long> makingLongArrayList(){
+        List<Long> longArrayList = new ArrayList<Long>();
         for (int i=0; i < arrayForExplore.size();i++) {
             File curFile = new File(arrayForExplore.get(i));
             longArrayList.add(curFile.length());
