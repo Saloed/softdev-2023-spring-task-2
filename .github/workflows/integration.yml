@@ -22,8 +22,6 @@ jobs:
       - name: Check gradle build
         if: hashFiles('gradlew') != ''
         uses: ./.github/actions/gradle-build
-      - name: Run chmod to make gradlew executable
-        run: chmod +x ./gradlew
       - name: Fail if build system is not detected
         if: hashFiles('pom.xml') == '' && hashFiles('gradlew') == ''
         run: |
