@@ -27,17 +27,13 @@ public class Uniq {
             } else {
                 output.stressOut();
             }
-
-        } catch (ParseException e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(1);
         }
     }
 
-    public static CommandLine line(String[] args) throws ParseException {
+    public static CommandLine line(String[] args){
         Options option = new Options();
         option.addOption("i", "register");
         option.addOption("u", "unique");
@@ -45,16 +41,14 @@ public class Uniq {
         option.addOption("s", true, "ignore");
         option.addOption("c", "counter");
         CommandLineParser parser = new DefaultParser();
-        return parser.parse(option, args);
+        try {
+            return parser.parse(option, args);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static String gop(String[] args) {
-        try {
-            return ForTest.forTest(line(args));
-        } catch (ParseException e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
-        }
-        return "";
+    public static String testOut(String[] args) {
+        return ForTest.forTest(line(args));
     }
 }

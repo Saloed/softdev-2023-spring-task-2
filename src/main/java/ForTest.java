@@ -1,13 +1,11 @@
 import org.apache.commons.cli.*;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
 public class ForTest {
-    public static String forTest(CommandLine cmd) {
+    public static String forTest(CommandLine cmd){
         int countS = 0;
         List<String> out = null;
         try {
