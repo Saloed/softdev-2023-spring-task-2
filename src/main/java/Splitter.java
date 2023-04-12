@@ -13,7 +13,7 @@ public class Splitter {
     private int sizeFile = 100; //Размер по умолчанию
     private String inputFile; //Имя входного файла
     private String outputFile = "x"; //Базовое имя выходного файла равняется “x”.
-    private final List<String> content; //Содержимое входного файла
+    private List<String> content; //Содержимое входного файла
     private Type splitType;
 
     private enum Type {
@@ -41,17 +41,26 @@ public class Splitter {
             CommandLine cmd = parser.parse(options, args);
             flagD = cmd.hasOption("d");
             if (cmd.hasOption("l")) {
-                if (splitType != null) throw new IllegalFormatFlagsException("Указаны несколько флагов размерности.");
+                if (splitType != null) {
+                    System.out.println("Указаны несколько флагов размерности.");
+                    return;
+                }
                 splitType = Type.LINE;
                 sizeFile = Integer.parseInt(cmd.getOptionValue("l"));
             }
             if (cmd.hasOption("c")) {
-                if (splitType != null) throw new IllegalFormatFlagsException("Указаны несколько флагов размерности.");
+                if (splitType != null) {
+                    System.out.println("Указаны несколько флагов размерности.");
+                    return;
+                }
                 splitType = Type.CHAR;
                 sizeFile = Integer.parseInt(cmd.getOptionValue("c"));
             }
             if (cmd.hasOption("n")) {
-                if (splitType != null) throw new IllegalFormatFlagsException("Указаны несколько флагов размерности.");
+                if (splitType != null) {
+                    System.out.println("Указаны несколько флагов размерности.");
+                    return;
+                }
                 splitType = Type.FILE;
                 sizeFile = Integer.parseInt(cmd.getOptionValue("n"));
             }
@@ -63,8 +72,8 @@ public class Splitter {
             }
             // Обработка аргументов
             String[] arguments = cmd.getArgs();
-            if (arguments.length == 0) throw new IllegalFormatFlagsException("Нет входного файл");
-            else if (arguments.length > 1) throw new IllegalFormatFlagsException("Указано несколько входных файлов");
+            if (arguments.length == 0) System.out.println("Нет входного файла");
+            else if (arguments.length > 1) System.out.println("Указано несколько входных файлов");
             else inputFile = arguments[0];
         } catch (ParseException e) {
             System.err.println("Ошибка при разборе аргументов командной строки: " + e.getMessage());
@@ -78,12 +87,11 @@ public class Splitter {
         List<String> result = new ArrayList<>();
         int startSize = content.size();
         for (int i = 0; i < startSize / sizeFile; i++) {
-            result.add(String.join("\n", content.subList(0, sizeFile)));
-            if (sizeFile > 0) {
-                content.subList(0, sizeFile).clear();
-            }
+            List<String> subList = content.subList(0, sizeFile);
+            result.add(String.join("\n", subList));
+            content = content.subList(sizeFile, content.size());
         }
-        if (content.size() % sizeFile != 0) result.add(String.join("\n", content));
+        if (!content.isEmpty()) result.add(String.join("\n", content));
         return result;
     }
 
@@ -142,15 +150,10 @@ public class Splitter {
         String chars = "abcdefghijklmnopqrstuvwxyz";
         if (flagD) return String.valueOf(i);
         StringBuilder postfix = new StringBuilder();
-        try (ByteArrayOutputStream newFileName = new ByteArrayOutputStream()) {
-            do {
-                newFileName.write(chars.charAt(i % 26));
-                i /= 26;
-            } while (i > 0);
-            postfix.append(newFileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        do {
+            postfix.append(chars.charAt(i % chars.length()));
+            i /= chars.length();
+        } while (i > 0);
         return postfix.reverse().toString();
     }
 }

@@ -23,19 +23,19 @@ public class SplitterTest {
     }
 
     @Test
-    public void TestSplitLine() throws IOException {
+    public void splitLineTest() throws IOException {
         Splitter splitter = new Splitter(new String[]{"-l", "3", "-o", "out", filePath});
         assertEquals(splitter.splitLine(), Arrays.asList("123\n456\n7890", "abcd\nefg"));
     }
 
     @Test
-    public void TestSplitChar() throws IOException {
+    public void splitCharTest() throws IOException {
         Splitter splitter = new Splitter(new String[]{"-c", "2", "-o", "out", filePath});
         assertEquals(splitter.splitChar(), Arrays.asList("12", "34", "56", "78", "90", "ab", "cd", "ef", "g"));
     }
 
     @Test
-    public void TestSplitFile() {
+    public void splitFileTest() {
         try {
             Splitter splitter = new Splitter(new String[]{"-n", "2", "-o", "out", filePath});
             splitter.save();
