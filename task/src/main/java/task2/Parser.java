@@ -2,8 +2,8 @@ package task2;
 
 import org.kohsuke.args4j.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.kohsuke.args4j.CmdLineException;
 
@@ -24,7 +24,7 @@ public class Parser {
         }
     }
 
-    public List<String> parse(String[] args) throws IOException {
+    public Set<String> parse(String[] args) throws IOException {
         CmdLineParser parser = new CmdLineParser(this);
         try {
             parser.parseArgument(args);
@@ -35,7 +35,7 @@ public class Parser {
         }
 
         Finder finder = new Finder(recursive, dir, fileName);
-        return new ArrayList<>(finder.find());
+        return new TreeSet<>(finder.find());
     }
 }
 

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 
@@ -21,9 +23,9 @@ public class Finder {
         this.fileName = fileName;
     }
 
-    public ArrayList<String> find() throws IOException {
+    public Set<String> find() throws IOException {
         ArrayList<File> fileList = new ArrayList<>();
-        ArrayList<String> result = new ArrayList<>();
+        TreeSet<String> result = new TreeSet<>();
         if (dir.equals("")) {dir = System.getProperty("user.dir");}
         search(new File(dir), fileList);
         for(File file : fileList) {
