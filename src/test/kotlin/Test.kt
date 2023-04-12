@@ -14,8 +14,6 @@ private fun isEqual(firstFile: Path, secondFile: Path): Boolean {
 }
 
 class Test {
-    lateinit var args: Array<String>
-    lateinit var result: File
 
     @Test // даны необходимые файлы, ошибок в передаваемых аргументах нет
     fun testMain() {

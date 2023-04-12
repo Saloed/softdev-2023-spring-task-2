@@ -1,6 +1,5 @@
 import kotlinx.cli.*
 import java.io.File
-import java.lang.IllegalArgumentException
 
 class ArgumentsCheck(args: Array<String>) {
 
@@ -25,8 +24,10 @@ class ArgumentsCheck(args: Array<String>) {
     val rangeEnd: Int?
 
     init {
-        if (indent != "-c" && indent != "-w")
+        if (indent != "-c" && indent != "-w") {
+            println("Нет или неверный параметр отступа")
             kotlin.system.exitProcess(-1)
+        }
 
         try {
             if (oFilePath != null)
@@ -47,6 +48,7 @@ class ArgumentsCheck(args: Array<String>) {
                 if (range[1].isNotBlank() && range[1][0] != '-') range[1].toInt()
                 else null
         } catch (e: Exception) {
+            println("Передан(ы) неверный(ые) аргумент(ы)")
             kotlin.system.exitProcess(-1)
         }
     }

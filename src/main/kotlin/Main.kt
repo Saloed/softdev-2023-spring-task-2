@@ -1,4 +1,5 @@
 import java.io.BufferedWriter
+import java.io.File
 
 fun main(args: Array<String>) {
     val arguments = ArgumentsCheck(args)
@@ -7,29 +8,19 @@ fun main(args: Array<String>) {
 
 fun cutting(arguments: ArgumentsCheck) {
     val writer: BufferedWriter? = arguments.outputFile?.bufferedWriter()
-    var newLine: String
-    var firstLine = true
 
     if (arguments.inputFile == null) {
-        var inputText = ""
-        while (inputText.isBlank()) {
-            println("Параметр file пуст. Введите текст в строку:")
-            inputText = readln()
-        }
+        println("Введите текст (после ввода перейдети на новую строку и нажмите Ctrl + D):")
+        val inputText = generateSequence { readlnOrNull() }
+        val textFromUser = inputText.toList()
 
-        val textFromUser = Regex("""\n""").split(inputText)
-
-        textFromUser.forEach { line ->
-            newLine = cutString(line, arguments.indent, arguments.rangeStart, arguments.rangeEnd)
-            writeNewLine(newLine, writer, firstLine)
-            firstLine = false
-        }
+        cutText(
+            textFromUser, writer, arguments.indent, arguments.rangeStart, arguments.rangeEnd
+        )
     } else {
-        arguments.inputFile!!.forEachLine { line ->
-            newLine = cutString(line, arguments.indent, arguments.rangeStart, arguments.rangeEnd)
-            writeNewLine(newLine, writer, firstLine)
-            firstLine = false
-        }
+        cutText(
+            arguments.inputFile!!, writer, arguments.indent, arguments.rangeStart, arguments.rangeEnd
+        )
     }
 
     writer?.close()
@@ -67,7 +58,37 @@ fun cutString(
         }
     else ""
 
-fun writeNewLine(newLine: String, writer: BufferedWriter?, firstLine: Boolean) {
+
+
+fun <E> cutText(
+    inputText: E,
+    writer: BufferedWriter?,
+    indentParam: String,
+    rangeStart: Int,
+    rangeEnd: Int?
+    ): Unit {
+    var firstLine = true
+    var newLine: String
+    when (inputText) {
+        is List<*> -> {
+            (inputText as List<String>).forEach { line ->
+                newLine = cutString(line, indentParam, rangeStart, rangeEnd)
+                writeNewLine(newLine, writer, firstLine)
+                firstLine = false
+            }
+        }
+
+        is File -> {
+            inputText.forEachLine { line ->
+                newLine = cutString(line, indentParam, rangeStart, rangeEnd)
+                writeNewLine(newLine, writer, firstLine)
+                firstLine = false
+            }
+        }
+    }
+}
+
+fun writeNewLine(newLine: String, writer: BufferedWriter?, firstLine: Boolean): Unit {
     if (writer != null) {
         if (!firstLine) writer.newLine()
         writer.write(newLine)
