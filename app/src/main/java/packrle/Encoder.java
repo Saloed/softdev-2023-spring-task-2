@@ -1,4 +1,4 @@
-package pack_rle;
+package packrle;
 
 import java.io.IOException;
 
@@ -10,8 +10,9 @@ public class Encoder extends Convertor {
 
     @Override
     int consume(byte[] bytes, int count) throws IOException {
+        int MAX_BYTES = 128;
         int num = 1;
-        int len = Math.min(count, 128);
+        int len = Math.min(count, MAX_BYTES);
         while (num < len) {
             if (bytes[0] != bytes[num]) break;
             num++;

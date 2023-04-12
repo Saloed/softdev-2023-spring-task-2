@@ -1,4 +1,4 @@
-package pack_rle;
+package packrle;
 
 import java.io.Closeable;
 import java.io.FileInputStream;
@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 class Source implements Closeable {
     InputStream input;
-    byte[] buffer = new byte[64];
+    byte[] buffer = new byte[4096];
     int count = 0;
 
     public Source(String filename) throws IOException {

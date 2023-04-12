@@ -1,4 +1,4 @@
-package pack_rle;
+package packrle;
 
 import org.kohsuke.args4j.*;
 
@@ -30,12 +30,6 @@ public class App {
 
     }
 
-    static String setExtension(String filename, String extToRemove, String extToAdd) {
-        if (filename.endsWith(extToRemove))
-            filename = filename.substring(0, filename.length() - extToRemove.length());
-        return filename + extToAdd;
-    }
-
     static void process(String inputFileName, String outputFileName, boolean encoding) throws IOException {
         try (var source = new Source(inputFileName);
              var output = createConvertor(outputFileName, encoding)) {
@@ -55,20 +49,17 @@ public class App {
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
             parser.printUsage(System.err);
-            return;
+            System.exit(1);
         }
 
         if (!encoding && !decoding) {
             System.out.println("one of the options is required [-z|-u]");
-            return;
+            System.exit(1);
         }
 
         if (outputFileName == null) {
-            if (encoding) {
-                outputFileName = setExtension(inputFileName, ".txt", ".rle");
-            } else if (decoding) {
-                outputFileName = setExtension(inputFileName, ".rle", ".txt");
-            }
+            if (encoding) outputFileName = inputFileName + ".encoded";
+            else if (decoding) outputFileName = inputFileName + ".decoded";
         }
 
         System.out.println(String.format("inputFileName: %s", inputFileName));

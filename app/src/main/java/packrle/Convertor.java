@@ -1,4 +1,4 @@
-package pack_rle;
+package packrle;
 
 import java.io.Closeable;
 import java.io.FileOutputStream;

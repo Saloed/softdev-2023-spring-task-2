@@ -1,4 +1,4 @@
-package pack_rle;
+package packrle;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,11 +27,4 @@ class AppTest {
         App.process("data/output.rle", "data/output.txt", false);
         assertTrue(comparingFiles("data/input.txt", "data/output.txt"));
     }
-
-    @Test
-    public void extensionTest() {
-        assertEquals(App.setExtension("abc.txt", ".txt", ".rle"), "abc.rle");
-        assertEquals(App.setExtension("abc", ".txt", ".rle"), "abc.rle");
-    }
-
 }
