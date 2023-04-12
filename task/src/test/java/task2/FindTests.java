@@ -20,9 +20,6 @@ public class FindTests {
         res.add(curDir + sep + "src" + sep + "test" + sep + "resources" + sep + "test1.txt");
         res.add(curDir + sep + "src" + sep + "test" + sep + "resources" + sep + "test2.txt");
         res.add(curDir + sep + "src" + sep + "test" + sep + "resources" + sep + "test20.txt");
-        System.err.println(curDir);
-        System.err.println(new Parser().parse(input));
-        System.out.println(res);
         Assertions.assertEquals(new Parser().parse(input), res);
     }
 
