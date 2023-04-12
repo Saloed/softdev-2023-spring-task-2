@@ -33,7 +33,7 @@ dependencies {
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
-    testLogging.showStandardStreams
+    testLogging.showStandardStreams = true
 }
 
 
