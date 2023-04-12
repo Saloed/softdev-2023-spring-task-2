@@ -20,6 +20,7 @@ public class FindTests {
         res.add(curDir + sep + "src" + sep + "test" + sep + "resources" + sep + "test1.txt");
         res.add(curDir + sep + "src" + sep + "test" + sep + "resources" + sep + "test2.txt");
         res.add(curDir + sep + "src" + sep + "test" + sep + "resources" + sep + "test20.txt");
+        System.out.println(new Parser().parse(input));
         Assertions.assertEquals(new Parser().parse(input), res);
     }
 
@@ -29,6 +30,7 @@ public class FindTests {
         ArrayList<String> res = new ArrayList<>();
         res.add(curDir + sep + "src" + sep + "test" + sep + "resources" + sep + "test2.txt");
         res.add(curDir + sep + "src" + sep + "test" + sep + "resources" + sep + "test20.txt");
+        System.out.println(new Parser().parse(input));
         Assertions.assertEquals(new Parser().parse(input), res);
     }
 
@@ -40,6 +42,7 @@ public class FindTests {
         res.add(curDir + sep + "build" + sep + "resources" + sep + "test" + sep + "test20.txt");
         res.add(curDir + sep + "src" + sep + "test" + sep + "resources" + sep + "test2.txt");
         res.add(curDir + sep + "src" + sep + "test" + sep + "resources" + sep + "test20.txt");
+        System.out.println(new Parser().parse(input));
         Assertions.assertEquals(new Parser().parse(input), res);
     }
 
@@ -47,6 +50,7 @@ public class FindTests {
     public void test4() throws IOException {
         String[] input = {"someFileName"};
         ArrayList<String> res = new ArrayList<>();
+        System.out.println(new Parser().parse(input));
         Assertions.assertEquals(new Parser().parse(input), res);
     }
 
@@ -55,6 +59,7 @@ public class FindTests {
         String[] input = {"build.gradle"};
         ArrayList<String> res = new ArrayList<>();
         res.add(curDir + "" + sep + "build.gradle.kts");
+        System.out.println(new Parser().parse(input));
         Assertions.assertEquals(new Parser().parse(input), res);
     }
 
