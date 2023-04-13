@@ -50,8 +50,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <!-- latest version (2.20.1) does not work well with JUnit5 -->
                 <version>3.0.0</version>
+                <configuration>
+                    <includes>
+                       <include>NewTests.java</include>
+                    </includes>
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
@@ -68,7 +72,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ch.frankel.blog.executablejar.ExecutableJarApplication</mainClass>
+                            <mainClass>com.utility.ConsoleApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

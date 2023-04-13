@@ -1,5 +1,3 @@
-import org.kohsuke.args4j.CmdLineException;
-
 import java.util.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -104,13 +102,13 @@ public class ConsoleApp {
 
 
     // флаги
-    static List<String> defaultFun (List<String> input, boolean Case) {
+    static List<String> defaultFun (List<String> input, boolean sen) {
         String previousLine = "";
 
         List<String> res = new ArrayList<>();
 
         for (String actualLine : input) {
-            if (!Case){
+            if (!sen){
             if (!previousLine.equals(actualLine)) {
                 res.add(actualLine);
                 }
@@ -125,14 +123,14 @@ public class ConsoleApp {
         return res;
     }
 
-    static List<String> numChar (List<String> input, int num, boolean Case) {
+    static List<String> numChar (List<String> input, int num, boolean sen) {
 
         String previousLine = "";
 
         List<String> res = new ArrayList<>();
 
         for (String actualLine : input) {
-            if (!Case) {
+            if (!sen) {
                 String subStr = "";
                 if (actualLine.length() > num) {
                     subStr = actualLine.substring(num);
@@ -165,8 +163,8 @@ public class ConsoleApp {
         return res;
     }
 
-    static List<String> countingLines (List<String> input, boolean Case) {
-        List<Pair<Integer, String>> list = counting(input, Case);
+    static List<String> countingLines (List<String> input, boolean sen) {
+        List<Pair<Integer, String>> list = counting(input, sen);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {
             res.add(integerStringPair.toString());
@@ -174,8 +172,8 @@ public class ConsoleApp {
         return res;
     }
 
-    static List<String> unique (List<String> input, boolean Case) {
-        List <Pair<Integer, String>> list = counting(input, Case);
+    static List<String> unique (List<String> input, boolean sen) {
+        List <Pair<Integer, String>> list = counting(input, sen);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {
             if (integerStringPair.first == 1) {
