@@ -4,28 +4,23 @@ import java.util.List;
 
 public class Filek {
 
-    private final List<String> in;
-
-    public Filek(List<String> input) {
-
-        in = input;
-    }
-
-    public void out(File file) {
-        try (FileWriter fis = new FileWriter(file)) {
-            for (String s : in) {
-                fis.write(s);
-                fis.write("\n");
+    public void out(String path, Variant.options option, List<String> in) {
+        if (Variant.options.withFile == option) {
+            File file = new File(path);
+            try (FileWriter fis = new FileWriter(file)) {
+                for (String s : in) {
+                    fis.write(s);
+                    fis.write("\n");
+                }
+            } catch (Exception e) {
+                System.out.println("Bruuuuh");
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            System.out.println("Bruuuuh");
-            e.printStackTrace();
+        } else {
+            for (String s : in) {
+                System.out.println(s);
+            }
         }
     }
 
-    public void stressOut() {
-        for (String s : in) {
-            System.out.println(s);
-        }
-    }
 }

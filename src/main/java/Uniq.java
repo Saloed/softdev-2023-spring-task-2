@@ -1,39 +1,18 @@
 import org.apache.commons.cli.*;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-
 public class Uniq {
 
     public static void main(String[] args) {
-        int countS = 0;
-        try {
-            CommandLine cmd = line(args);
-            String openFile = String.join("", cmd.getArgList());
-            List<String> inFile = Files.readAllLines(Paths.get(openFile));
-            if (cmd.hasOption("s")) {
-                countS = Integer.parseInt(cmd.getOptionValue("s"));
-            }
-            Change changeFile = new Change(inFile, cmd.hasOption("i"), countS,
-                    cmd.hasOption("u"), cmd.hasOption("c"));
-            List<String> out = changeFile.res();
-            Filek output = new Filek(out);
-            if (cmd.hasOption("o")) {
-                String m2 = cmd.getOptionValue("o");
-                File f12 = new File(m2);
-                output.out(f12);
-            } else {
-                output.stressOut();
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.exit(1);
+        InFile file = new InFile();
+        Filek output = new Filek();
+        if (line(args).hasOption("o")) {
+            output.out(line(args).getOptionValue("o"), Variant.options.withFile, file.open(line(args)));
+        } else {
+            output.out(line(args).getOptionValue("o"), Variant.options.noFile, file.open(line(args)));
         }
     }
 
-    public static CommandLine line(String[] args){
+    public static CommandLine line(String[] args) {
         Options option = new Options();
         option.addOption("i", "register");
         option.addOption("u", "unique");

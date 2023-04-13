@@ -15,7 +15,7 @@ public class UniqTest {
 
     @Test
     public void test2() {
-        String[] args = {"-o", "output.txt","-s","8", "input\\test1.txt"};
+        String[] args = {"-o", "output.txt", "-s", "8", "input\\test1.txt"};
         Assertions.assertEquals("""
                 hello, world
                 Hello, Worlds
