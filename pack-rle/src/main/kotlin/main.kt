@@ -137,6 +137,7 @@ class DecodeParser private constructor (inputFile: File, outputFile: File) {
             window.move()
         }
         writer.close()
+        reader.close()
     }
 
 
