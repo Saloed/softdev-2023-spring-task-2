@@ -1,5 +1,6 @@
 import java.io.File
 import kotlinx.cli.*
+
 import java.io.FileInputStream
 
 
@@ -25,16 +26,12 @@ fun main(args: Array<String>) {
     when (type) {
         "-z" -> {
             println("Processing...")
-            outputFile.bufferedWriter().use {
-                it.write(EncodeParser.create(FileInputStream(inputFile)).encoded)
-            }
+            EncodeParser.create(inputFile, outputFile).encode()
             println("File saved successfully!/nHave a good day!")
         }
         "-u" -> {
             println("Processing...")
-            outputFile.bufferedWriter().use {
-                it.write(DecodeParser.create(FileInputStream(inputFile)).decoded)
-            }
+            DecodeParser.create(inputFile, inputFile).decode()
             println("File saved successfully!/nHave a good day!")
         }
         else -> {
@@ -48,9 +45,10 @@ fun main(args: Array<String>) {
 }
 
 
-class EncodeParser private constructor (private val inputStream: FileInputStream) {
+class EncodeParser private constructor (inputFile: File, outputFile: File) {
+    private val writer = outputFile.bufferedWriter()
+    private val reader = inputFile.bufferedReader()
     private var index = 0
-    private var result = StringBuilder()
     private var text = StringBuilder()
     private var textIsRead = false
 
@@ -97,7 +95,7 @@ class EncodeParser private constructor (private val inputStream: FileInputStream
             cdResult += text[index]
             read()
         }
-        result.append(fromIntToString(-count, cdResult))
+        writer.write(fromIntToString(-count, cdResult))
     }
 
     private fun countSim() {
@@ -107,10 +105,10 @@ class EncodeParser private constructor (private val inputStream: FileInputStream
             index++
             read()
         }
-        result.append(fromIntToString(count, text[index].toString()))
+        writer.write(fromIntToString(count, text[index].toString()))
     }
 
-    private fun encode(): String {
+    fun encode() {
         read()
         while (!isOutOfBounds(index)) {
             read()
@@ -120,12 +118,13 @@ class EncodeParser private constructor (private val inputStream: FileInputStream
             else countDif()
             index++
         }
-        return String(result)
+        writer.close()
+        reader.close()
     }
 
     private fun read() {
         if (!textIsRead && text.length <= index + 2) {
-            val status = inputStream.read()
+            val status = reader.read()
             if (status != -1) text.append(Char(status).toString())
             else textIsRead = true
         }
@@ -133,34 +132,32 @@ class EncodeParser private constructor (private val inputStream: FileInputStream
 
     private fun isOutOfBounds(localIndex: Int) = textIsRead && localIndex >= text.length
 
-    val encoded = encode()
 
     companion object {
-        fun create(inputStream: FileInputStream) = EncodeParser(inputStream)
+        fun create(inputFile: File, outputFile: File) = EncodeParser(inputFile, outputFile)
     }
 }
 
-class DecodeParser private constructor (private val inputStream: FileInputStream) {
-
+class DecodeParser private constructor (inputFile: File, outputFile: File) {
+    private val inputStream = FileInputStream(inputFile)
+    private val writer = outputFile.bufferedWriter()
     private var byteArray = ByteArray(2048)
-    private val result = StringBuilder()
     private var text = ""
     private var index = 0
 
-    private fun decode(): String {
+    fun decode() {
         read()
         while (true) {
             if (text[index].code in 32..144) {
                 appendDiff(text[index].code)
             }
             else {
-                println(text[index].code)
                 appendSim(text[index].code)
             }
             if (index >= text.length && read() == -1) break
         }
         inputStream.close()
-        return result.toString()
+        writer.close()
     }
 
     private fun read(): Int {
@@ -171,31 +168,30 @@ class DecodeParser private constructor (private val inputStream: FileInputStream
 
     private fun appendDiff(int: Int) {
         if (index + int - 30 <= text.length) {
-            result.append(text.substring(index + 1, index + int - 30))
+            writer.write(text.substring(index + 1, index + int - 30))
             index += int - 30
         }
         else {
-            result.append(text.substring(index + 1))
+            writer.write(text.substring(index + 1, index + int - 30))
             index = index + int - 30 - text.length
             read()
-            result.append(text.substring(0, index))
+            writer.write(text.substring(index + 1, index + int - 30))
         }
     }
     private fun appendSim(int: Int) {
         if (index + 1 < text.length) {
-            result.append(text[index + 1].toString().repeat(int - 143))
+            writer.write(text.substring(index + 1, index + int - 30))
             index += 2
         }
         else {
             read()
-            result.append(text[0].toString().repeat(int - 143))
+            writer.write(text.substring(index + 1, index + int - 30))
             index = 1
         }
     }
 
 
-    val decoded = decode()
     companion object {
-        fun create(inputStream: FileInputStream) = DecodeParser(inputStream)
+        fun create(inputFile: File, outputFile: File) = DecodeParser(inputFile, outputFile)
     }
 }
