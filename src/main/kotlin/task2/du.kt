@@ -38,49 +38,35 @@ fun main(args: Array<String>) {
 }
 
 fun getAllSizes(humRead: Boolean, needSum: Boolean, thousandBased: Boolean, files: List<File>): List<String> {
-    val listOfSizes = emptyList<Long>().toMutableList()
-    val resList = emptyList<String>().toMutableList()
+    val listOfSizes = mutableListOf<Long>()
     val base = if (thousandBased) 1000 else 1024
     files.forEach {
-        var size = 0L
         if (it.isDirectory) {
-            it.listFiles()?.let { it1 ->
-                allFilesFromDirectory(it1.toList()).forEach { itFile ->
-                    size += itFile.length()
-                }
-            }
-        } else size = it.length()
-        listOfSizes.add(size)
-        if (humRead) {
-            val hRSize = toHumRead(size, base)
-            val sizeInString = "${hRSize.first} ${hRSize.second}"
-            resList.add(sizeInString)
-            println("Размер файла $it =  $sizeInString")
-        } else {
-            val sizeInString = "$size B"
-            resList.add(sizeInString)
-            println("Размер файла $it = $sizeInString")
-        }
+            listOfSizes.add(sizeOfDirectory(allFilesFromDirectory(it.listFiles().toList())))
+        } else listOfSizes.add(it.length())
+    }
+    val resList = output(listOfSizes, humRead, base).toMutableList()
+    resList.forEach {
+        println(it)
     }
     if (needSum) {
-        val sum = listOfSizes.sum()
-        listOfSizes.add(sum)
-        if (humRead) {
-            val hRSize = toHumRead(sum, base)
-            val sizeInString = "${hRSize.first} ${hRSize.second}"
-            resList.add(sizeInString)
-            println("Суммарный размер = $sizeInString")
-        } else {
-            val sizeInString = "$sum B"
-            resList.add(sizeInString)
-            println("Суммарный размер = $sizeInString")
-        }
+        val sum = output(listOf(listOfSizes.sum()), humRead, base)[0]
+        println("Суммарный размер файлов равен $sum")
+        resList.add(sum)
     }
     return resList
 }
 
+fun sizeOfDirectory(list: List<File>): Long {
+    var size = 0L
+    list.forEach {
+        size += it.length()
+    }
+    return size
+}
+
 fun allFilesFromDirectory(list: List<File>): List<File> {
-    val newList = emptyList<File>().toMutableList()
+    val newList = mutableListOf<File>()
     list.forEach {
         if (it.isDirectory) {
             it.listFiles()?.let { it1 -> allFilesFromDirectory(it1.toList()) }?.let { it2 -> newList.addAll(it2) }
@@ -100,3 +86,17 @@ fun toHumRead(size: Long, base: Int): Pair<Double, String> {
     return Pair(newSize, units[count])
 }
 
+fun output(list: List<Long>, humRead: Boolean, base: Int): List<String> {
+    val resList = mutableListOf<String>()
+    if (humRead) {
+        list.forEach {
+            val size = toHumRead(it, base)
+            resList.add("${size.first} ${size.second}")
+        }
+    } else {
+        list.forEach {
+            resList.add("$it B")
+        }
+    }
+    return resList
+}
