@@ -1,6 +1,5 @@
 import java.io.File
 import kotlinx.cli.*
-
 import java.io.FileInputStream
 
 
@@ -48,8 +47,7 @@ fun main(args: Array<String>) {
 class EncodeParser private constructor (inputFile: File, outputFile: File) {
     private val writer = outputFile.bufferedWriter()
     private val reader = inputFile.bufferedReader()
-    private var index = 0
-    private var text = StringBuilder()
+    private var textArray = Array(3) { reader.read().let { if (it != -1) Char(it) else null} }
     private var textIsRead = false
 
 
@@ -85,52 +83,52 @@ class EncodeParser private constructor (inputFile: File, outputFile: File) {
     }
 
     private fun countDif() {
-        read()
         var count = 1
-        var cdResult = "${text[index]}"
-        while (!isOutOfBounds(index + 1) && text[index] != text[index + 1]) {
-            if (!isOutOfBounds(index + 2) && text[index + 1] == text[index + 2]) break
+        var cdResult = textArray[0]!!.toString()
+        while (!isOutOfBounds(1) && textArray[0] != textArray[1]) {
+            if (!isOutOfBounds(2) && textArray[1] == textArray[2]) break
             count++
-            index++
-            cdResult += text[index]
-            read()
+            moveWindow()
+            cdResult += textArray[0]!!
         }
         writer.write(fromIntToString(-count, cdResult))
     }
 
     private fun countSim() {
         var count = 1
-        while (!isOutOfBounds(index + 1) && text[index] == text[index + 1]) {
+        while (!isOutOfBounds(1) && textArray[0] == textArray[1]) {
             count++
-            index++
-            read()
+            moveWindow()
         }
-        writer.write(fromIntToString(count, text[index].toString()))
+        writer.write(fromIntToString(count, textArray[0].toString()))
     }
 
     fun encode() {
-        read()
-        while (!isOutOfBounds(index)) {
-            read()
-            if (text[index] == text[index + 1]) {
+        while (!isOutOfBounds(0)) {
+            if (textArray[0] == textArray[1]) {
                 countSim()
             }
             else countDif()
-            index++
+            moveWindow()
         }
         writer.close()
         reader.close()
     }
 
-    private fun read() {
-        if (!textIsRead && text.length <= index + 2) {
+    private fun moveWindow() {
+        if (!(textIsRead && isOutOfBounds(0))) {
             val status = reader.read()
-            if (status != -1) text.append(Char(status).toString())
-            else textIsRead = true
+                textArray[0] = textArray[1]
+                textArray[1] = textArray[2]
+            if (status != -1) textArray[2] = Char(status)
+            else {
+                textArray[2] = null
+                textIsRead = true
+            }
         }
     }
 
-    private fun isOutOfBounds(localIndex: Int) = textIsRead && localIndex >= text.length
+    private fun isOutOfBounds(localIndex: Int) = textIsRead && textArray[localIndex] == null
 
 
     companion object {
