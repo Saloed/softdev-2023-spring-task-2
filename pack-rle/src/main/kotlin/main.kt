@@ -14,7 +14,6 @@ fun main(args: Array<String>) {
     parser.parse(args)
     val outputFile = File(output)
     val inputFile = File(input)
-    val byteArray = ByteArray(2048)
 
 
     if (!inputFile.exists()) {
@@ -26,21 +25,15 @@ fun main(args: Array<String>) {
     when (type) {
         "-z" -> {
             println("Processing...")
-            FileInputStream(inputFile).use { reader ->
-                outputFile.bufferedWriter().use { writer ->
-                    while (reader.read(byteArray) != -1) {
-                        writer.write(EncodeParser.create(String(byteArray)).encoded)
-                    }
-                }
+            outputFile.bufferedWriter().use {
+                it.write(EncodeParser.create(FileInputStream(inputFile)).encoded)
             }
             println("File saved successfully!/nHave a good day!")
         }
         "-u" -> {
             println("Processing...")
-            FileInputStream(inputFile).use { reader ->
-                outputFile.bufferedWriter().use { writer ->
-                    writer.write(DecodeParser.create(FileInputStream(inputFile)).decoded)
-                }
+            outputFile.bufferedWriter().use {
+                it.write(DecodeParser.create(FileInputStream(inputFile)).decoded)
             }
             println("File saved successfully!/nHave a good day!")
         }
@@ -55,31 +48,35 @@ fun main(args: Array<String>) {
 }
 
 
-class EncodeParser private constructor (private val text: String) {
-    private val originalLength = text.length
+class EncodeParser private constructor (private val inputStream: FileInputStream) {
     private var index = 0
     private var result = StringBuilder()
+    private var text = StringBuilder()
+    private var textIsRead = false
+
 
     private fun fromIntToString(count: Int, string: String): String {
         var curCount = count
         val localResult = StringBuilder()
+        val maxSequenceDif = 113
+        val maxSequenceSim = 112
         when {
             count < 0 -> {
                 var maxSequenceCounter = 0
                 curCount *= -1
-                while (curCount > 113) {
+                while (curCount > maxSequenceDif) {
                     maxSequenceCounter++
                     localResult.append(Char(144))
                         .append(string.substring(113 * (maxSequenceCounter - 1), 113 * maxSequenceCounter))
-                    curCount -= 113
+                    curCount -= maxSequenceDif
                 }
                 localResult.append(' ' + curCount - 1).append(string.substring(113 * maxSequenceCounter, string.length))
                 return localResult.toString()
             }
             count > 1 -> {
-                while (curCount > 112) {       // A * 142 = ~A~A~A!A
+                while (curCount > maxSequenceSim) {       // A * 142 = ~A~A~A!A
                     localResult.append("${Char(255)}$string")       //
-                    curCount -= 112
+                    curCount -= maxSequenceSim
                 }
                 if (curCount > 1) localResult.append(Char(143) + curCount).append(string)
                 else localResult.append(Char(32)).append(string)
@@ -90,46 +87,60 @@ class EncodeParser private constructor (private val text: String) {
     }
 
     private fun countDif() {
+        read()
         var count = 1
         var cdResult = "${text[index]}"
-        while (index < text.length - 1 && text[index] != text[index + 1]) {
-            if (index < originalLength - 2 && text[index + 1] == text[index + 2]) break
+        while (!isOutOfBounds(index + 1) && text[index] != text[index + 1]) {
+            if (!isOutOfBounds(index + 2) && text[index + 1] == text[index + 2]) break
             count++
             index++
             cdResult += text[index]
+            read()
         }
         result.append(fromIntToString(-count, cdResult))
     }
 
     private fun countSim() {
         var count = 1
-        while (index < text.length - 1 && text[index] == text[index + 1]) {
+        while (!isOutOfBounds(index + 1) && text[index] == text[index + 1]) {
             count++
             index++
+            read()
         }
         result.append(fromIntToString(count, text[index].toString()))
     }
 
     private fun encode(): String {
-        while (index < originalLength) {
+        read()
+        while (!isOutOfBounds(index)) {
+            read()
             if (text[index] == text[index + 1]) {
                 countSim()
             }
             else countDif()
             index++
         }
-        return result.toString()
+        return String(result)
     }
 
+    private fun read() {
+        if (!textIsRead && text.length <= index + 2) {
+            val status = inputStream.read()
+            if (status != -1) text.append(Char(status).toString())
+            else textIsRead = true
+        }
+    }
+
+    private fun isOutOfBounds(localIndex: Int) = textIsRead && localIndex >= text.length
+
     val encoded = encode()
-    val sizeRed = originalLength.toDouble() / encoded.length.toDouble()
 
     companion object {
-        fun create(text: String) = EncodeParser(text)
+        fun create(inputStream: FileInputStream) = EncodeParser(inputStream)
     }
 }
 
-class DecodeParser private constructor (private val FileIS: FileInputStream) {
+class DecodeParser private constructor (private val inputStream: FileInputStream) {
 
     private var byteArray = ByteArray(2048)
     private val result = StringBuilder()
@@ -148,12 +159,12 @@ class DecodeParser private constructor (private val FileIS: FileInputStream) {
             }
             if (index >= text.length && read() == -1) break
         }
-        FileIS.close()
+        inputStream.close()
         return result.toString()
     }
 
     private fun read(): Int {
-        val res = FileIS.read(byteArray)
+        val res = inputStream.read(byteArray)
         text = if (res != -1) String(byteArray, 0, res) else ""
         return res
     }
@@ -185,6 +196,6 @@ class DecodeParser private constructor (private val FileIS: FileInputStream) {
 
     val decoded = decode()
     companion object {
-        fun create(FileIS: FileInputStream) = DecodeParser(FileIS)
+        fun create(inputStream: FileInputStream) = DecodeParser(inputStream)
     }
 }
