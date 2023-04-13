@@ -39,31 +39,25 @@ import java.util.Locale;
 
 public class ConsoleApp {
 
-    private static List<Pair<Integer, String>> counting(List<String> input, boolean Case) {
+    private static List<Pair<Integer, String>> counting(List<String> input, boolean sen) {
         List<Pair<Integer, String>> res = new ArrayList<>();
         int c = 1;
         String previousLine = "";
 
         for (String actualLine : input) {
-            if (!Case) {
-                if (!actualLine.equals(previousLine)) {
-                    c = 1;
-                    res.add(new Pair<>(c, actualLine));
-                } else {
-                    res.remove(res.size() - 1);
-                    res.add(new Pair<>(c, actualLine));
-                }
-
-            } else {
-                if (!actualLine.toLowerCase(Locale.ROOT).equals(previousLine.toLowerCase())) {
-                    c = 1;
-                    res.add(new Pair<>(c, actualLine));
-                } else {
-                    res.remove(res.size() - 1);
-                    res.add(new Pair<>(c, actualLine));
-                }
-
+            String a = actualLine;
+            String b = previousLine;
+            if (sen) {
+                a = actualLine.toLowerCase();
+                b = previousLine.toLowerCase();
             }
+                if (!a.equals(b)) {
+                    c = 1;
+                    res.add(new Pair<>(c, actualLine));
+                } else {
+                    res.remove(res.size() - 1);
+                    res.add(new Pair<>(c, actualLine));
+                }
             previousLine = actualLine;
             ++c;
         }
