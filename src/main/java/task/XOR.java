@@ -38,10 +38,10 @@ public class XOR {
         }
 
         try {
+            byte[] buffer = new byte[4096];
+            byte[] byteOutput;
             if (outputFileName.isEmpty()) outputFileName = inputFileName + ".ciph";
             try (FileInputStream inputStream = new FileInputStream(inputFileName); FileOutputStream outputStream = new FileOutputStream(outputFileName)) {
-                byte[] buffer = new byte[4096];
-                byte[] byteOutput;
                 int n;
                 while ((n = inputStream.read(buffer)) >= 0) {
                     if (encryptionKey == null) byteOutput = ciph(buffer, decryptionKey);
