@@ -162,19 +162,17 @@ class DecodeParser private constructor (inputFile: File, outputFile: File) {
 
 class MovingWindow (private val array: Array<Char?>,private val reader: BufferedReader) {
     private val lastIndex = array.size - 1
-    private var textIsRead = false
 
     fun move() {
         val code = reader.read()
         for (i in 0 until lastIndex) array[i] = array[i + 1]
         if (code != -1) array[lastIndex] = Char(code)
         else {
-            textIsRead = true
             array[lastIndex] = null
         }
     }
 
-    fun isOutOfBounds(index: Int) = textIsRead && array[index] == null
+    fun isOutOfBounds(index: Int) = array[index] == null
 
     operator fun get(index: Int) = array[index]
 }
