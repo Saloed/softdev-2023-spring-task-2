@@ -1,32 +1,88 @@
-import java.io.FileNotFoundException;
+import org.kohsuke.args4j.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.kohsuke.args4j.*;
+
 
 public class UniqParser {
     @Option(name = "-o", metaVar = "-o")
             private boolean isToFile;
     @Argument(metaVar = "-o")
-            private String o;
+            private String outputName;
     @Option(name = "-i")
-            private boolean sen;
+            private boolean i;
     @Option(name = "-u")
-            private boolean uni;
+            private boolean u;
     @Option(name = "-s", metaVar = "-s")
-            private boolean ign;
+            private boolean s;
+
     @Argument(metaVar = "-s")
             private int num;
+
     @Option(name = "-c")
-            private boolean count;
+            private boolean c;
     @Argument(metaVar = "")
-            private String in;
+            private String inputName;
+
+    List<String> commands = new ArrayList<>();
+
+
     UniqParser(String[] args){
-        CmdLineParser parser = new CmdLineParser(this);
+        CmdLineParser parser = new CmdLineParser(args);
         try {
             parser.parseArgument(args);
+            if (u) commands.add("u");
+            if (s) commands.add("s");
+            if (c) commands.add("c");
         } catch (CmdLineException e) {
             System.out.println(e.getMessage());
+            parser.printUsage(System.err);
         }
     }
 
+//геттеры
+    public boolean isToFile(){
+       return isToFile;
+    }
+    public String getOutputName(){
+        return outputName;
+    }
+    public String getInputName(){
+        return inputName;
+    }
+    public boolean getI(){
+       return i;
+    }
+    public boolean getU(){
+        return u;
+    }
+    public boolean getS(){
+        return s;
+    }
+    public int getNum(){
+        return num;
+    }
+    public boolean getC(){
+        return c;
+    }
+
+    public List getCommands(){
+        return commands;
+    }
+
+    UniqParser(boolean insen, boolean uniq, boolean seq, int numCh, boolean count,
+               boolean out, String outputNameF, String inputNameF) {
+      i = insen;
+      u = uniq;
+      s = seq;
+      num = numCh;
+      c = count;
+      isToFile = out;
+      outputName = outputNameF;
+      inputName = inputNameF;
+      //if (i == true) commands.add("i");
+      if (u) commands.add("u");
+      if (s) commands.add("s");
+      if (c) commands.add("c");
+    }
 }

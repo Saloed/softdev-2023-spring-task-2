@@ -1,3 +1,5 @@
+import org.kohsuke.args4j.CmdLineException;
+
 import java.util.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -54,8 +56,6 @@ public class ConsoleApp {
                     res.add(new Pair<>(c, actualLine));
                 }
 
-                previousLine = actualLine;
-                ++c;
             } else {
                 if (!actualLine.toLowerCase(Locale.ROOT).equals(previousLine.toLowerCase())) {
                     c = 1;
@@ -65,9 +65,9 @@ public class ConsoleApp {
                     res.add(new Pair<>(c, actualLine));
                 }
 
-                previousLine = actualLine;
-                ++c;
             }
+            previousLine = actualLine;
+            ++c;
         }
 
         return res;
@@ -85,20 +85,20 @@ public class ConsoleApp {
 
 
     // методы для вывода информации
-    static void outputFile(List<String> list, String output) {
-        try (FileWriter writer = new FileWriter(output)) {
-            for (String s : list) {
-                writer.write(s);
-                writer.write("\n");
+    static void output(List<String> list, String output, boolean isToFile) {
+        if (isToFile) {
+            try (FileWriter writer = new FileWriter(output)) {
+                for (String s : list) {
+                    writer.write(s);
+                    writer.write("\n");
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    static void outputStream(List<String> list) {
-        for (String s : list) {
+        } else {
+            for (String s : list) {
             System.out.println(s);
+            }
         }
     }
 
@@ -185,51 +185,53 @@ public class ConsoleApp {
         return res;
     }
 
-    public static void main(String[] args) throws IOException {
-
-        Parser pars = new Parser(args);
-        List<String> commands = pars.getCommands();
-        //UniqParser pars = new UniqParser(args);
-        List<String> list;
-        Scanner input;
-
-        //получение и запись строчек в список
-        if (pars.FromFile()) {
-            input = new Scanner(new FileReader(pars.getInputName()));
-        }
-        else {
-            input = new Scanner(new InputStreamReader(System.in));
-        }
-        list = readOut(input);
-
-        //выполнение флагов
-        if (commands.isEmpty()) {
-            list = defaultFun(list, pars.insensitiveCase());
-        } else {
-            for (String command : commands) {
-                switch (command) {
-                    case ("i"):
-                        list = defaultFun(list, pars.insensitiveCase());
-                        break;
-                    case ("u"):
-                        list = unique(list, pars.insensitiveCase());
-                        break;
-                    case ("c"):
-                        list = countingLines(list, pars.insensitiveCase());
-                        break;
-                    case ("s"):
-                        list = numChar(list, pars.getNum(), pars.insensitiveCase());
-                        break;
-                }
-            }
-        }
-
-        //вывод полученного списка строк как файл или построчно на консоль
-        if (pars.ToFile()){
-            outputFile(list, pars.getOutputName());
-        }
-        else {
-            outputStream(list);
+    public static void main(String[] args) {
+        UniqParser arguments = new UniqParser(args);
+        try {
+            start(arguments);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
         }
     }
+
+        public static void start(UniqParser pars) throws FileNotFoundException {
+            List<String> list;
+            Scanner input;
+            //получение и запись строчек в список
+            if (!pars.getInputName().equals("")) {
+                input = new Scanner(new FileReader(pars.getInputName()));
+            }
+            else {
+                input = new Scanner(new InputStreamReader(System.in));
+            }
+            list = readOut(input);
+
+            List<String> commands = pars.getCommands();
+
+            //выполнение флагов
+            if (commands.isEmpty()){
+                list = defaultFun(list, pars.getI());
+            }
+          else{
+                for (String actcom : commands) {
+                    switch (actcom) {
+                        case ("u"):
+                            list = unique(list, pars.getI());
+                            break;
+                        case ("c"):
+                            list = countingLines(list, pars.getI());
+                            break;
+                        case("s"):
+                            list = numChar(list, pars.getNum(), pars.getI());
+                            break;
+                        default:
+                            list = defaultFun(list, pars.getI());
+                            break;
+                    }
+                }
+            }
+            //вывод полученного списка строк как файл или построчно на консоль
+            output(list, pars.getOutputName(), pars.isToFile());
+
+        }
 }
