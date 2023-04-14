@@ -42,7 +42,7 @@ public class Main {
         if (wordIndent) answer = wordIndention(stringsText);
         else answer = charIndention(stringsText);
         if (outputName != null) writeOutput(outputName, answer.toString());
-        else writeOutput(System.out.toString(), answer.toString());
+        else writeOutput(System.out, answer.toString());
     }
 
     private List<Integer> countRange(String startData) {
@@ -91,13 +91,15 @@ public class Main {
         return answer;
     }
     private void writeOutput(String place, String data) throws IOException {
-        byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
         if (new File(place).isFile()){
             OutputStream out = new FileOutputStream(place);
-            out.write(bytes);
+            writeOutput(out, data);
         } else {
-            OutputStream out = System.out;
-            out.write(bytes);
+            writeOutput(System.out, data);
         }
+    }
+    private void writeOutput(OutputStream out, String data) throws IOException {
+        byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
+        out.write(bytes);
     }
 }
