@@ -53,7 +53,7 @@ fun encryption(key: ByteArray, inputName: String, outputName: String) {
 
 fun main(args: Array<String>): Unit = exitProcess(CommandLine(XOR()).execute(*args))
 
-class XOR : Callable<Any> {
+class XOR : Callable<Unit> {
 
     @Parameters(index = "0")
     lateinit var inputName: String
