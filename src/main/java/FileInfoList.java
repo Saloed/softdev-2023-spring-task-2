@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class FileInfoList {
-    public static Set<String> setOfFiles = new HashSet<>();
     private final List<FileInfo> files = new ArrayList<>();
 
     public FileInfoList(String way) {
