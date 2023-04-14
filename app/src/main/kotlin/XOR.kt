@@ -16,13 +16,18 @@ fun encryption(key: ByteArray, inputName: String, outputName: String) {
             val data = DataOutputStream(outputStream)
             file.use { reader ->
                 data.use { writer ->
-                    val text = reader.readBytes()
+                    val text = ByteArray(32)
                     var y = 0
-                    for (i in text) {
-                        val temp = i xor key[y]
-                        writer.writeByte(temp.toInt())
-                        y++
-                        if (y >= key.size) y = 0
+                    while (true) {
+                        val n = reader.read(text)
+                        if (n == -1) break
+                        for (idx in 0 until n) {
+                            val i = text[idx]
+                            val temp = i xor key[y]
+                            writer.writeByte(temp.toInt())
+                            y++
+                            if (y >= key.size) y = 0
+                        }
                     }
                 }
             }
@@ -37,13 +42,18 @@ fun encryption(key: ByteArray, inputName: String, outputName: String) {
                 val data = DataOutputStream(outputStream)
                 file.use { reader ->
                     data.use { writer ->
-                        val text = reader.readBytes()
+                        val text = ByteArray(32)
                         var y = 0
-                        for (i in text) {
-                            val temp = i xor key[y]
-                            writer.writeByte(temp.toInt())
-                            y++
-                            if (y >= key.size) y = 0
+                        while (true) {
+                            val n = reader.read(text)
+                            if (n == -1) break
+                            for (idx in 0 until n) {
+                                val i = text[idx]
+                                val temp = i xor key[y]
+                                writer.writeByte(temp.toInt())
+                                y++
+                                if (y >= key.size) y = 0
+                            }
                         }
                     }
                 }
