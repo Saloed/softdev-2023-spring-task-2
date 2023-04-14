@@ -20,17 +20,11 @@ public class LsTests {
         Set<String> setOfFiles = new HashSet<>();
         String line = reader.readLine();
         while (line != null) {
-            setOfFiles.add(line);
+            setOfFiles.add(line.replaceAll(" \\d+/\\d+/\\d+ \\d+:\\d+:\\d+",""));
             line = reader.readLine();
         }
 
-        Set<String> setWithoutTime = new HashSet<>();
-        for (String i: setOfFiles) {
-            String newString = i.replaceAll(" \\d+/\\d+/\\d+ \\d+:\\d+:\\d+","");
-            setWithoutTime.add(newString);
-        }
-
-        assertEquals(expected, setWithoutTime);
+        assertEquals(expected, setOfFiles);
         output.delete();
     }
 
