@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class XORTest {
     @Test
     public void cipher() {
-        String input = "Hello! This is test for task 2!";
+        String input = "Hello! This is test for task #2!";
         byte[] inputBytes = input.getBytes();
         String key = "afd6219abc726103";
         byte[] encoded = XOR.ciph(inputBytes, key);
