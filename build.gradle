@@ -10,13 +10,16 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
+
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    implementation group: 'args4j', name: 'args4j', version: '2.33'
 }
 
 application {
     // Define the main class for the application.
-    mainClass = 'softdev.spring.task.App'
+    mainClass = 'softdev.spring.task.CutLauncher'
 }
 
 tasks.named('test') {
@@ -28,5 +31,19 @@ jar {
         attributes(
                 "Main-Class": application.mainClass
         )
+    }
+}
+
+task createJar(type: Jar) {
+    baseName = 'my-app'
+    version = '1.0'
+    manifest {
+        attributes 'Main-Class': 'softdev.spring.task.CutLauncher'
+    }
+
+    from {
+        configurations.compileClasspath.filter { it.exists() }.collect {
+            zipTree(it)
+        } + sourceSets.main.output
     }
 }
