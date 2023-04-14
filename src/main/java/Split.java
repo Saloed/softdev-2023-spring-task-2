@@ -66,11 +66,9 @@ public class Split {
             throw new RuntimeException(e);
         }
     }
-
     String str(int i) {
         return i < 0 ? "" : String.valueOf(alphabet.charAt(i / alphabet.length() - 1)) + alphabet.charAt(i % alphabet.length());
     }
-
     String dNum(int fileNum) {
         if (!d) {
             int i = (alphabet.length() - 1) + fileNum;
@@ -78,20 +76,27 @@ public class Split {
         }
         return String.valueOf(fileNum);
     }
-
+    String getOutName(int i){
+        return oValue + dNum(i) + ".txt";
+    }
+    BufferedReader bufferedReader() {
+        try {
+            return new BufferedReader(new FileReader(fileName.toFile()));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    FileWriter writer(String name) throws IOException {
+        return new FileWriter(name);
+    }
     public void lSplit() throws IOException {
-//        try (BufferedReader br = new BufferedReader(new FileReader(fileName.toFile()))) {
-//            String outName;
-//            FileWriter writer;
-        //
-        bufferedReader();
+        BufferedReader br = bufferedReader();
         int fileNum = 1;
         String line;
         boolean k = true;
         while (k) {
             int i = 0;
-            outName = oValue + dNum(fileNum) + ".txt";
-            writer = new FileWriter(outName);
+            FileWriter writer = writer(getOutName(fileNum));
             while (i++ < size) {
                 if ((line = br.readLine()) != null) {
                     writer.write(line);
@@ -104,53 +109,16 @@ public class Split {
             writer.close();
             fileNum++;
         }
+        bufferedReader().close();
     }
-
-    //    public void cSplit() {
-//        try (BufferedReader br = new BufferedReader(new FileReader(fileName.toFile()))) {
-//            String outName;
-//            FileWriter writer;
-//            int fileNum = 1;
-//            int value;
-//            int last = 0;
-//            while ((value = br.read()) != -1) {
-//                int i = 0;
-//                outName = oValue + dNum(fileNum) + ".txt";
-//                writer = new FileWriter(outName);
-//                if (last != 0) writer.write(last);
-//                writer.write(value);
-//                while ((last = br.read()) != -1 & i++ < size) {
-//                    writer.write(last);
-//                }
-//                writer.close();
-//                fileNum++;
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-    BufferedReader br;
-
-    void bufferedReader() {
-        try {
-            br = new BufferedReader(new FileReader(fileName.toFile()));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    String outName;
-    FileWriter writer;
-
     public void cSplit() throws IOException {
-        bufferedReader();
+        BufferedReader br = bufferedReader();
         int fileNum = 1;
         int value;
         int last = 0;
         while ((value = br.read()) != -1) {
             int i = 0;
-            outName = oValue + dNum(fileNum) + ".txt";
-            writer = new FileWriter(outName);
+            FileWriter writer = writer(getOutName(fileNum));
             if (last != 0) writer.write(last);
             writer.write(value);
             while ((last = br.read()) != -1 & i++ < size) {
@@ -159,24 +127,22 @@ public class Split {
             writer.close();
             fileNum++;
         }
+        bufferedReader().close();
     }
-
     public void nSplit() throws IOException {
-//        try (BufferedReader br = new BufferedReader(new FileReader(fileName.toFile()))) {
-//            String outName;
-//            FileWriter writer;
-        bufferedReader();
+        BufferedReader br = bufferedReader();
         int fileNum = 1;
-        int fileLength = ((int) new File(fileName.toUri()).length() / 2) / size;
+        int fileLength = (int) new File(fileName.toUri()).length();
         boolean k = fileLength % size > 0;
+        fileLength=(int) new File(fileName.toUri()).length() / size;
         int value;
         while (fileNum <= size) {
-            outName = oValue + dNum(fileNum) + ".txt";
-            writer = new FileWriter(outName);
+            FileWriter writer = writer(getOutName(fileNum));
             int length = 0;
             while (length < fileLength) {
                 if ((value = br.read()) != -1) writer.write(value);
-                length++;
+                if (value<=255) length++;
+                else length+=2;
             }
             if (fileNum == size & k) {
                 while ((value = br.read()) != -1) {
@@ -186,8 +152,8 @@ public class Split {
             writer.close();
             fileNum++;
         }
+        bufferedReader().close();
     }
-
     public void split() throws IOException {
         fileName = Path.of(input);
         switch (type) {
