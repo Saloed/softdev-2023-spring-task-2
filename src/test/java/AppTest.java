@@ -21,7 +21,7 @@ public class AppTest {
     }
     @org.junit.jupiter.api.Test
     void SingleFile() throws CmdLineException, IOException {
-        String[] args = new String[]{"-h", "files\\TestingFiles\\Test1.txt"};
+        String[] args = new String[]{"-h", "files/TestingFiles/Test1.txt"};
         main(args);
         assertEquals("Test1.txt 111 2KB", outputStreamCaptor.toString()
                 .trim().replaceAll("2023-[\\d\\-:.TZ]+ ","")); //Без проверки даты изменения
@@ -29,14 +29,14 @@ public class AppTest {
     }
     @org.junit.jupiter.api.Test
     void SingleFileBytes() throws CmdLineException, IOException {
-        String[] args = new String[]{"files\\TestingFiles\\Test1.txt"};
+        String[] args = new String[]{"files/TestingFiles/Test1.txt"};
         main(args);
         assertEquals("Test1.txt 111 2415", outputStreamCaptor.toString()
                 .trim().replaceAll("2023-[\\d\\-:.TZ]+ ",""));
     }
     @org.junit.jupiter.api.Test
     void Directory() throws CmdLineException, IOException {
-        String[] args = new String[]{"-l", "-h", "files\\TestingFiles\\"};
+        String[] args = new String[]{"-l", "-h", "files/TestingFiles/"};
         main(args);
         assertEquals("Test1.txt 111 2KB" +
                 "Test2.txt 111 9KB" +
@@ -49,9 +49,9 @@ public class AppTest {
     @org.junit.jupiter.api.Test
     void DirectoryAndOutput() throws CmdLineException, IOException {
 
-        String outputName = "files\\Test.txt\\";
+        String outputName = "files/Test.txt/";
 
-        String[] args = new String[]{"-l", "-h", "-o", outputName, "files\\TestingFiles\\"};
+        String[] args = new String[]{"-l", "-h", "-o", outputName, "files/TestingFiles/"};
 
         File file = new File(outputName);
         main(args);
