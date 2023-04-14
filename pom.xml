@@ -50,7 +50,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources/input</directory>
+                <directory>src/test</directory>
             </resource>
         </resources>
         <plugins>
