@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-
 /**Объединение последовательностей одинаковых идущих подряд строк в файле в одну:
  file задаёт имя входного файла. Если параметр отсутствует, следует считывать текст с консоли.
  Флаг -o ofile  задаёт имя выходного файла. Если параметр отсутствует,
@@ -23,18 +22,6 @@ import java.util.Locale;
  В случае, когда какое-нибудь из имён файлов указано неверно, следует выдать ошибку.
 
  Кроме самой программы, следует написать автоматические тесты к ней.
- input:
- xxx
- avc
- avc
-
- -u -c
- 1 xxx
-
- -c
- 1 xxx
- 2 avc
-порядок не важен
  */
 
 public class ConsoleApp {
@@ -61,7 +48,6 @@ public class ConsoleApp {
             previousLine = actualLine;
             ++c;
         }
-
         return res;
     }
 
@@ -224,6 +210,5 @@ public class ConsoleApp {
             }
             //вывод полученного списка строк как файл или построчно на консоль
             output(list, pars.getOutputName().toString(), pars.isToFile());
-
         }
 }

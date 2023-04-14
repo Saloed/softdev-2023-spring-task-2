@@ -35,6 +35,7 @@ public class UniqParser {
             if (u) commands.add("u");
             if (s) commands.add("s");
             if (c) commands.add("c");
+            if (i) commands.add("i");
         } catch (CmdLineException e) {
             System.out.println(e.getMessage());
             parser.printUsage(System.err);
@@ -81,9 +82,9 @@ public class UniqParser {
       isToFile = out;
       outputName = outputNameF;
       inputName = inputNameF;
-      //if (i == true) commands.add("i");
       if (u) commands.add("u");
       if (s) commands.add("s");
       if (c) commands.add("c");
+      if (i) commands.add("i");
     }
 }
