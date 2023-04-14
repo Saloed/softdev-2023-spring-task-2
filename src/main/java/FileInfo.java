@@ -1,23 +1,14 @@
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Set;
 
 public class FileInfo {
     private final File file;
     private final String name;
 
-    public StringBuilder toString(Args args, StringBuilder str, Set<String> names) {
+    public StringBuilder toString(Args args, StringBuilder str) {
         str.append(name);
-        String fileToSet = name;
-        if (args.longFormat && !args.humanReadable) {
-            str.append(toLongFormat());
-            fileToSet += toLongFormat();
-        }
-        if (args.longFormat && args.humanReadable) {
-            str.append(toHumanReadable());
-            fileToSet += toHumanReadable();
-        }
-        names.add(fileToSet.replaceAll(" \\d+/\\d+/\\d+ \\d+:\\d+:\\d+",""));
+        if (args.longFormat && !args.humanReadable) str.append(toLongFormat());
+        if (args.longFormat && args.humanReadable) str.append(toHumanReadable());
         return str;
     }
 
