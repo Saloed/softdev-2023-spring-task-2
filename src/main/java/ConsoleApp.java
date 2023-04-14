@@ -191,7 +191,7 @@ public class ConsoleApp {
             Scanner input;
             //получение и запись строчек в список
             if (!pars.getInputName().equals("")) {
-                input = new Scanner(new FileReader(pars.getInputName()));
+                input = new Scanner(new FileReader(pars.getInputName().toString()));
             }
             else {
                 input = new Scanner(new InputStreamReader(System.in));
@@ -223,7 +223,7 @@ public class ConsoleApp {
                 }
             }
             //вывод полученного списка строк как файл или построчно на консоль
-            output(list, pars.getOutputName(), pars.isToFile());
+            output(list, pars.getOutputName().toString(), pars.isToFile());
 
         }
 }

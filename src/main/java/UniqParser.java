@@ -1,5 +1,6 @@
 import org.kohsuke.args4j.*;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class UniqParser {
     @Option(name = "-o", metaVar = "-o")
             private boolean isToFile;
     @Argument(metaVar = "-o")
-            private String outputName;
+            private Path outputName;
     @Option(name = "-i")
             private boolean i;
     @Option(name = "-u")
@@ -22,7 +23,7 @@ public class UniqParser {
     @Option(name = "-c")
             private boolean c;
     @Argument(metaVar = "")
-            private String inputName;
+            private Path inputName;
 
     List<String> commands = new ArrayList<>();
 
@@ -44,10 +45,10 @@ public class UniqParser {
     public boolean isToFile(){
        return isToFile;
     }
-    public String getOutputName(){
+    public Path getOutputName(){
         return outputName;
     }
-    public String getInputName(){
+    public Path getInputName(){
         return inputName;
     }
     public boolean getI(){
@@ -71,7 +72,7 @@ public class UniqParser {
     }
 
     UniqParser(boolean insen, boolean uniq, boolean seq, int numCh, boolean count,
-               boolean out, String outputNameF, String inputNameF) {
+               boolean out, Path outputNameF, Path inputNameF) {
       i = insen;
       u = uniq;
       s = seq;
