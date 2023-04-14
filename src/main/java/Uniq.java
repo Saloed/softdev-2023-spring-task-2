@@ -25,6 +25,7 @@ public class Uniq {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     public static String testOut(String[] args) {
