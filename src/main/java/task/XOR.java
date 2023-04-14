@@ -57,12 +57,11 @@ public class XOR {
 
     public static byte[] ciph(byte[] input, String key) {
         byte[] byteKey = key.getBytes();
-        byte[] result = new byte[input.length];
         int keySize = byteKey.length;
         for (int i = 0; i < input.length; i++) {
-            result[i] = (byte) (input[i] ^ byteKey[i % keySize]);
+            input[i] = (byte) (input[i] ^ byteKey[i % keySize]);
         }
-        return result;
+        return input;
     }
 }
 
