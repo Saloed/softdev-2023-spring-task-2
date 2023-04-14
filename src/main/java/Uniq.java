@@ -27,8 +27,4 @@ public class Uniq {
         }
 
     }
-
-    public static String testOut(String[] args) {
-        return ForTest.forTest(line(args));
-    }
 }
