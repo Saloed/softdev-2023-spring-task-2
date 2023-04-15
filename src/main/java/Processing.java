@@ -4,20 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Processing {
-//    boolean v;
-//    boolean i;
-//    boolean r;
-//    String regex;
-//    List<String> file;
-//
-//    public Processing(boolean v, boolean i, boolean r, String regex, List<String> file) {
-//        this.v = v;
-//        this.r = r;
-//        this.i = i;
-//        this.regex = regex;
-//        this.file = file;
-//    }
-
     public static List<String> result(boolean v, boolean i, boolean r, String regex, List<String> file) {
         List<String> res = new ArrayList<>();
         if (r) {
