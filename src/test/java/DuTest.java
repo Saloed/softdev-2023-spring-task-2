@@ -22,10 +22,7 @@ public class DuTest {
                 Paths.get("Inputs", "File2").toString(),
                 "Inputs\\File3");
         Functions functions = new Functions(new Explorer(fileList).makingLongArrayList(), true, false, true);
-        Assertions.assertEquals("""
-                12,00B
-                124,36KB
-                84,37KB""",functions.outForTest().trim());
+        Assertions.assertEquals("12,00B" + System.lineSeparator() + "124,36KB" + System.lineSeparator() + "84,37KB",functions.outForTest().trim());
     }
 
     @Test
@@ -34,10 +31,7 @@ public class DuTest {
                 Paths.get("Inputs", "File1").toString(),
                 "Inputs\\File3");
         Functions functions = new Functions(new Explorer(fileList).makingLongArrayList(), true, false, true);
-        Assertions.assertEquals("""
-                124,36KB
-                12,00B
-                84,37KB""",functions.outForTest().trim());
+        Assertions.assertEquals("124,36KB" + System.lineSeparator() + "12,00B" + System.lineSeparator() + "84,37KB",functions.outForTest().trim());
     }
 
     @Test
@@ -45,9 +39,7 @@ public class DuTest {
         List<String> fileList = Arrays.asList(Paths.get("Inputs", "File2").toString(),
                 Paths.get("Inputs", "File1").toString());
         Functions functions = new Functions(new Explorer(fileList).makingLongArrayList(), true, false, true);
-        Assertions.assertEquals("""
-                124,36KB
-                12,00B""",functions.outForTest().trim());
+        Assertions.assertEquals("124,36KB"+ System.lineSeparator() + "12,00B",functions.outForTest().trim());
     }
 
     @Test
