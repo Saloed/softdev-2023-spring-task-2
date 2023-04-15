@@ -1,7 +1,5 @@
 import org.apache.commons.cli.*;
 
-import java.util.Arrays;
-
 public class Du {
     public static void main(String[] args) {
         Options options = new Options();
