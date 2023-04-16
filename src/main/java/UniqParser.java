@@ -32,9 +32,6 @@ public class UniqParser {
         CmdLineParser parser = new CmdLineParser(args);
         try {
             parser.parseArgument(args);
-            if (s) commands.add("s");
-            if (c) commands.add("c");
-            if (i) commands.add("i");
         } catch (CmdLineException e) {
             System.out.println(e.getMessage());
             parser.printUsage(System.err);
@@ -67,10 +64,6 @@ public class UniqParser {
         return c;
     }
 
-    public List getCommands(){
-        return commands;
-    }
-
     UniqParser(boolean insen, boolean uniq, boolean seq, int numCh, boolean count,
                boolean out, Path outputNameF, Path inputNameF) {
       i = insen;
@@ -81,8 +74,5 @@ public class UniqParser {
       isToFile = out;
       outputName = outputNameF;
       inputName = inputNameF;
-      if (s) commands.add("s");
-      if (c) commands.add("c");
-      if (i) commands.add("i");
     }
 }

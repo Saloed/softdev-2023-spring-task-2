@@ -26,7 +26,8 @@ import java.util.Locale;
 
 public class ConsoleApp {
 
-    private static List<Pair<Integer, String>> counting(List<String> input, boolean sen, boolean ignore, int num) {
+    private static List<Pair<Integer, String>> counting(List<String> input,
+                                                        boolean sen, boolean ignore, int num) {
         List<Pair<Integer, String>> res = new ArrayList<>();
         int c = 1;
         String previousLine = "";
@@ -94,18 +95,21 @@ public class ConsoleApp {
         List<String> res = new ArrayList<>();
 
         for (String actualLine : input) {
+            String a = actualLine;
+            String b = previousLine;
             if (ignore) {
-                if (num < actualLine.length() && num < previousLine.length()){
-                    actualLine = actualLine.substring(num);
-                    previousLine = previousLine.substring(num);
-                }}
+                if (num < a.length() && num < b.length()){
+                    a = a.substring(num);
+                    b = b.substring(num);
+                }
+            }
             if (!sen){
-                if (!previousLine.equals(actualLine)) {
+                if (!b.equals(a)) {
                     res.add(actualLine);
                 }
             }
             else {
-                if (!previousLine.toLowerCase(Locale.ROOT).equals(actualLine.toLowerCase())) {
+                if (!b.toLowerCase(Locale.ROOT).equals(a.toLowerCase())) {
                     res.add(actualLine);
                 }
             }
@@ -143,7 +147,7 @@ public class ConsoleApp {
         }
     }
 
-        public static void start(UniqParser pars) throws FileNotFoundException {
+    public static void start(UniqParser pars) throws FileNotFoundException {
             List<String> list;
             Scanner input;
             //получение и запись строчек в список
@@ -155,28 +159,23 @@ public class ConsoleApp {
             }
             list = readOut(input);
 
-            List<String> commands = pars.getCommands();
             int num = 0;
             if (pars.getS()){
                 num = pars.getNum();
             }
 
             //выполнение флагов
-             if (commands.isEmpty()){
-                list = defaultFun(list, pars.getI(), pars.getS(), num);
+
+            if (pars.getU()){
+                list = unique(list, pars.getI(), pars.getS(), num);
             }
-          else{
-                for (String command : commands) {
-                    if ("c".equals(command)) {
-                        list = countingLines(list, pars.getI(), pars.getS(), num);
-                    } else {
-                        list = defaultFun(list, pars.getI(), pars.getS(), num);
-                    }
-                    }
-                if (pars.getU()){
-                    list = unique(list, pars.getI(), pars.getS(), num);
-                }
-            }
+             if (pars.getC()){
+                 list = countingLines(list, pars.getI(),pars.getS(), num);
+             }
+
+             if (!pars.getU() && !pars.getC()){
+                 list = defaultFun(list, pars.getI(), pars.getS(), num);
+             }
             //вывод полученного списка строк как файл или построчно на консоль
             output(list, pars.getOutputName().toString(), pars.isToFile());
         }

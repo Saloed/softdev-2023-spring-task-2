@@ -33,7 +33,7 @@ public class TestFlag {
     public void flagUS() throws FileNotFoundException{
         Path out = Paths.get("input", "null.txt");
         Path name = Paths.get("input", "фейрверк.txt");
-        UniqParser args = new UniqParser(true, true, true, 22,
+        UniqParser args = new UniqParser(false, true, true, 22,
                 false, false,  out, name);
         ConsoleApp.start(args);
     }
