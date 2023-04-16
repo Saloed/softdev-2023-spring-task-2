@@ -9,6 +9,7 @@ public class GrepTest {
         List<String> args = List.of("worde", "inputname.txt");
         Assertions.assertEquals("""
                 ejhygtfrdeworde""", GrepResult.Res4Test(args));
+
     }
     @Test
     public void grepTest2() {
