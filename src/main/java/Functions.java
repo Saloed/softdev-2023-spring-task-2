@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Locale;
 
 public class Functions {
     private final boolean h;
@@ -71,11 +72,11 @@ public class Functions {
         double mb = kb / k;
         double gb = mb / k;
         double tb = gb / k;
-        if (tb > 1) return (String.format("%.2f", tb) + "TB");
-        else if (gb > 1) return (String.format("%.2f", gb) + "GB");
-        else if (mb > 1) return (String.format("%.2f", mb) + "MB");
-        else if (kb > 1) return (String.format("%.2f", kb) + "KB");
-        else return (String.format("%.2f", b) + "B");
+        if (tb > 1) return (String.format(Locale.US,"%.2f", tb) + "TB");
+        else if (gb > 1) return (String.format(Locale.US,"%.2f", gb) + "GB");
+        else if (mb > 1) return (String.format(Locale.US,"%.2f", mb) + "MB");
+        else if (kb > 1) return (String.format(Locale.US,"%.2f", kb) + "KB");
+        else return (String.format(Locale.US,"%.2f", b) + "B");
     }
 
 }
