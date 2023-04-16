@@ -19,12 +19,12 @@ public class Functions {
         private void print (Long num){
         if (h) {
             tester+=outputSize(num);
-            tester+=System.lineSeparator();
+            tester+="\n";
             System.out.println(outputSize(num));
         }
         else {
             tester+=num;
-            tester+=System.lineSeparator();
+            tester+="\n";
             System.out.println(num);
         }
     }
@@ -47,11 +47,11 @@ public class Functions {
         if (c) {
             Long sum = sumFileSizes();
             result.append(outputSize(sum));
-            result.append(System.lineSeparator());
+            result.append("\n");
         } else {
             for (Long aLong : list) {
                 result.append(outputSize(aLong));
-                result.append(System.lineSeparator());
+                result.append("\n");
             }
         }
         return result.toString();
