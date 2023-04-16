@@ -32,7 +32,6 @@ public class UniqParser {
         CmdLineParser parser = new CmdLineParser(args);
         try {
             parser.parseArgument(args);
-            if (u) commands.add("u");
             if (s) commands.add("s");
             if (c) commands.add("c");
             if (i) commands.add("i");
@@ -82,7 +81,6 @@ public class UniqParser {
       isToFile = out;
       outputName = outputNameF;
       inputName = inputNameF;
-      if (u) commands.add("u");
       if (s) commands.add("s");
       if (c) commands.add("c");
       if (i) commands.add("i");

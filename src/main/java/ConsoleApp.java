@@ -26,7 +26,7 @@ import java.util.Locale;
 
 public class ConsoleApp {
 
-    private static List<Pair<Integer, String>> counting(List<String> input, boolean sen) {
+    private static List<Pair<Integer, String>> counting(List<String> input, boolean sen, boolean ignore, int num) {
         List<Pair<Integer, String>> res = new ArrayList<>();
         int c = 1;
         String previousLine = "";
@@ -37,6 +37,12 @@ public class ConsoleApp {
             if (sen) {
                 a = actualLine.toLowerCase();
                 b = previousLine.toLowerCase();
+            }
+            if (ignore) {
+                if (num < a.length() && num < b.length()){
+                    a = a.substring(num);
+                    b = b.substring(num);
+                }
             }
                 if (!a.equals(b)) {
                     c = 1;
@@ -82,15 +88,20 @@ public class ConsoleApp {
 
 
     // флаги
-    static List<String> defaultFun (List<String> input, boolean sen) {
+    static List<String> defaultFun (List<String> input, boolean sen, boolean ignore, int num) {
         String previousLine = "";
 
         List<String> res = new ArrayList<>();
 
         for (String actualLine : input) {
+            if (ignore) {
+                if (num < actualLine.length() && num < previousLine.length()){
+                    actualLine = actualLine.substring(num);
+                    previousLine = previousLine.substring(num);
+                }}
             if (!sen){
-            if (!previousLine.equals(actualLine)) {
-                res.add(actualLine);
+                if (!previousLine.equals(actualLine)) {
+                    res.add(actualLine);
                 }
             }
             else {
@@ -103,48 +114,8 @@ public class ConsoleApp {
         return res;
     }
 
-    static List<String> numChar (List<String> input, int num, boolean sen) {
-
-        String previousLine = "";
-
-        List<String> res = new ArrayList<>();
-
-        for (String actualLine : input) {
-            if (!sen) {
-                String subStr = "";
-                if (actualLine.length() > num) {
-                    subStr = actualLine.substring(num);
-                }
-                String prevSubStr = "";
-
-                if (previousLine.length() > num) {
-                    prevSubStr = previousLine.substring(num);
-                }
-                if (!prevSubStr.equals(subStr) || prevSubStr.equals("")) {
-                    res.add(actualLine);
-                }
-                previousLine = actualLine;
-            } else {
-                String subStr = "";
-                if (actualLine.length() > num) {
-                    subStr = actualLine.toLowerCase(Locale.ROOT).substring(num);
-                }
-                String prevSubStr = "";
-
-                if (previousLine.length() > num) {
-                    prevSubStr = previousLine.toLowerCase(Locale.ROOT).substring(num);
-                }
-                if (!prevSubStr.equals(subStr) || prevSubStr.equals("")) {
-                    res.add(actualLine);
-                }
-                previousLine = actualLine;
-            }
-        }
-        return res;
-    }
-
-    static List<String> countingLines (List<String> input, boolean sen) {
-        List<Pair<Integer, String>> list = counting(input, sen);
+    static List<String> countingLines (List<String> input, boolean sen, boolean ignore, int num) {
+        List<Pair<Integer, String>> list = counting(input, sen, ignore, num);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {
             res.add(integerStringPair.toString());
@@ -152,8 +123,8 @@ public class ConsoleApp {
         return res;
     }
 
-    static List<String> unique (List<String> input, boolean sen) {
-        List <Pair<Integer, String>> list = counting(input, sen);
+    static List<String> unique (List<String> input, boolean sen, boolean ignore, int num) {
+        List <Pair<Integer, String>> list = counting(input, sen, ignore, num);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {
             if (integerStringPair.first == 1) {
@@ -176,7 +147,7 @@ public class ConsoleApp {
             List<String> list;
             Scanner input;
             //получение и запись строчек в список
-            if (!pars.getInputName().equals("")) {
+            if (!pars.getInputName().toString().equals("")) {
                 input = new Scanner(new FileReader(pars.getInputName().toString()));
             }
             else {
@@ -185,27 +156,25 @@ public class ConsoleApp {
             list = readOut(input);
 
             List<String> commands = pars.getCommands();
+            int num = 0;
+            if (pars.getS()){
+                num = pars.getNum();
+            }
 
             //выполнение флагов
-            if (commands.isEmpty()){
-                list = defaultFun(list, pars.getI());
+             if (commands.isEmpty()){
+                list = defaultFun(list, pars.getI(), pars.getS(), num);
             }
           else{
-                for (String actcom : commands) {
-                    switch (actcom) {
-                        case ("u"):
-                            list = unique(list, pars.getI());
-                            break;
-                        case ("c"):
-                            list = countingLines(list, pars.getI());
-                            break;
-                        case("s"):
-                            list = numChar(list, pars.getNum(), pars.getI());
-                            break;
-                        default:
-                            list = defaultFun(list, pars.getI());
-                            break;
+                for (String command : commands) {
+                    if ("c".equals(command)) {
+                        list = countingLines(list, pars.getI(), pars.getS(), num);
+                    } else {
+                        list = defaultFun(list, pars.getI(), pars.getS(), num);
                     }
+                    }
+                if (pars.getU()){
+                    list = unique(list, pars.getI(), pars.getS(), num);
                 }
             }
             //вывод полученного списка строк как файл или построчно на консоль

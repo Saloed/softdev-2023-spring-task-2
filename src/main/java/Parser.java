@@ -1,12 +1,12 @@
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class Parser {
 
     private int num = 0;
+    private boolean un = false;
     private boolean sen = false;
     private boolean o = false;
     private boolean in = false;
@@ -15,9 +15,7 @@ public class Parser {
 
 
     //список комманд
-    private List<String> commands = new ArrayList<>();
-
-    private final Pattern fileName = Pattern.compile("^\\.*.txt$");
+    private final List<String> commands = new ArrayList<>();
     Parser(String[] args) {
         for (int i = 0; i < args.length; ++i) {
             switch (args[i]) {
@@ -28,7 +26,7 @@ public class Parser {
                     commands.add("c");
                     break;
                 case ("-u"):
-                    commands.add("u");
+                    un = true;
                     break;
                 case ("-s"):
                     commands.add("s");
@@ -64,18 +62,15 @@ public class Parser {
         return in;
     }
 
+    public boolean isUn(){
+        return un;
+    }
+
     public String getOutputName() throws FileNotFoundException {
-        if (!outputName.matches("^\\.*.txt$") && !o) {
-                throw new FileNotFoundException("Некорректное имя файла");
-        }
         return outputName;
     }
 
     public String getInputName() throws FileNotFoundException {
-        Matcher matcher = fileName.matcher(inputName);
-        if (!in && !matcher.matches()) {
-                throw new FileNotFoundException("Некорректное имя файла или его не существует");
-        }
         return inputName;
     }
 
