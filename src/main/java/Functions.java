@@ -68,7 +68,7 @@ public class Functions {
 
     private String outputSize(long size) {
         double b = size;
-        double kb = size / k;
+        double kb = b / k;
         double mb = kb / k;
         double gb = mb / k;
         double tb = gb / k;
