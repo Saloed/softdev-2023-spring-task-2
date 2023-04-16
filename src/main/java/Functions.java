@@ -19,13 +19,9 @@ public class Functions {
 
         private void print (Long num){
         if (h) {
-            tester+=outputSize(num);
-            tester+="\n";
             System.out.println(outputSize(num));
         }
         else {
-            tester+=num;
-            tester+="\n";
             System.out.println(num);
         }
     }

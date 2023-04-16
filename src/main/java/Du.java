@@ -13,6 +13,8 @@ public class Du {
             Functions functions = new Functions(explorer.makingLongArrayList(),cmd.hasOption("h"), cmd.hasOption("c"), cmd.hasOption("si"));
             functions.out();
 
+
+
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
