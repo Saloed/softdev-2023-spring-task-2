@@ -15,3 +15,6 @@ runs:
           echo "No tests found"
           exit 1
         fi
+    - name: Make gradlew executable
+      shell: bash
+      run: chmod +x ./gradlew
