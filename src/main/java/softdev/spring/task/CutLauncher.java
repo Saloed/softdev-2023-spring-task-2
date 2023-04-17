@@ -32,6 +32,7 @@ public class CutLauncher {
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
             parser.printUsage(System.err);
+            System.exit(1);
         }
         run(ch, word, inputFileName, outputFileName, range);
     }
@@ -40,7 +41,8 @@ public class CutLauncher {
         try {
             Cut.cut(ch, word, inputFileName, outputFileName, range);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
+            System.exit(1);
         }
     }
 

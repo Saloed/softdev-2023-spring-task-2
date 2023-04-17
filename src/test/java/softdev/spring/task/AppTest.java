@@ -14,14 +14,14 @@ class AppTest {
     public void testStartEndChars() {
         Cut cut = new Cut();
         String line = "Hello, world!";
-        String result = cut.startEnd(line, "10-15", true);
+        String result = cut.startEnd(line, 10,15, true);
         assertEquals("ld!", result);
     }
     @Test
     public void testStartEndWord() {
         Cut cut = new Cut();
         String line = "Hello, world! It is me";
-        String result = cut.startEnd(line, "1-3", false);
+        String result = cut.startEnd(line, 1, 3, false);
         assertEquals("world! It", result);
     }
     @Test
@@ -53,14 +53,7 @@ class AppTest {
         reader.close();
         assertEquals("Hello,", result);
     }
-    @Test
-    public void testProcessLineInvalidRangeFormat() {
-        String line = "This is a test line";
-        String range = "x-y";
-        Cut cut = new Cut();
-        String result = cut.startEnd(line, range, true);
-        assertEquals("", result);
-    }
+
     @Test
     public void finalTestChar() throws IOException {
         String[] args = {"-c", "-o", "files/output.txt", "files/input.txt", "4-8"};
