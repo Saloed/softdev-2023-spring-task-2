@@ -61,8 +61,7 @@ public class Cut {
         try {
             String res;
             if (start < 0) start = 0;
-            if (end < start) return "";
-            if (start > line.length()) return "";
+            if ((end < start) || (start > line.length())) return "";
             if (chars) {
                 if (end >= line.length()) end = line.length() - 1;
                 res = line.substring(start, end + 1);
