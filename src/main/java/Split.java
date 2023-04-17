@@ -29,10 +29,7 @@ public class Split {
             } catch (Exception ignored) {
             }
             if (cmd.hasOption("l")) {
-                if (type != null) {
-                    new Exception().printStackTrace();
-                    System.exit(1);
-                }
+                if (type != null) throw new Exception();
                 type = "l";
                 try {
                     size = Integer.parseInt(cmd.getOptionValue("l"));
@@ -42,33 +39,30 @@ public class Split {
                 }
             }
             if (cmd.hasOption("c")) {
-                if (type != null) {
-                    new Exception().printStackTrace();
-                    System.exit(1);
-                }
+                if (type != null) throw new Exception();
                 type = "c";
                 size = Integer.parseInt(cmd.getOptionValue("c"));
             }
             if (cmd.hasOption("n")) {
-                if (type != null) {
-                    new Exception().printStackTrace();
-                    System.exit(1);
-                }
+                if (type != null) throw new Exception();
                 type = "n";
                 size = Integer.parseInt(cmd.getOptionValue("n"));
             }
             if (cmd.hasOption("o")) {
                 String value = cmd.getOptionValue("-o");
-                if (value.equals("-")) oValue = String.valueOf(Path.of(input).getFileName().toString().split("\\.")[0]);
+                if (value.equals("-")) oValue = Path.of(input).getFileName().toString().split("\\.txt")[0];
                 else oValue = value;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            new RuntimeException(e).printStackTrace();
+            System.exit(1);
         }
     }
+
     String str(int i) {
         return i < 0 ? "" : String.valueOf(alphabet.charAt(i / alphabet.length() - 1)) + alphabet.charAt(i % alphabet.length());
     }
+
     String dNum(int fileNum) {
         if (!d) {
             int i = (alphabet.length() - 1) + fileNum;
@@ -76,19 +70,25 @@ public class Split {
         }
         return String.valueOf(fileNum);
     }
-    String getOutName(int i){
+
+    String getOutName(int i) {
         return oValue + dNum(i) + ".txt";
     }
+
     BufferedReader bufferedReader() {
         try {
             return new BufferedReader(new FileReader(fileName.toFile()));
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            new RuntimeException(e).printStackTrace();
+            System.exit(1);
         }
+        return null;
     }
+
     FileWriter writer(String name) throws IOException {
         return new FileWriter(name);
     }
+
     public void lSplit() throws IOException {
         BufferedReader br = bufferedReader();
         int fileNum = 1;
@@ -109,8 +109,8 @@ public class Split {
             writer.close();
             fileNum++;
         }
-        bufferedReader().close();
     }
+
     public void cSplit() throws IOException {
         BufferedReader br = bufferedReader();
         int fileNum = 1;
@@ -127,22 +127,22 @@ public class Split {
             writer.close();
             fileNum++;
         }
-        bufferedReader().close();
     }
+
     public void nSplit() throws IOException {
         BufferedReader br = bufferedReader();
         int fileNum = 1;
-        int fileLength = (int) new File(fileName.toUri()).length();
+        long fileLength = new File(fileName.toUri()).length();
         boolean k = fileLength % size > 0;
-        fileLength=(int) new File(fileName.toUri()).length() / size;
+        fileLength = fileLength / size;
         int value;
         while (fileNum <= size) {
             FileWriter writer = writer(getOutName(fileNum));
             int length = 0;
             while (length < fileLength) {
                 if ((value = br.read()) != -1) writer.write(value);
-                if (value<=255) length++;
-                else length+=2;
+                if (value <= 255) length++;
+                else length += 2;
             }
             if (fileNum == size & k) {
                 while ((value = br.read()) != -1) {
@@ -152,8 +152,8 @@ public class Split {
             writer.close();
             fileNum++;
         }
-        bufferedReader().close();
     }
+
     public void split() throws IOException {
         fileName = Path.of(input);
         switch (type) {
@@ -161,5 +161,6 @@ public class Split {
             case "c" -> cSplit();
             case "n" -> nSplit();
         }
+        bufferedReader().close();
     }
 }
