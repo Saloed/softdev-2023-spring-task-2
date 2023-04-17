@@ -1,6 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class FileInfoList {
@@ -18,21 +16,19 @@ public class FileInfoList {
     StringBuilder result = new StringBuilder();
 
     public void output(Args args) throws IOException {
+        BufferedWriter writer;
         if (args.reverse) Collections.reverse(files);
         if (args.out == null) {
-            for (FileInfo file : files) {
-                file.toString(args, result);
-                result.append(System.lineSeparator());
-            }
-            System.out.println(result);
+            writer = new BufferedWriter(new OutputStreamWriter(System.out));
         } else {
-            FileWriter writer = new FileWriter(args.out);
-            for (int i = 0; i < files.size(); i++) {
-                files.get(i).toString(args, result);
-                if (i < files.size() - 1) result.append(System.lineSeparator());
-            }
-            writer.write(result.toString());
-            writer.close();
+            writer = new BufferedWriter(new FileWriter(args.out));
         }
+        for (FileInfo file: files) {
+            file.toString(args, result);
+            result.append(System.lineSeparator());
+        }
+        writer.write(result.toString());
+        writer.flush();
+        writer.close();
     }
 }
