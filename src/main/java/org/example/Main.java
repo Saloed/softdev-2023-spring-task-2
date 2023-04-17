@@ -26,6 +26,8 @@ public class Main {
     @Argument(usage = "Path of the input file/directory", required = true)
     private String inputName;
 
+    private File[] filesList;
+
     public static void main(final String[] args) throws CmdLineException, IOException {
         Main newMain = new Main();
         newMain.argsParse(args);
@@ -53,7 +55,8 @@ public class Main {
         if (files.isFile()) {
             System.out.println(stringAssembler(0, files));
         } else {
-            int dirFileCount = Objects.requireNonNull(files.listFiles()).length;
+            filesList = Objects.requireNonNull(files.listFiles());
+            int dirFileCount = filesList.length;
             if (!reverse) {
                 for (int i = 0; i < dirFileCount; i++) {
                     System.out.println(stringAssembler(i, files));
@@ -90,7 +93,7 @@ public class Main {
     private String stringAssembler(int i, File directory) throws IOException {
         File file;
         if (directory.listFiles() != null) {
-            file = Objects.requireNonNull(directory.listFiles())[i];
+            file = filesList[i];
         }
         else {
             file = directory;
