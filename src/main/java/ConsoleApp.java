@@ -2,7 +2,6 @@ import java.util.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**Объединение последовательностей одинаковых идущих подряд строк в файле в одну:
  file задаёт имя входного файла. Если параметр отсутствует, следует считывать текст с консоли.
@@ -27,31 +26,42 @@ import java.util.Locale;
 public class ConsoleApp {
 
     private static List<Pair<Integer, String>> counting(List<String> input,
-                                                        boolean sen, boolean ignore, int num) {
+                                                        boolean senCase, boolean ignChar, int num) {
         List<Pair<Integer, String>> res = new ArrayList<>();
         int c = 1;
-        String previousLine = "";
+        String previousLine = null;
 
-        for (String actualLine : input) {
-            String a = actualLine;
+        for (int i = 0; i < input.size(); ++i) {
+            String actualLine = input.get(i);
             String b = previousLine;
-            if (sen) {
-                a = actualLine.toLowerCase();
-                b = previousLine.toLowerCase();
-            }
-            if (ignore) {
-                if (num < a.length() && num < b.length()){
-                    a = a.substring(num);
-                    b = b.substring(num);
-                }
-            }
-                if (!a.equals(b)) {
-                    c = 1;
-                    res.add(new Pair<>(c, actualLine));
-                } else {
-                    res.remove(res.size() - 1);
-                    res.add(new Pair<>(c, actualLine));
-                }
+               if (i > 0) {
+                   String a = actualLine;
+                   if (senCase) {
+                       a = a.toLowerCase();
+                       b = previousLine.toLowerCase();
+                   }
+                   if (ignChar){
+                       if (num < a.length()){
+                           a = a.substring(num);
+                       } else {
+                           a = "";
+                       }
+                       if (num < b.length()){
+                           b = b.substring(num);
+                       } else {
+                           b = "";
+                       }
+                   }
+                   if (!a.equals(b)) {
+                       c = 1;
+                       res.add(new Pair<>(c,actualLine));
+                   } else {
+                       res.remove(res.size() - 1);
+                       res.add(new Pair<>(c, actualLine));
+                   }
+               } else {
+                   res.add(new Pair<>(1, actualLine));
+               }
             previousLine = actualLine;
             ++c;
         }
@@ -90,36 +100,16 @@ public class ConsoleApp {
 
     // флаги
     static List<String> defaultFun (List<String> input, boolean sen, boolean ignore, int num) {
-        String previousLine = "";
-
         List<String> res = new ArrayList<>();
-
-        for (String actualLine : input) {
-            String a = actualLine;
-            String b = previousLine;
-            if (ignore) {
-                if (num < a.length() && num < b.length()){
-                    a = a.substring(num);
-                    b = b.substring(num);
-                }
-            }
-            if (!sen){
-                if (!b.equals(a)) {
-                    res.add(actualLine);
-                }
-            }
-            else {
-                if (!b.toLowerCase(Locale.ROOT).equals(a.toLowerCase())) {
-                    res.add(actualLine);
-                }
-            }
-            previousLine = actualLine;
+        List<Pair<Integer, String>> interTable = counting(input, sen, ignore, num);
+        for (Pair<Integer, String> integerStringPair : interTable) {
+            res.add(integerStringPair.second);
         }
         return res;
     }
 
-    static List<String> countingLines (List<String> input, boolean sen, boolean ignore, int num) {
-        List<Pair<Integer, String>> list = counting(input, sen, ignore, num);
+    static List<String> countingLines (List<String> input, boolean senCase, boolean ignChar, int num) {
+        List<Pair<Integer, String>> list = counting(input, senCase, ignChar, num);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {
             res.add(integerStringPair.toString());
@@ -127,8 +117,8 @@ public class ConsoleApp {
         return res;
     }
 
-    static List<String> unique (List<String> input, boolean sen, boolean ignore, int num) {
-        List <Pair<Integer, String>> list = counting(input, sen, ignore, num);
+    static List<String> unique (List<String> input, boolean senCase, boolean ignChar, int num) {
+        List <Pair<Integer, String>> list = counting(input, senCase, ignChar, num);
         ArrayList<String> res = new ArrayList<>();
         for (Pair<Integer, String> integerStringPair : list) {
             if (integerStringPair.first == 1) {
@@ -148,35 +138,42 @@ public class ConsoleApp {
     }
 
     public static void start(UniqParser pars) throws FileNotFoundException {
-            List<String> list;
-            Scanner input;
-            //получение и запись строчек в список
-            if (!pars.getInputName().toString().equals("")) {
-                input = new Scanner(new FileReader(pars.getInputName().toString()));
-            }
-            else {
-                input = new Scanner(new InputStreamReader(System.in));
-            }
-            list = readOut(input);
+        List<String> list;
 
-            int num = 0;
-            if (pars.getS()){
-                num = pars.getNum();
-            }
+        Scanner input;
 
-            //выполнение флагов
+        //получение и запись строчек в список
 
-            if (pars.getU()){
-                list = unique(list, pars.getI(), pars.getS(), num);
-            }
-             if (pars.getC()){
-                 list = countingLines(list, pars.getI(),pars.getS(), num);
-             }
-
-             if (!pars.getU() && !pars.getC()){
-                 list = defaultFun(list, pars.getI(), pars.getS(), num);
-             }
-            //вывод полученного списка строк как файл или построчно на консоль
-            output(list, pars.getOutputName().toString(), pars.isToFile());
+        if (!pars.getInputName().toString().equals("")) {
+            input = new Scanner(new FileReader(pars.getInputName().toString()));
         }
+        else {
+            input = new Scanner(new InputStreamReader(System.in));
+        }
+        list = readOut(input);
+
+        int num = 0;
+        if (pars.getS()){
+            num = pars.getNum();
+        }
+
+        //выполнение флагов
+        if (pars.getU()){
+            list = unique(list, pars.getI(), pars.getS(), num);
+        }
+
+        if (pars.getC()){
+            list = countingLines(list, pars.getI(),pars.getS(), num);
+        }
+
+        if (!pars.getU() && !pars.getC()){
+            list = defaultFun(list, pars.getI(), pars.getS(), num);
+        }
+
+        //вывод полученного списка строк как файл или построчно на консоль
+
+        output(list, pars.getOutputName().toString(), pars.isToFile());
+
+    }
+
 }

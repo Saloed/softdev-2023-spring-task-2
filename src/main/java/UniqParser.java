@@ -1,8 +1,6 @@
 import org.kohsuke.args4j.*;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class UniqParser {
@@ -24,8 +22,6 @@ public class UniqParser {
             private boolean c;
     @Argument(metaVar = "")
             private Path inputName;
-
-    List<String> commands = new ArrayList<>();
 
 
     UniqParser(String[] args){
