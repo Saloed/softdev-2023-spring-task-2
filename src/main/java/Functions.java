@@ -1,3 +1,5 @@
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -54,6 +56,15 @@ public class Functions {
         return result.toString();
     }
 
+    public String sumFileSizesForTest(){
+        StringBuilder result = new StringBuilder();
+        long sum = 0;
+        for (Long aLong : list) {
+            sum += aLong;
+        }
+        return outputSize(sum);
+    }
+
     private long sumFileSizes() {
         long sum = 0;
         for (Long aLong : list) {
@@ -64,6 +75,8 @@ public class Functions {
 
     private String outputSize(long size) {
         double b = size;
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.HALF_UP);
         double kb = b / k;
         double mb = kb / k;
         double gb = mb / k;

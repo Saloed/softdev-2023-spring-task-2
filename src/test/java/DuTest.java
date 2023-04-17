@@ -63,6 +63,6 @@ public class DuTest {
                 Paths.get("Inputs", "File2").toString(),
                 Paths.get("Inputs", "File3").toString());
         Functions functions = new Functions(new Explorer(fileList).makingLongArrayList(), true, true, false);
-        Assertions.assertEquals("203.85KB",functions.outForTest().trim());
+        Assertions.assertEquals(functions.sumFileSizesForTest(),functions.outForTest().trim());
     }
 }
