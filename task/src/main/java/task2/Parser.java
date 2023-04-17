@@ -35,7 +35,7 @@ public class Parser {
         }
 
         Finder finder = new Finder(recursive, dir, fileName);
-        return new TreeSet<>(finder.find());
+        return finder.find();
     }
 }
 

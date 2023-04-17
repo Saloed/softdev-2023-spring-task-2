@@ -24,7 +24,7 @@ public class Finder {
     }
 
     public Set<String> find() throws IOException {
-        ArrayList<File> fileList = new ArrayList<>();
+        List<File> fileList = new ArrayList<>();
         TreeSet<String> result = new TreeSet<>();
         if (dir.equals("")) {dir = System.getProperty("user.dir");}
         search(new File(dir), fileList);

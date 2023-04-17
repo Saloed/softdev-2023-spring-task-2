@@ -58,4 +58,18 @@ public class FindTests {
         Assertions.assertEquals(new Parser().parse(input), res);
     }
 
+    @Test
+    public void test6() throws IOException {
+        String[] input = {"-r", "a.b.c.txt"};
+        TreeSet<String> res = new TreeSet<>();
+        Assertions.assertEquals(new Parser().parse(input), res);
+    }
+
+    @Test
+    public void test7() throws IOException {
+        String[] input = {"-r", "axbxc.txt"};
+        TreeSet<String> res = new TreeSet<>();
+        Assertions.assertEquals(new Parser().parse(input), res);
+    }
+
 }
