@@ -16,8 +16,8 @@ class XorTest {
 
     @Test
     fun test1() {
-        encryption("125F".toByteArray(),"files/text1.txt","files/temp.txt")
-        decryption("125F".toByteArray(),"files/temp.txt","files/decryption.txt")
+        crypto("5676".toByteArray(), "files/text1.txt", "files/temp.txt")
+        crypto("5676".toByteArray(), "files/temp.txt", "files/decryption.txt")
         isEqual("files/text1.txt", "files/decryption.txt")
     }
     @Test

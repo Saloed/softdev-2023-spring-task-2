@@ -9,7 +9,7 @@ import java.util.concurrent.Callable
 import kotlin.experimental.xor
 import kotlin.system.exitProcess
 
-fun encryption(key: ByteArray, inputName: String, outputName: String) {
+fun crypto(key: ByteArray, inputName: String, outputName: String) {
     FileInputStream(inputName).use { inputStream ->
         val file = DataInputStream(inputStream)
         FileOutputStream(outputName).use { outputStream ->
@@ -35,32 +35,6 @@ fun encryption(key: ByteArray, inputName: String, outputName: String) {
     }
 }
 
-    fun decryption(key: ByteArray, inputName: String, outputName: String) {
-        FileInputStream(inputName).use { inputStream ->
-            val file = DataInputStream(inputStream)
-            FileOutputStream(outputName).use { outputStream ->
-                val data = DataOutputStream(outputStream)
-                file.use { reader ->
-                    data.use { writer ->
-                        val text = ByteArray(32)
-                        var y = 0
-                        while (true) {
-                            val n = reader.read(text)
-                            if (n == -1) break
-                            for (idx in 0 until n) {
-                                val i = text[idx]
-                                val temp = i xor key[y]
-                                writer.writeByte(temp.toInt())
-                                y++
-                                if (y >= key.size) y = 0
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 fun main(args: Array<String>): Unit = exitProcess(CommandLine(XOR()).execute(*args))
 
 class XOR : Callable<Unit> {
@@ -85,7 +59,7 @@ class XOR : Callable<Unit> {
     override fun call() {
         val key = exclusive.key
         val dkey = exclusive.dkey
-        return if (key.isNotEmpty()) encryption(key.toByteArray(), inputName, outputName)
-        else decryption(dkey.toByteArray(), inputName, outputName)
+        return if (key.isNotEmpty()) crypto(key.toByteArray(), inputName, outputName)
+        else crypto(dkey.toByteArray(), inputName, outputName)
     }
 }
