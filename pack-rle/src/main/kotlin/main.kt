@@ -56,26 +56,32 @@ class EncodeParser private constructor (inputFile: File, outputFile: File) {
         val localResult = StringBuilder()
         val maxSequenceDif = 113
         val maxSequenceSim = 112
+        val maxSequenceCharDif = Char(144)
+        val maxSequenceCharSim = Char(255)
+        val zeroSequenceCharDif = Char(31)
+        val zeroSequenceCharSim = Char(143)
         when {
             count < 0 -> {
                 var maxSequenceCounter = 0
                 curCount *= -1
                 while (curCount > maxSequenceDif) {
                     maxSequenceCounter++
-                    localResult.append(Char(144))
-                        .append(string.substring(113 * (maxSequenceCounter - 1), 113 * maxSequenceCounter))
+                    localResult.append(maxSequenceCharDif)
+                        .append(string.substring(maxSequenceDif * (maxSequenceCounter - 1),
+                            maxSequenceDif * maxSequenceCounter))
                     curCount -= maxSequenceDif
                 }
-                localResult.append(' ' + curCount - 1).append(string.substring(113 * maxSequenceCounter, string.length))
+                localResult.append(zeroSequenceCharDif + curCount)
+                    .append(string.substring(maxSequenceDif * maxSequenceCounter, string.length))
                 return localResult.toString()
             }
             count > 1 -> {
                 while (curCount > maxSequenceSim) {       // A * 142 = ~A~A~A!A
-                    localResult.append("${Char(255)}$string")       //
+                    localResult.append(maxSequenceCharSim).append(string)
                     curCount -= maxSequenceSim
                 }
-                if (curCount > 1) localResult.append(Char(143) + curCount).append(string)
-                else localResult.append(Char(32)).append(string)
+                if (curCount > 1) localResult.append(zeroSequenceCharSim + curCount).append(string)
+                else localResult.append(zeroSequenceCharDif + 1).append(string)
             }
             else -> throw IllegalArgumentException()
         }
@@ -84,14 +90,15 @@ class EncodeParser private constructor (inputFile: File, outputFile: File) {
 
     private fun countDif() {
         var count = 1
-        var cdResult = window[0]!!.toString()
+        val cdResult = StringBuilder()
+        cdResult.append(window[0])
         while (!window.isOutOfBounds(1) && window[0] != window[1]) {
             if (!window.isOutOfBounds(2) && window[1] == window[2]) break
             count++
             window.move()
-            cdResult += window[0]!!
+            cdResult.append(window[0])
         }
-        writer.write(fromIntToString(-count, cdResult))
+        writer.write(fromIntToString(-count, cdResult.toString()))
     }
 
     private fun countSim() {
