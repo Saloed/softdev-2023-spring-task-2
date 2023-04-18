@@ -19,7 +19,7 @@ class DuTest {
 
     @Test
     fun test2() {
-        val args = arrayOf("-ch", "files/file1.txt", "files/otherfiles")
+        val args = arrayOf("-ch", "files/file1.docx", "files/otherfiles")
         cmd.execute(*args)
         val result = cmd.getExecutionResult<List<String>>()
         assertArrayEquals(
