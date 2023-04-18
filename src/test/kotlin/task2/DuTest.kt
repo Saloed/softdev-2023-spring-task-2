@@ -11,12 +11,12 @@ class DuTest {
 
     @Test
     fun test1() {
-        val args = arrayOf("files/otherfiles/anotherfiles/file5.png")
+        val args = arrayOf("-h", "files/otherfiles/anotherfiles/file5.png")
         cmd.execute(*args)
         val result = cmd.getExecutionResult<List<String>>()
         System.err.println(result)
-        System.err.println("253339 B")
-        assertArrayEquals(arrayOf("253339 B"), result.toTypedArray())
+        System.err.println("247.4013671875 KB")
+        assertArrayEquals(arrayOf("247.4013671875 KB"), result.toTypedArray())
     }
 //
 //    @Test
