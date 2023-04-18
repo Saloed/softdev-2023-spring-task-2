@@ -7,18 +7,15 @@ import picocli.CommandLine
 class DuTest {
     private val cmd = CommandLine(Du())
 
-    @Test
-    fun test() {
-        Assert.assertEquals(1, 1)
-    }
 
-//    @Test
-//    fun test1() {
-//        val args = arrayOf("-h", "files/file1.txt")
-//        cmd.execute(*args)
-//        val result = cmd.getExecutionResult<List<String>>()
-//        Assert.assertArrayEquals(arrayOf("17.123046875 KB"), result.toTypedArray())
-//    }
+
+    @Test
+    fun test1() {
+        val args = arrayOf("files")
+        cmd.execute(*args)
+        val result = cmd.getExecutionResult<List<String>>()
+        Assert.assertArrayEquals(arrayOf("339952 B"), result.toTypedArray())
+    }
 //
 //    @Test
 //    fun test2() {
