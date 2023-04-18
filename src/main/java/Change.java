@@ -21,31 +21,25 @@ public class Change {
     }
 
     public List<String> res() {
-        return expi();
-    }
-
-    private List<String> expi() {
         String a;
         String b;
         int count = 0;
         for (int i = 1; i < in.size(); i++) {
-            a = in.get(i - 1).substring(funS);
-            b = in.get(i).substring(funS);
-            if (funI) {
-                if (a.equalsIgnoreCase(b)) {
-                    count++;
-                } else {
-                    addList(count, i);
-                    count = 0;
-
-                }
-            } else {
-                if (a.equals(b)) {
-                    count++;
-                } else {
-                    addList(count, i);
-                    count = 0;
-                }
+            a = in.get(i - 1);
+            b = in.get(i);
+            if (a.length() <= funS) a = "";
+            else a  = a.substring(funS);
+            if (b.length() <= funS) b = "";
+            else b = b.substring(funS);
+            if (funI){
+            a = a.toLowerCase();
+            b = b.toLowerCase();
+            }
+            if (a.equals(b))
+                count++;
+            else{
+                addList(count,i);
+                count = 0;
             }
         }
         addList(count, in.size() - 1);
@@ -56,12 +50,9 @@ public class Change {
         if (funU) {
             if (count == 0) {
                 exp.add(in.get(i - 1));
-
             }
         } else {
-            if (count != 0) {
-                count++;
-            }
+            count++;
             if (funC) {
                 exp.add(Integer.toString(count) + " " + in.get(i - 1));
             } else {

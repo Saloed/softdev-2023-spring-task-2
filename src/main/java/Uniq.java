@@ -5,10 +5,11 @@ public class Uniq {
     public static void main(String[] args) {
         InFile file = new InFile();
         Filek output = new Filek();
-        if (line(args).hasOption("o")) {
-            output.out(line(args).getOptionValue("o"), Variant.options.withFile, file.open(line(args)));
+        CommandLine cmd = line(args);
+        if (cmd.hasOption("o")) {
+            output.out(cmd.getOptionValue("o"), Variant.options.withFile, file.open(cmd));
         } else {
-            output.out(line(args).getOptionValue("o"), Variant.options.noFile, file.open(line(args)));
+            output.out(cmd.getOptionValue("o"), Variant.options.noFile, file.open(cmd));
         }
     }
 
@@ -25,6 +26,5 @@ public class Uniq {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
