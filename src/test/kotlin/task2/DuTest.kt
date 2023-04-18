@@ -8,7 +8,6 @@ class DuTest {
     private val cmd = CommandLine(Du())
 
 
-
     @Test
     fun test1() {
         val args = arrayOf("files/otherfiles/file4.mp3")
