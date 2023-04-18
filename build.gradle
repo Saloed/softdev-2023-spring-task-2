@@ -15,18 +15,18 @@ application {
     mainClass.set('task2.DuKt')
 }
 dependencies {
-    implementation 'junit:junit:4.12'
+    //implementation 'junit:junit:4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    //testImplementation(kotlin("Test"))
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
     implementation("info.picocli:picocli:4.7.1")
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    //testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 }
 
-//tasks.getByName("test") {
-//    useJUnitPlatform()
-////    testLogging.showStandardStreams
-////    testLogging.showStandardStreams = true
-//}
+test {
+    useJUnitPlatform()
+//    testLogging.showStandardStreams
+//    testLogging.showStandardStreams = true
+}
 
 
 jar {

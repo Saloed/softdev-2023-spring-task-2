@@ -1,7 +1,7 @@
 package task2
 
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertArrayEquals
+import org.junit.jupiter.api.Test
 import picocli.CommandLine
 
 class DuTest {
@@ -16,7 +16,7 @@ class DuTest {
         val result = cmd.getExecutionResult<List<String>>()
         System.err.println(result.toTypedArray())
         System.err.println(arrayOf("339952 B"))
-        Assert.assertArrayEquals(arrayOf("339952 B"), result.toTypedArray())
+        assertArrayEquals(arrayOf("339952 B"), result.toTypedArray())
     }
 //
 //    @Test
