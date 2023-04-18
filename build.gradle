@@ -24,8 +24,8 @@ dependencies {
 
 tasks.getByName("test") {
     useJUnitPlatform()
-    testLogging.showStandardStreams
-    testLogging.showStandardStreams = true
+//    testLogging.showStandardStreams
+//    testLogging.showStandardStreams = true
 }
 
 
