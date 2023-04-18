@@ -22,10 +22,12 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 }
 
-tasks.getByName('test') {
+tasks.getByName("test") {
     useJUnitPlatform()
+    testLogging.showStandardStreams
     testLogging.showStandardStreams = true
 }
+
 
 jar {
     manifest {
