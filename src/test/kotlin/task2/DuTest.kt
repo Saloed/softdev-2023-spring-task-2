@@ -14,6 +14,8 @@ class DuTest {
         val args = arrayOf("files")
         cmd.execute(*args)
         val result = cmd.getExecutionResult<List<String>>()
+        System.err.println(result.toTypedArray())
+        System.err.println(arrayOf("339952 B"))
         Assert.assertArrayEquals(arrayOf("339952 B"), result.toTypedArray())
     }
 //
