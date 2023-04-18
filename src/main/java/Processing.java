@@ -4,34 +4,26 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Processing {
-    public static List<String> result(boolean v, boolean i, boolean r, String regex, List<String> file) {
+    public List<String> result(boolean v, boolean i, boolean r, String regex, List<String> file) {
         List<String> res = new ArrayList<>();
+        for (String line : file) {
+            if ((containReg(i, r, line, regex) && !v) ||
+                    (!containReg(i, r, line, regex) && v))
+                res.add(line);
+        }
+        return res;
+    }
+
+    private boolean containReg(boolean i, boolean r, String line, String regex) {
         if (r) {
             if (i) {
                 Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-                for (String line : file) {
-                    Matcher matcher = pattern.matcher(line);
-                    if ((matcher.matches() && !v) || (!matcher.matches() && v)) res.add(line);
-                }
-            } else {
-                for (String line : file) {
-                    if ((line.matches(regex) && !v) || (!line.matches(regex) && v)) res.add(line);
-                }
-            }
-        } else {
-            if (i) {
-                for (String line : file) {
-                    boolean contain = line.toLowerCase().contains(regex.toLowerCase());
-                    if ((contain && !v) ||
-                            (!contain && v))
-                        res.add(line);
-                }
-            } else {
-                for (String line : file) {
-                    if ((line.contains(regex) && !v) || (!line.contains(regex) && v)) res.add(line);
-                }
-            }
+                Matcher matcher = pattern.matcher(line);
+                return matcher.matches();
+            } else return line.matches(regex);
         }
-        return res;
+        else if (i) {
+            return line.toLowerCase().contains(regex.toLowerCase());
+        } else return line.contains(regex);
     }
 }

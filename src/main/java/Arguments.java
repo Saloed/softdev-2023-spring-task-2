@@ -4,7 +4,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Arguments {
-    public static String parsArgWord(List<String> arguments) {
+    public String parsArgWord(List<String> arguments) {
         if (arguments.size() == 0 || arguments.size() > 2) {
             System.out.println("Неверный формат ввода");
             System.exit(1);
@@ -12,7 +12,7 @@ public class Arguments {
         return arguments.get(0);
     }
 
-    public static List<String> parsArgFile(List<String> arguments) {
+    public List<String> parsArgFile(List<String> arguments) {
         try {
             String inputname = arguments.get(arguments.size() - 1);
             return Files.readAllLines(Paths.get(inputname));

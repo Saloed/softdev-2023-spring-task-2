@@ -25,9 +25,10 @@ public class Grep {
         try {
             CommandLine cmd = lineParser.parse(option, args);
             List<String> arguments = cmd.getArgList();
-            String word = Arguments.parsArgWord(arguments);
-            List<String> file = Arguments.parsArgFile(arguments);
-            Processing.result(cmd.hasOption("v"),
+            String word = new Arguments().parsArgWord(arguments);
+            List<String> file = new Arguments().parsArgFile(arguments);
+            Processing data = new Processing();
+            data.result(cmd.hasOption("v"),
                     cmd.hasOption("i"), cmd.hasOption("r"), word, file).forEach(System.out::println);
         } catch (ParseException e) {
             System.out.println(e.getMessage());

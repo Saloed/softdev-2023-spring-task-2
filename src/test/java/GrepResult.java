@@ -10,8 +10,8 @@ public class GrepResult {
         boolean v = input.contains("-v");
         boolean i = input.contains("-i");
         List<String> argum = input.subList(input.size() - 2, input.size());
-        String word = Arguments.parsArgWord(argum);
-        List<String> file = Arguments.parsArgFile(argum);
-        return String.join("\n", Processing.result(v, i, r, word, file));
+        String word = new Arguments().parsArgWord(argum);
+        List<String> file =  new Arguments().parsArgFile(argum);
+        return String.join("\n", new Processing().result(v, i, r, word, file));
     }
 }
