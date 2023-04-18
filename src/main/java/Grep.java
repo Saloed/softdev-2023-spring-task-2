@@ -14,6 +14,7 @@ import java.util.List;
 // Command Line: grep [-v] [-i] [-r] word inputname.txt
 
 
+
 public class Grep {
     public static void main(String[] args) {
         Options option = new Options();
