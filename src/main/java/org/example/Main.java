@@ -58,7 +58,7 @@ public class Main {
             System.out.println(stringAssembler(0, files));
         } else {
             filesList = Objects.requireNonNull(files.listFiles());
-            sort(filesList);
+            sort(filesList); //Добавлено чисто из-за проблем с тестами GitHub (там файлы шли не в том порядке)
             int dirFileCount = filesList.length;
             if (!reverse) {
                 for (int i = 0; i < dirFileCount; i++) {
