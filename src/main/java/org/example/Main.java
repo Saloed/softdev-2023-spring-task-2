@@ -14,6 +14,8 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
+import static java.util.Arrays.sort;
+
 public class Main {
     @Option(name = "-l", aliases = "--long", usage = "Display file info")
     private Boolean longArg = false;
@@ -56,6 +58,7 @@ public class Main {
             System.out.println(stringAssembler(0, files));
         } else {
             filesList = Objects.requireNonNull(files.listFiles());
+            sort(filesList);
             int dirFileCount = filesList.length;
             if (!reverse) {
                 for (int i = 0; i < dirFileCount; i++) {
