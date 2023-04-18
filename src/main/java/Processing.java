@@ -21,8 +21,9 @@ public class Processing {
         } else {
             if (i) {
                 for (String line : file) {
-                    if ((line.toLowerCase().contains(regex.toLowerCase()) && !v) ||
-                            (!line.toLowerCase().contains(regex.toLowerCase()) && v))
+                    boolean contain = line.toLowerCase().contains(regex.toLowerCase());
+                    if ((contain && !v) ||
+                            (!contain && v))
                         res.add(line);
                 }
             } else {
@@ -33,5 +34,4 @@ public class Processing {
         }
         return res;
     }
-
 }
