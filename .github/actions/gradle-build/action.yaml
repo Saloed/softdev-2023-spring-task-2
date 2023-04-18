@@ -16,4 +16,5 @@ runs:
           exit 1
         fi
     - name: Make gradlew executable
+      shell: bash
       run: chmod +x ./gradlew
