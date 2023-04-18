@@ -14,27 +14,25 @@ class DuTest {
         val args = arrayOf("files/otherfiles/file4.mp3")
         cmd.execute(*args)
         val result = cmd.getExecutionResult<List<String>>()
-        System.err.println(result)
-        System.err.println("8266188 B")
         assertArrayEquals(arrayOf("8266188 B"), result.toTypedArray())
     }
-//
-//    @Test
-//    fun test2() {
-//        val args = arrayOf("-ch", "files/file1.txt", "files/otherfiles")
-//        cmd.execute(*args)
-//        val result = cmd.getExecutionResult<List<String>>()
-//        Assert.assertArrayEquals(
-//            arrayOf("17.123046875 KB", "284.560546875 KB", "301.68359375 KB"),
-//            result.toTypedArray()
-//        )
-//    }
-//
-//    @Test
-//    fun test3() {
-//        val args = arrayOf("--si", "files/file2.txt", "files/otherfiles/anotherfiles")
-//        cmd.execute(*args)
-//        val result = cmd.getExecutionResult<List<String>>()
-//        Assert.assertArrayEquals(arrayOf("12350 B", "253339 B"), result.toTypedArray())
-//    }
+
+    @Test
+    fun test2() {
+        val args = arrayOf("-ch", "files/file1.txt", "files/otherfiles")
+        cmd.execute(*args)
+        val result = cmd.getExecutionResult<List<String>>()
+        assertArrayEquals(
+            arrayOf("19.1142578125 KB", "8.12485408782959 MB", "8.14352035522461 MB"),
+            result.toTypedArray()
+        )
+    }
+
+    @Test
+    fun test3() {
+        val args = arrayOf("--si", "files/file2.docx", "files/otherfiles/anotherfiles")
+        cmd.execute(*args)
+        val result = cmd.getExecutionResult<List<String>>()
+        assertArrayEquals(arrayOf("17576 B", "253339 B"), result.toTypedArray())
+    }
 }
