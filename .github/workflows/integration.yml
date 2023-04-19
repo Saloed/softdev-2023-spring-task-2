@@ -1,9 +1,9 @@
 name: Java CI
 
 on:
-  push: 
-  pull_request:
+  push:
     branches: ["main"]
+  pull_request:
     types: [ opened, synchronize, reopened, edited, assigned ]
 
 jobs:
