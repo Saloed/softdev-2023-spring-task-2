@@ -25,8 +25,8 @@ class Test {
             )
         val results =
             listOf(
-                File("src/test/testFiles/result1.txt").toPath(),
-                File("src/test/testFiles/result2.txt").toPath(),
+                File("src/test/testFiles/result1.txt"),
+                File("src/test/testFiles/result2.txt"),
 
             )
 
@@ -38,7 +38,7 @@ class Test {
 
             assertTrue(
                 isEqual(
-                    results[example],
+                    results[example].toPath(),
                     File("src/test/testFiles/output.txt").toPath()
                 )
             )
