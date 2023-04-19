@@ -33,9 +33,6 @@ class Test {
         for (example in argsExamples.indices) {
             main(argsExamples[example])
 
-            results[example].useLines { System.err.println(it) }
-            File("src/test/testFiles/output.txt").useLines { System.err.println(it) }
-
             assertTrue(
                 isEqual(
                     results[example].toPath(),
