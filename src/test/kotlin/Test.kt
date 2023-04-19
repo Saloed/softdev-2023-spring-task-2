@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.useLines
 import kotlin.test.assertTrue
 
 private fun isEqual(firstFile: Path, secondFile: Path): Boolean {
@@ -31,6 +32,9 @@ class Test {
 
         for (example in argsExamples.indices) {
             main(argsExamples[example])
+
+            results[example].useLines { System.err.println(it) }
+            File("src/test/testFiles/output.txt").useLines { System.err.println(it) }
 
             assertTrue(
                 isEqual(
