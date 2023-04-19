@@ -1,5 +1,4 @@
-package org.example;
-
+package softdev.spring.task;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class Main {
+public class App {
     @Option(name = "-r", required = true)
     String range;
     @Option(name = "-o")
@@ -24,7 +23,7 @@ public class Main {
     String inputText = "";
 
     public static void main(String[] args) throws CmdLineException, IOException {
-        final Main instance = new Main();
+        final App instance = new App();
         instance.doMain(args);
     }
 
