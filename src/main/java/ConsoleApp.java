@@ -80,20 +80,27 @@ public class ConsoleApp {
 
 
     // методы для вывода информации
-    static void output(List<String> list, String output, boolean isToFile) {
+    //Можно сделать функцию, которая принимает OutputStream и в одном случае передать туда файл,
+    // а в другом System.out
+
+    static void outputStream(OutputStream out, List<String> list){
+        try(PrintWriter writer = new PrintWriter(out)){
+            for (String s : list) {
+                writer.println(s);
+            }
+        }
+    }
+
+    static void output(List<String> out, String output, boolean isToFile) {
         if (isToFile) {
-            try (FileWriter writer = new FileWriter(output)) {
-                for (String s : list) {
-                    writer.write(s);
-                    writer.write("\n");
-                }
+            File result = new File(output);
+            try (FileOutputStream writer = new FileOutputStream(result)) {
+                outputStream(writer,out);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         } else {
-            for (String s : list) {
-            System.out.println(s);
-            }
+           outputStream(System.out,out);
         }
     }
 

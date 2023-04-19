@@ -52,7 +52,6 @@ public class TestFlag {
         UniqParser args = new UniqParser(true, true, true, 3, false, false, out, name);
         ConsoleApp.start(args);
     }
-
     @Test
     public void flagSIC() throws FileNotFoundException{
         Path out = Paths.get("input", "null.txt");
