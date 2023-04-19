@@ -19,7 +19,7 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    testLogging.showStandartStreams = true
+    testLogging.showStandardStreams = true
 }
 
 tasks.withType<KotlinCompile> {
