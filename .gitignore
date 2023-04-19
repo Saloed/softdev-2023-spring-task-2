@@ -16,3 +16,5 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 *.iml
+# Ignore Gradle build output directory
+build
