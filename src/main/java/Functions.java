@@ -56,15 +56,6 @@ public class Functions {
         return result.toString();
     }
 
-    public String sumFileSizesForTest(){
-        StringBuilder result = new StringBuilder();
-        long sum = 0;
-        for (Long aLong : list) {
-            sum += aLong;
-        }
-        return outputSize(sum);
-    }
-
     private long sumFileSizes() {
         long sum = 0;
         for (Long aLong : list) {
