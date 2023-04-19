@@ -43,23 +43,22 @@ fun main(args: Array<String>) {
     }
 }
 
+open class Parser (inputFile: File, outputFile: File) {
+    val writer = outputFile.bufferedWriter()
+    val reader = inputFile.bufferedReader()
+    val maxSequenceDif = 113
+    val maxSequenceSim = 112
+    val maxSequenceCharDif = Char(144)
+    val maxSequenceCharSim = Char(255)
+    val zeroSequenceCharDif = Char(31)
+    val zeroSequenceCharSim = Char(143)
+}
 
-class EncodeParser private constructor (inputFile: File, outputFile: File) {
-    private val writer = outputFile.bufferedWriter()
-    private val reader = inputFile.bufferedReader()
+class EncodeParser private constructor (inputFile: File, outputFile: File): Parser(inputFile, outputFile) {
     private val window = MovingWindow(Array(3) { reader.read().let { if (it != -1) Char(it) else null} }, reader)
-
-
-
     private fun fromIntToString(count: Int, string: String): String {
         var curCount = count
         val localResult = StringBuilder()
-        val maxSequenceDif = 113
-        val maxSequenceSim = 112
-        val maxSequenceCharDif = Char(144)
-        val maxSequenceCharSim = Char(255)
-        val zeroSequenceCharDif = Char(31)
-        val zeroSequenceCharSim = Char(143)
         when {
             count < 0 -> {
                 var maxSequenceCounter = 0
@@ -92,8 +91,7 @@ class EncodeParser private constructor (inputFile: File, outputFile: File) {
         var count = 1
         val cdResult = StringBuilder()
         cdResult.append(window[0])
-        while (!window.isOutOfBounds(1) && window[0] != window[1]) {
-            if (!window.isOutOfBounds(2) && window[1] == window[2]) break
+        while (!window.isOutOfBounds(1) && window[1] != window[2]) {
             count++
             window.move()
             cdResult.append(window[0])
@@ -127,9 +125,7 @@ class EncodeParser private constructor (inputFile: File, outputFile: File) {
     }
 }
 
-class DecodeParser private constructor (inputFile: File, outputFile: File) {
-    private val writer = outputFile.bufferedWriter()
-    private val reader = inputFile.bufferedReader()
+class DecodeParser private constructor (inputFile: File, outputFile: File): Parser(inputFile, outputFile) {
     private val window = MovingWindow(Array(2) { reader.read().let { if (it != -1) Char(it) else null} }, reader)
 
 
@@ -149,14 +145,14 @@ class DecodeParser private constructor (inputFile: File, outputFile: File) {
 
 
     private fun appendDiff() {
-        val count = window[0]!!.code - 31
+        val count = window[0]!!.code - zeroSequenceCharDif.code
         for (i in 0 until count) {
             window.move()
             writer.write(window[0].toString())
         }
     }
     private fun appendSim() {
-        val count = window[0]!!.code - 143
+        val count = window[0]!!.code - zeroSequenceCharSim.code
         writer.write(window[1].toString())
         for (i in 0 until count) window.move()
     }
