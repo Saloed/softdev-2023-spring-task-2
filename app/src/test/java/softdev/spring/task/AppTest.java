@@ -44,7 +44,7 @@ class MainTest {
         File expectedFile = new File("expectedFile.txt");
         String[] args = {"-w", "-o", "outputfile.txt", "-r", "2-5", "input.txt"};
         App.main(args);
-        File outputFile = new File("outputFile.txt");
+        File outputFile = new File("outputfile.txt");
         Scanner expectedScanner = new Scanner(expectedFile);
         Scanner answerScanner = new Scanner(outputFile);
         List<String> answer = new ArrayList<>();
