@@ -42,7 +42,7 @@ class MainTest {
     @Test
     void workWithFiles() throws IOException, CmdLineException {
         File expectedFile = new File("expectedFile.txt");
-        String[] args = {"-w", "-o", "outputFile.txt", "-r", "2-5", "input.txt"};
+        String[] args = {"-w", "-o", "outputfile.txt", "-r", "2-5", "input.txt"};
         App.main(args);
         File outputFile = new File("outputFile.txt");
         Scanner expectedScanner = new Scanner(expectedFile);
