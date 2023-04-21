@@ -33,6 +33,28 @@ public class TailTest {
         List<Object> list1 = read(new File("Files/check2"));
         assertEquals(list1, read(new File(new Tail().last(list, symbols, lines, outputFile).toURI())));
     }
+    @Test
+    public void testTail3() throws IOException {
+        String symbols = null;
+        String lines = null;
+        List<File> list = new ArrayList<>();
+        list.add(new File("Files/input1"));
+        list.add(new File("Files/input2"));
+        list.add(new File("Files/input3"));
+        File outputFile = new File("Files/output");
+        List<Object> list1 = read(new File("Files/check3"));
+        assertEquals(list1, read(new File(new Tail().last(list, symbols, lines, outputFile).toURI())));
+    }
+    @Test
+    public void testTail4() throws IOException {
+        String symbols = null;
+        String lines = "2";
+        List<File> list = new ArrayList<>();
+        list.add(new File("Files/input3"));
+        File outputFile = new File("Files/output");
+        List<Object> list1 = read(new File("Files/check4"));
+        assertEquals(list1, read(new File(new Tail().last(list, symbols, lines, outputFile).toURI())));
+    }
     public List<Object> read(File file) throws IOException {
         String line;
         BufferedReader bufReader = new BufferedReader(new FileReader(file));

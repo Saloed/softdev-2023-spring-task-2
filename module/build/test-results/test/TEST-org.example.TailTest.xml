@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.example.TailTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2023-04-21T13:45:24" hostname="ALEXANDRVYSOTSK" time="0.042">
+<testsuite name="org.example.TailTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-04-21T14:21:23" hostname="ALEXANDRVYSOTSK" time="0.037">
   <properties/>
-  <testcase name="testTail2()" classname="org.example.TailTest" time="0.036"/>
-  <testcase name="testTail()" classname="org.example.TailTest" time="0.005"/>
+  <testcase name="testTail4()" classname="org.example.TailTest" time="0.037"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
