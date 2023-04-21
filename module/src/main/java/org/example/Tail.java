@@ -32,7 +32,7 @@ public class Tail {
         //there are no any input files
         else if (inputFiles.size() == 0) {
             try {
-                File enteredText = new File("ifThereIsNoInputFile");
+                File enteredText = new File("File/ifThereIsNoInputFile");
                 BufferedWriter bufWriterForNewFile = new BufferedWriter(new FileWriter(enteredText));
                 System.out.println("Enter text...");
                 Scanner scan = new Scanner(System.in);
@@ -54,7 +54,7 @@ public class Tail {
         boolean isIndentNeeded = false;
         try {
             BufferedReader bufReader;
-            File newOutputFile = new File("newOutputFile");
+            File newOutputFile = new File("File/newOutputFile");
             if (outputFile != null) newOutputFile = outputFile;
             else System.out.println("Here is response for your request...");
             BufferedWriter bufWriter = new BufferedWriter(new FileWriter(newOutputFile));

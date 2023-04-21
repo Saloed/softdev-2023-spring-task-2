@@ -14,11 +14,11 @@ public class TailTest {
         String lines = null;
         List<File> list = new ArrayList<>();
         //по-другому файлы не видны :(
-        list.add(new File("C:\\Users\\sanch\\IdeaProjects\\softdev-2023-spring-task-2\\input1"));
-        list.add(new File("C:\\Users\\sanch\\IdeaProjects\\softdev-2023-spring-task-2\\input2"));
-        list.add(new File("C:\\Users\\sanch\\IdeaProjects\\softdev-2023-spring-task-2\\input3"));
-        File outputFile = new File("C:\\Users\\sanch\\IdeaProjects\\softdev-2023-spring-task-2\\output");
-        List<Object> list1 = read(new File("C:\\Users\\sanch\\IdeaProjects\\softdev-2023-spring-task-2\\check1"));
+        list.add(new File("Files/input1"));
+        list.add(new File("Files/input2"));
+        list.add(new File("Files/input3"));
+        File outputFile = new File("Files/output");
+        List<Object> list1 = read(new File("Files/check1"));
         assertEquals(list1, read(new File(new Tail().last(list, symbols, lines, outputFile).toURI())));
     }
     @Test
@@ -26,11 +26,11 @@ public class TailTest {
         String symbols = null;
         String lines = "3";
         List<File> list = new ArrayList<>();
-        list.add(new File("C:\\Users\\sanch\\IdeaProjects\\softdev-2023-spring-task-2\\input1"));
-        list.add(new File("C:\\Users\\sanch\\IdeaProjects\\softdev-2023-spring-task-2\\input2"));
-        list.add(new File("C:\\Users\\sanch\\IdeaProjects\\softdev-2023-spring-task-2\\input3"));
-        File outputFile = new File("C:\\Users\\sanch\\IdeaProjects\\softdev-2023-spring-task-2\\output");
-        List<Object> list1 = read(new File("C:\\Users\\sanch\\IdeaProjects\\softdev-2023-spring-task-2\\check2"));
+        list.add(new File("Files/input1"));
+        list.add(new File("Files/input2"));
+        list.add(new File("Files/input3"));
+        File outputFile = new File("Files/output");
+        List<Object> list1 = read(new File("Files/check2"));
         assertEquals(list1, read(new File(new Tail().last(list, symbols, lines, outputFile).toURI())));
     }
     public List<Object> read(File file) throws IOException {
