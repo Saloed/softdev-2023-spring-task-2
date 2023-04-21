@@ -56,7 +56,7 @@ public class Tail {
             BufferedReader bufReader;
             File newOutputFile = new File("newOutputFile");
             if (outputFile != null) newOutputFile = outputFile;
-            else System.out.println("Here if response for your request...");
+            else System.out.println("Here is response for your request...");
             BufferedWriter bufWriter = new BufferedWriter(new FileWriter(newOutputFile));
             //last lines
             if (symbols == null) {
